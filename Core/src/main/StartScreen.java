@@ -9,15 +9,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.util.function.Function;
-
-public class StartScreen implements Screen, InputProcessor {
+class StartScreen implements Screen, InputProcessor {
 
     private SpriteBatch batch;
     private BitmapFont font;
     private Runnable onEnter;
 
-    public StartScreen(Runnable onEnter) {
+    StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
 
 

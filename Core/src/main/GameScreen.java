@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-public class GameScreen implements Screen {
+class GameScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     /**
