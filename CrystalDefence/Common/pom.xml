@@ -14,6 +14,14 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <publicPackages>
+                        <publicPackage>dk/sdu/group5/common/services</publicPackage>
+                        <publicPackage>dk.sdu.group5.common.data</publicPackage>
+                        <publicPackage>dk.sdu.group5.common</publicPackage>
+                        <publicPackage>dk.sdu.group5.common.services</publicPackage>
+                    </publicPackages>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
