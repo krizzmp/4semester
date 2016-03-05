@@ -8,12 +8,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 class StartScreen implements Screen, InputProcessor {
 
     private SpriteBatch batch;
     private BitmapFont font;
     private Runnable onEnter;
+    private Skin skin;
+    private Stage stage;
+    private Table table;
 
     StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
@@ -26,17 +39,36 @@ class StartScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.RED);
-        Gdx.input.setInputProcessor(this);
+        System.out.println(Gdx.files.getLocalStoragePath());
+        skin = new Skin();
+
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
+        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
+        skin.addRegions(textureAtlas);
+        table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+        final TextButton button = new TextButton("Click me", style);
+        table.add(button);
+        button.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                onEnter.run();
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
-        //just painting the screen white
+        //painting the screen white
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        font.draw(batch, "Press Enter to start new game.", 150, 220);
-        batch.end();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     @Override
@@ -63,6 +95,7 @@ class StartScreen implements Screen, InputProcessor {
     public void dispose() {
         batch.dispose();
         font.dispose();
+        stage.dispose();
     }
 
     /**
@@ -84,7 +117,7 @@ class StartScreen implements Screen, InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.ENTER){
+        if (keycode == Input.Keys.ENTER) {
             onEnter.run();
             return true;
         }
