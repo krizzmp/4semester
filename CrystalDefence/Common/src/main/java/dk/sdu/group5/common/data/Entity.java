@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public class Entity
 {
-    // TODO: 05/03/16 this uses corfixen's example code, we need to change it to something that works better for us
     private final UUID ID = UUID.randomUUID();
     private int x, y;
     private final Set<String> properties;

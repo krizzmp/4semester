@@ -12,6 +12,11 @@ public class PlayerGameProcess implements IGameProcess
     private Entity player;
 
     @Override
+    public void install() {
+
+    }
+
+    @Override
     public void start(World world)
     {
         player = new Entity();
@@ -48,6 +53,11 @@ public class PlayerGameProcess implements IGameProcess
         {
             Logger.getLogger(PlayerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void uninstall() {
+
     }
 
 }
