@@ -1,6 +1,7 @@
 package dk.sdu.group5.common.data;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class World
@@ -16,22 +17,13 @@ public class World
         entities = new LinkedList<>();
     }
 
-    public void AddEntity(Entity entity) throws Exception
+    public void AddEntity(Entity entity)
     {
-        entities.add(entity));
-
-    public World()
-    {
-        entities = new LinkedHashSet<>();
+        entities.add(entity);
     }
 
-    public void AddEntity(Entity entity) throws Exception
+    public void RemoveEntity(Entity entity)
     {
-        entities.add(entity));
-    }
-
-    public void RemoveEntity(Entity entity) throws Exception
-    {
-       entities.remove(entity));
+       entities.remove(entity);
     }
 }
