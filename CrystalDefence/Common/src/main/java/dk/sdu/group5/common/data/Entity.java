@@ -5,102 +5,93 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class Entity
-{
+public class Entity {
+
     private final UUID ID = UUID.randomUUID();
     private int x, y;
+    private int lives;
+
     private final Set<String> properties;
     private EntityType type;
 
-    public Entity()
-    {
+    public Entity() {
         properties = new HashSet<>();
     }
 
-    public int getX()
-    {
+    public int getX() {
         return x;
     }
 
-    public void setX(int x)
-    {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return y;
     }
 
-    public void setY(int y)
-    {
+    public void setY(int y) {
         this.y = y;
     }
 
-    public EntityType getType()
-    {
+    public EntityType getType() {
         return type;
     }
 
-    public void setType(EntityType type)
-    {
+    public void setType(EntityType type) {
         this.type = type;
     }
 
-    public void addProperty(String property) throws Exception
-    {
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void addProperty(String property) throws Exception {
         // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
         // if duplicate found.
-        if (!properties.add(property))
-        {
+        if (!properties.add(property)) {
             throw new Exception("A duplicate entry already exists matching the provided property!");
         }
     }
 
-    public void removeProperty(String property) throws Exception
-    {
+    public void removeProperty(String property) throws Exception {
         // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
         // if duplicate found.
-        if (!properties.remove(property))
-        {
+        if (!properties.remove(property)) {
             throw new Exception("No entry already exists matching the provided property!");
         }
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = 3;
         hash = 59 * hash + Objects.hashCode(this.ID);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass())
-        {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Entity other = (Entity) obj;
-        if (!Objects.equals(this.ID, other.ID))
-        {
+        if (!Objects.equals(this.ID, other.ID)) {
             return false;
         }
-        if (this.x != other.x)
-        {
+        if (this.x != other.x) {
             return false;
         }
-        if (this.y != other.y)
-        {
+        if (this.y != other.y) {
             return false;
         }
-        if (!Objects.equals(this.properties, other.properties))
-        {
+        if (!Objects.equals(this.properties, other.properties)) {
             return false;
         }
         return true;
