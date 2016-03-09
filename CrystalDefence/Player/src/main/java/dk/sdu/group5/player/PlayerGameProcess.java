@@ -21,6 +21,7 @@ public class PlayerGameProcess implements IGameProcess
     {
         player = new Entity();
         player.setType(EntityType.PLAYER);
+        player.setLives(3);
 
         try
         {
