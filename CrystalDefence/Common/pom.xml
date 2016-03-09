@@ -16,10 +16,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>dk/sdu/group5/common/services</publicPackage>
-                        <publicPackage>dk.sdu.group5.common.data</publicPackage>
-                        <publicPackage>dk.sdu.group5.common</publicPackage>
-                        <publicPackage>dk.sdu.group5.common.services</publicPackage>
+                        <publicPackage>dk.sdu.group5.common.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

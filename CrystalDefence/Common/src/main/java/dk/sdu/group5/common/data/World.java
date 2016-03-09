@@ -26,4 +26,8 @@ public class World
     {
        entities.remove(entity);
     }
+
+    public List<Entity> getEntities() {
+        return entities;
+    }
 }

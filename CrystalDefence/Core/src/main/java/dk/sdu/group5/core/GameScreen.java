@@ -28,8 +28,10 @@ class GameScreen implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
-        processes = Lookup.getDefault().lookupAll(IGameProcess.class);
+        processes = Lookup.getDefault().lookupAll(IGameProcess.class);//this makes the build fail
         world = new World();
+        processes.forEach((p)->p.start(world));
+        world.getEntities().forEach(System.out::println);
     }
 
     /**
@@ -48,7 +50,8 @@ class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        font.draw(batch, "the game is now running.", 150, 220);
+//        font.draw(batch, "the game is now running.", 150, 220);
+        font.draw(batch, world.getEntities().toString()+" hello", 150, 220);
         batch.end();
     }
     

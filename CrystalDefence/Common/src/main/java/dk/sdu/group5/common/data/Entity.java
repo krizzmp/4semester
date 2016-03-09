@@ -67,33 +67,7 @@ public class Entity {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.ID);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Entity other = (Entity) obj;
-        if (!Objects.equals(this.ID, other.ID)) {
-            return false;
-        }
-        if (this.x != other.x) {
-            return false;
-        }
-        if (this.y != other.y) {
-            return false;
-        }
-        if (!Objects.equals(this.properties, other.properties)) {
-            return false;
-        }
-        return true;
+    public String toString() {
+        return type.toString()+"{x:"+x+", y:"+y+", lives:"+lives+"}";
     }
 }
