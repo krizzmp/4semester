@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import dk.sdu.group5.common.data.World;
+import org.openide.util.Lookup;
 
 
 class GameScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
+    private World currentWorld ;
+        
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
      */
@@ -36,7 +40,12 @@ class GameScreen implements Screen {
         batch.begin();
         font.draw(batch, "the game is now running.", 150, 220);
         batch.end();
+        currentWorld =  Lookup.getDefault().lookup(World.class);
     }
+    
+    /**
+     * 
+     */
 
     /**
      * @param width
