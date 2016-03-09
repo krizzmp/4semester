@@ -7,6 +7,7 @@ import org.openide.modules.ModuleInstall;
 public class Start implements Runnable {
     @Override
     public void run() {
+        System.out.println("hi");
         LwjglApplicationConfiguration cfg =
                 new LwjglApplicationConfiguration();
         cfg.title = "Crystal Defence";
