@@ -40,7 +40,9 @@ class GameScreen implements Screen {
         batch.begin();
         font.draw(batch, "the game is now running.", 150, 220);
         batch.end();
-        currentWorld =  Lookup.getDefault().lookup(World.class);
+
+        // I don't understand this:
+        //currentWorld =  Lookup.getDefault().lookup(World.class);
     }
     
     /**
