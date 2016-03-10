@@ -1,9 +1,7 @@
 package dk.sdu.group5.common.data;
 
-public class Spawner {
+public abstract class Spawner {
     int difficulty;
 
-    public Entity spawn() {
-        return null;
-    }
+    public abstract Entity spawn();
 }
