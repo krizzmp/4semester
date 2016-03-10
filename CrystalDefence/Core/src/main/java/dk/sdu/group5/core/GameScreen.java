@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.group5.common.data.World;
@@ -12,13 +13,15 @@ import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
+import java.util.Objects;
 
 
 class GameScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
-    private World world ;
+    private World world;
     private Collection<? extends IGameProcess> processes;
+    private Texture dropImage;
 
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
@@ -30,8 +33,9 @@ class GameScreen implements Screen {
         font.setColor(Color.CYAN);
         processes = Lookup.getDefault().lookupAll(IGameProcess.class);//this makes the build fail
         world = new World();
-        processes.forEach((p)->p.start(world));
+        processes.forEach((p) -> p.start(world));
         world.getEntities().forEach(System.out::println);
+        //dropImage = new Texture(Gdx.files.classpath("gridPattern.png"));
     }
 
     /**
@@ -44,23 +48,30 @@ class GameScreen implements Screen {
         // TODO: 03/03/16 add game rendering
 
         //update entities
-        processes.forEach((p)->p.update(world,delta));
+        processes.forEach((p) -> p.update(world, delta));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
 //        font.draw(batch, "the game is now running.", 150, 220);
-        font.draw(batch, world.getEntities().toString()+" hello", 150, 220);
+//        batch.draw(dropImage, 100, 100);
+        font.draw(batch, world.getEntities().toString(), 150, 220);
+        world.getEntities().forEach(e -> {
+            String texture = e.getTexture();
+            if (texture != null && !Objects.equals(texture, "")) {
+                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
+            }
+        });
         batch.end();
     }
-    
+
     /**
-     * 
+     *
      */
 
     /**
-     * @param width the width of the window
+     * @param width  the width of the window
      * @param height the height of the window
      * @see ApplicationListener#resize(int, int)
      */

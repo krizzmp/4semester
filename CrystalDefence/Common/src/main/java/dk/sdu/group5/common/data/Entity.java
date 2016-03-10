@@ -1,7 +1,6 @@
 package dk.sdu.group5.common.data;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,6 +12,7 @@ public class Entity {
 
     private final Set<String> properties;
     private EntityType type;
+    private String texture;
 
     public Entity() {
         properties = new HashSet<>();
@@ -69,5 +69,13 @@ public class Entity {
     @Override
     public String toString() {
         return type.toString()+"{x:"+x+", y:"+y+", lives:"+lives+"}";
+    }
+
+    public void setTexture(String texture) {
+        this.texture = texture;
+    }
+
+    public String getTexture() {
+        return texture;
     }
 }

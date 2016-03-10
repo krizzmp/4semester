@@ -6,6 +6,7 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 @ServiceProvider(service = IGameProcess.class)
@@ -24,7 +25,9 @@ public class PlayerGameProcess implements IGameProcess
         player = new Entity();
         player.setType(EntityType.PLAYER);
         player.setLives(3);
-
+        player.setX(250);
+        player.setY(250);
+        player.setTexture("gridPattern.png");
         try
         {
             player.addProperty("collidable");
