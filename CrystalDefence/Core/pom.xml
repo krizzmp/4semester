@@ -105,13 +105,18 @@
         <dependency>
             <groupId>dk.sdu.group5</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>dk.sdu.group5</groupId>
             <artifactId>Player</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.group5</groupId>
+            <artifactId>Tower</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>

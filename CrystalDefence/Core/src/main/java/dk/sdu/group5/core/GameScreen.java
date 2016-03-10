@@ -21,7 +21,6 @@ class GameScreen implements Screen {
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
-    private Texture dropImage;
 
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
@@ -31,11 +30,10 @@ class GameScreen implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
-        processes = Lookup.getDefault().lookupAll(IGameProcess.class);//this makes the build fail
+        processes = Lookup.getDefault().lookupAll(IGameProcess.class);
         world = new World();
         processes.forEach((p) -> p.start(world));
         world.getEntities().forEach(System.out::println);
-        //dropImage = new Texture(Gdx.files.classpath("gridPattern.png"));
     }
 
     /**
@@ -54,8 +52,6 @@ class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-//        font.draw(batch, "the game is now running.", 150, 220);
-//        batch.draw(dropImage, 100, 100);
         font.draw(batch, world.getEntities().toString(), 150, 220);
         world.getEntities().forEach(e -> {
             String texture = e.getTexture();

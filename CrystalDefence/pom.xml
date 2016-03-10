@@ -7,7 +7,6 @@
     <artifactId>CrystalDefence-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-
     <name>CrystalDefence-parent</name>
 
     <repositories>
@@ -74,6 +73,7 @@
         <module>Player</module>
         <module>Enemy</module>
         <module>Core</module>
+        <module>Tower</module>
     </modules>
 
     <properties>
