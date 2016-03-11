@@ -1,6 +1,5 @@
 package dk.sdu.group5.enemy;
 
-import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.Spawner;

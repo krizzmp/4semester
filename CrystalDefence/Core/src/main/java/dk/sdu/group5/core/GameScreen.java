@@ -34,7 +34,7 @@ class GameScreen implements Screen {
         font.setColor(Color.CYAN);
         processes = Lookup.getDefault().lookupAll(IGameProcess.class);
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
-        processes.forEach((p) -> p.start(world));
+        processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
     }
 
@@ -50,7 +50,7 @@ class GameScreen implements Screen {
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
         //update entities
-        processes.forEach((p) -> p.update(world, delta));
+        processes.forEach(p -> p.update(world, delta));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

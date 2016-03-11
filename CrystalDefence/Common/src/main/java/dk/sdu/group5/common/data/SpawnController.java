@@ -7,9 +7,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SpawnController {
-    private float timeSinceLastSpawn = 0;
-    private List<Spawner> spawners = new LinkedList<>();
-    private Random random = new Random();
+    private float timeSinceLastSpawn;
+    private final List<Spawner> spawners = new LinkedList<>();
+    private final Random random = new Random();
     private static SpawnController instance;
 
     public static SpawnController getInstance() {

@@ -9,7 +9,7 @@ public class Difficulty {
 
     public Difficulty(int maxConcurrentDifficulty, float spawnRate) {
         this.maxConcurrentDifficulty = maxConcurrentDifficulty;
-        this.currentDifficulty = 0;
+        currentDifficulty = 0;
         this.spawnRate = spawnRate;
     }
 }
