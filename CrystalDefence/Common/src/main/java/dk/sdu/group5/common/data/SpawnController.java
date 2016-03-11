@@ -1,10 +1,9 @@
 package dk.sdu.group5.common.data;
 
-import com.sun.javafx.geom.Vec2d;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SpawnController {
@@ -21,19 +20,50 @@ public class SpawnController {
 
     public void update(World world, float delta) { // FIXME: 10/03/16 call this from render method in core
         timeSinceLastSpawn += delta;
-        if (timeSinceLastSpawn > world.difficulty.spawnRate) {
-            int b = world.difficulty.maxConcurrentDifficulty - world.difficulty.currentDifficulty;
+        ifShouldSpawn(world.difficulty, b -> {
+            Entity entity = getSpawnerLessDifficultThan(b).spawn();
+            setEntityPos(getPosOnEdge(400, 500), entity);
+            world.entities.add(entity);
+            reset();
+        });
+    }
+
+    private void reset() {
+        timeSinceLastSpawn = 0;
+    }
+
+    private void ifShouldSpawn(Difficulty difficulty, Consumer<Integer> consumer) {
+        if (timeSinceLastSpawn > difficulty.spawnRate) {
+            int b = difficulty.maxConcurrentDifficulty - difficulty.currentDifficulty;
             if (b > 0) {
-                Entity entity = getSpawnerLessDifficultThan(b).spawn();
-                setEntityPos(getPos(), entity);
-                world.entities.add(entity);
-                timeSinceLastSpawn = 0;
+                consumer.accept(b);
             }
         }
     }
 
-    private Pos2d getPos() {
-        return new Pos2d(20, 20);// FIXME: 11/03/16 return random point along the map egde
+    private Pos2d getPosOnEdge(int width, int height) {
+        int rnd = rnd(4);
+        Pos2d pos2d = new Pos2d(0, 0);
+        switch (rnd){
+            case 0:
+                pos2d = new Pos2d(rnd(width), 0);
+                break;
+            case 1:
+                pos2d = new Pos2d(rnd(width), height);
+                break;
+            case 2:
+                pos2d = new Pos2d(0, rnd(height));
+                break;
+            case 3:
+                pos2d = new Pos2d(width, rnd(height));
+                break;
+        }
+
+        return pos2d;
+    }
+
+    private int rnd(int i) {
+        return random.nextInt(i);
     }
 
     private void setEntityPos(Pos2d pos, Entity entity) {
@@ -46,7 +76,7 @@ public class SpawnController {
     }
 
     private <T> T chooseOne(List<T> spawners) {
-        int i = random.nextInt(spawners.size());
+        int i = rnd(spawners.size());
         return spawners.get(i);
     }
 
