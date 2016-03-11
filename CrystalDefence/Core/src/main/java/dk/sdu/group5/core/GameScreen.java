@@ -52,7 +52,6 @@ class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-//        font.draw(batch, world.getEntities().toString(), 150, 220);
         world.getEntities().forEach(e -> {
             String texture = e.getTexture();
             if (texture != null && !Objects.equals(texture, "")) {
