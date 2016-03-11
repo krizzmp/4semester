@@ -6,7 +6,6 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 @ServiceProvider(service = IGameProcess.class)

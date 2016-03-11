@@ -6,4 +6,10 @@ public class Difficulty {
     int numberOfEnemiesToKillInOrderToWin;
     int numberOfEnemiesKilled;
     float spawnRate;
+
+    public Difficulty(int maxConcurrentDifficulty, float spawnRate) {
+        this.maxConcurrentDifficulty = maxConcurrentDifficulty;
+        this.currentDifficulty = 0;
+        this.spawnRate = spawnRate;
+    }
 }

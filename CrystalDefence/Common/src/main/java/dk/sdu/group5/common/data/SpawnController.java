@@ -18,12 +18,15 @@ public class SpawnController {
         return instance;
     }
 
-    public void update(World world, float delta) { // FIXME: 10/03/16 call this from render method in core
+    public void update(World world, float delta) {
         timeSinceLastSpawn += delta;
         ifShouldSpawn(world.difficulty, b -> {
-            Entity entity = getSpawnerLessDifficultThan(b).spawn();
-            setEntityPos(getPosOnEdge(400, 500), entity);
-            world.entities.add(entity);
+            Spawner spawner = getSpawnerLessDifficultThan(b);
+            if (spawner != null){
+                Entity entity = spawner.spawn();
+                setEntityPos(getPosOnEdge(800, 400), entity);
+                world.entities.add(entity);
+            }
             reset();
         });
     }
@@ -44,7 +47,7 @@ public class SpawnController {
     private Pos2d getPosOnEdge(int width, int height) {
         int rnd = rnd(4);
         Pos2d pos2d = new Pos2d(0, 0);
-        switch (rnd){
+        switch (rnd) {
             case 0:
                 pos2d = new Pos2d(rnd(width), 0);
                 break;
@@ -72,12 +75,17 @@ public class SpawnController {
     }
 
     private Spawner getSpawnerLessDifficultThan(int difficulty) {
-        return chooseOne(spawners.stream().filter(spawner -> spawner.difficulty <= difficulty).collect(Collectors.toList()));
+        return chooseOne(spawners.stream().filter(spawner -> spawner.getDifficulty() <= difficulty).collect(Collectors.toList()));
     }
 
     private <T> T chooseOne(List<T> spawners) {
-        int i = rnd(spawners.size());
-        return spawners.get(i);
+        int size = spawners.size();
+        if (size > 0) {
+            int i = rnd(size);
+            return spawners.get(i);
+        } else {
+            return null;
+        }
     }
 
     public void register(Spawner spawner) {

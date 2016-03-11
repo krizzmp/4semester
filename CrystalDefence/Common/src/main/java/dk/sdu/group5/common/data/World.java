@@ -17,6 +17,11 @@ public class World
         entities = new LinkedList<>();
     }
 
+    public World(Difficulty difficulty) {
+        this();
+        this.difficulty = difficulty;
+    }
+
     public void AddEntity(Entity entity)
     {
         entities.add(entity);

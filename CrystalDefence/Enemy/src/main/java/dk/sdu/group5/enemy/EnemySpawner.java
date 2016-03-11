@@ -1,5 +1,6 @@
 package dk.sdu.group5.enemy;
 
+import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.Spawner;
@@ -8,6 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EnemySpawner extends Spawner {
+    @Override
+    public int getDifficulty() {
+        return 100;
+    }
+
     @Override
     public Entity spawn() {
         Entity entity = new Entity();
