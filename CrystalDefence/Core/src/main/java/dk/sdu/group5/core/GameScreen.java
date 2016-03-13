@@ -21,6 +21,11 @@ class GameScreen implements Screen {
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
+    public static final int GAME_READY = 0; 
+    public static final int GAME_RUNNING = 1; 
+    public static final int GAME_PAUSED = 2; 
+    public static final int GAME_OVER = 4;
+    public static int state;
 
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
@@ -34,6 +39,8 @@ class GameScreen implements Screen {
         world = new World();
         processes.forEach((p) -> p.start(world));
         world.getEntities().forEach(System.out::println);
+        state = GAME_RUNNING;
+     
     }
 
     /**
@@ -82,8 +89,11 @@ class GameScreen implements Screen {
      */
     @Override
     public void pause() {
-
+        updatePaused();
+           
     }
+    
+    
 
     /**
      * @see ApplicationListener#resume()
@@ -107,5 +117,27 @@ class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+    
+    @Overide
+    public void update() {
+        switch (state) {
+    case GAME_READY:
+        updateReady();
+        break;
+    case GAME_RUNNING:
+        updateRunning(delta);
+        break;
+    case GAME_PAUSED:
+        updatePaused();
+        break;
+    case GAME_OVER:
+        gameOver = true;
+        updateGameOver();
+        break;
+    }
+    }
+    public void updatePaused(){
+        state = GAME_PAUSED;
     }
 }
