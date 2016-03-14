@@ -68,7 +68,7 @@ public class Entity {
 
     @Override
     public String toString() {
-        return type.toString()+"{x:"+x+", y:"+y+", lives:"+lives+"}";
+        return type +"{x:"+x+", y:"+y+", lives:"+lives+"}";
     }
 
     public void setTexture(String texture) {

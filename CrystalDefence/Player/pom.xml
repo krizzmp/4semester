@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE</version>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
     <properties>

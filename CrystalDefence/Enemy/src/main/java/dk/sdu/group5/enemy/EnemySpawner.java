@@ -9,6 +9,11 @@ import java.util.logging.Logger;
 
 public class EnemySpawner extends Spawner {
     @Override
+    public int getDifficulty() {
+        return 100;
+    }
+
+    @Override
     public Entity spawn() {
         Entity entity = new Entity();
         entity.setType(EntityType.ENEMY);

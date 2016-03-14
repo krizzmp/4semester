@@ -7,7 +7,7 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
         System.out.println("hi");
-        new dk.sdu.group5.core.Start().run();
+        new Start().run();
         System.out.println("app created");
     }
 }

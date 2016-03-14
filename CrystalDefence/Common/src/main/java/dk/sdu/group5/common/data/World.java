@@ -1,6 +1,5 @@
 package dk.sdu.group5.common.data;
 
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +14,11 @@ public class World
     public World()
     {
         entities = new LinkedList<>();
+    }
+
+    public World(Difficulty difficulty) {
+        this();
+        this.difficulty = difficulty;
     }
 
     public void AddEntity(Entity entity)

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import static com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 class StartScreen implements Screen {
 
@@ -41,14 +42,14 @@ class StartScreen implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+        TextButtonStyle style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
 
         addButton("start game", onEnter, style);
         addButton("exit game", ()->Gdx.app.exit(), style);
     }
 
-    private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style) {
-        final TextButton button = new TextButton(text, style);
+    private void addButton(String text, Runnable onEnter, TextButtonStyle style) {
+        TextButton button = new TextButton(text, style);
         button.addListener(new ClickListener(){
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
