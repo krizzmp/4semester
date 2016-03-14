@@ -13,6 +13,7 @@ public class EnemySpawner extends Spawner {
         Entity entity = new Entity();
         entity.setType(EntityType.ENEMY);
         entity.setLives(3);
+        entity.setSpeed(40);
         entity.setTexture("gridPattern.png");
         try {
             entity.addProperty("collidable");
