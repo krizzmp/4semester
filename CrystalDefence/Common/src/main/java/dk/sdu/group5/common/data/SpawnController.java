@@ -37,9 +37,9 @@ public class SpawnController {
 
     private void ifShouldSpawn(Difficulty difficulty, Consumer<Integer> consumer) {
         if (timeSinceLastSpawn > difficulty.spawnRate) {
-            int b = difficulty.maxConcurrentDifficulty - difficulty.currentDifficulty;
-            if (b > 0) {
-                consumer.accept(b);
+            int difficultyRemaining = difficulty.maxConcurrentDifficulty - difficulty.currentDifficulty;
+            if (difficultyRemaining > 0) {
+                consumer.accept(difficultyRemaining);
             }
         }
     }
