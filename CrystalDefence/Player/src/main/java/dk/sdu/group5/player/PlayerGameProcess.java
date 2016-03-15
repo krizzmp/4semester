@@ -26,7 +26,7 @@ public class PlayerGameProcess implements IGameProcess
         player.setLives(3);
         player.setX(250);
         player.setY(250);
-        player.setTexture("gridPattern.png");
+        player.setTexture("playerTexture.png");
         try
         {
             player.addProperty("collidable");
