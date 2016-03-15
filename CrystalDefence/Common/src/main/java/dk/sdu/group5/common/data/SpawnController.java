@@ -2,15 +2,17 @@ package dk.sdu.group5.common.data;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpawnController {
-    private float timeSinceLastSpawn;
+    private static SpawnController instance;
     private final List<Spawner> spawners = new LinkedList<>();
     private final Random random = new Random();
-    private static SpawnController instance;
+    private float timeSinceLastSpawn;
 
     public static SpawnController getInstance() {
         if (instance == null)
@@ -21,12 +23,13 @@ public class SpawnController {
     public void update(World world, float delta) {
         timeSinceLastSpawn += delta;
         ifShouldSpawn(world.difficulty, b -> {
-            Spawner spawner = getSpawnerLessDifficultThan(b);
-            if (spawner != null){
-                Entity entity = spawner.spawn();
+            Optional<Spawner> spawner = getSpawnerLessDifficultThan(b);
+            spawner.ifPresent(s -> {
+                Entity entity = s.spawn();
                 setEntityPos(getPosOnEdge(800, 400), entity);
+                world.difficulty.currentDifficulty += s.getDifficulty();
                 world.entities.add(entity);
-            }
+            });
             reset();
         });
     }
@@ -74,17 +77,19 @@ public class SpawnController {
         entity.setY(pos.y);
     }
 
-    private Spawner getSpawnerLessDifficultThan(int difficulty) {
-        return chooseOne(spawners.stream().filter(spawner -> spawner.getDifficulty() <= difficulty).collect(Collectors.toList()));
+    private Optional<Spawner> getSpawnerLessDifficultThan(int difficulty) {
+        Predicate<Spawner> isTheRightDifficulty = spawner -> spawner.getDifficulty() <= difficulty;
+        List<Spawner> filteredSpawners = spawners.stream().filter(isTheRightDifficulty).collect(Collectors.toList());
+        return chooseOne(filteredSpawners);
     }
 
-    private <T> T chooseOne(List<T> spawners) {
+    private <T> Optional<T> chooseOne(List<T> spawners) {
         int size = spawners.size();
         if (size > 0) {
             int i = rnd(size);
-            return spawners.get(i);
+            return Optional.of(spawners.get(i));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
