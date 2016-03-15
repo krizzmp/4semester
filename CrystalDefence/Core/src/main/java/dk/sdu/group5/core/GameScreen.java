@@ -49,6 +49,10 @@ class GameScreen implements Screen {
 
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
+        
+        //Check input
+        //GameInputProcessor.getInstance().update();
+        
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
