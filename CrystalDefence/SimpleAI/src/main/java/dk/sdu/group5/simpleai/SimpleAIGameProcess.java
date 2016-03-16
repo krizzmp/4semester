@@ -32,13 +32,9 @@ public class SimpleAIGameProcess implements IGameProcess {
             Vector2d t1 = vectorOf(t);
             Vector2d a = t1.minus(e1).unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
             Vector2d newPoint = e1.plus(a);
-            e.setX(toInt(newPoint.x));
-            e.setY(toInt(newPoint.y));
+            e.setX(newPoint.x);
+            e.setY(newPoint.y);
         }));
-    }
-
-    private int toInt(double round) {
-        return Math.toIntExact(Math.round(round));
     }
 
     private Optional<Entity> getFirstTower(List<Entity> entities) {

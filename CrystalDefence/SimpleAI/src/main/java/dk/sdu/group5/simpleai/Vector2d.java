@@ -1,10 +1,10 @@
 package dk.sdu.group5.simpleai;
 
 class Vector2d {
-    final double x;
-    final double y;
+    final float x;
+    final float y;
 
-    Vector2d(double x, double y) {
+    Vector2d(float x, float y) {
 
         this.x = x;
         this.y = y;
@@ -22,12 +22,12 @@ class Vector2d {
         return divide(length());
     }
 
-    Vector2d divide(double length) {
+    Vector2d divide(float length) {
         return new Vector2d(x / length, y / length);
     }
 
-    double length() {
-        return Math.sqrt(x * x + y * y);
+    float length() {
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     Vector2d plus(Vector2d e) {

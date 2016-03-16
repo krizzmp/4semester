@@ -3,13 +3,13 @@ package dk.sdu.group5.common.data;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Vector;
 
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
     private final Set<String> properties;
-    private int x, y;
+    private float x;
+    private float y;
     private int lives;
     private EntityType type;
     private String texture;
@@ -27,19 +27,19 @@ public class Entity {
         Speed = speed;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
