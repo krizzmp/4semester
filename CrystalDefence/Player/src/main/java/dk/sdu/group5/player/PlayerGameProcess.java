@@ -2,6 +2,7 @@ package dk.sdu.group5.player;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
@@ -12,7 +13,8 @@ import java.util.logging.Logger;
 public class PlayerGameProcess implements IGameProcess
 {
     private Entity player;
-
+    private int speed;
+    
     @Override
     public void install() {
 
@@ -20,13 +22,14 @@ public class PlayerGameProcess implements IGameProcess
 
     @Override
     public void start(World world)
-    {
+    {      
         player = new Entity();
         player.setType(EntityType.PLAYER);
         player.setLives(3);
         player.setX(250);
         player.setY(250);
-        player.setTexture("gridPattern.png");
+        player.setTexture("playerTexture.png");
+        speed = 60;                                // Should probably be implementet into Entity
         try
         {
             player.addProperty("collidable");
@@ -43,7 +46,24 @@ public class PlayerGameProcess implements IGameProcess
     @Override
     public void update(World world, float delta)
     {
-        // Render stuff
+        //Player Movement
+        GameKeys gameKeys = GameKeys.getInstance();
+        boolean upState = gameKeys.player_movement_up.getKeyState();
+        if(upState) {
+            float v = player.getY() + speed * delta;
+            player.setY(v);
+        }
+        if(gameKeys.player_movement_down.getKeyState()) {
+            player.setY(player.getY() - speed * delta);
+        }
+        if(gameKeys.player_movement_left.getKeyState()) {
+            player.setX(player.getX() - speed * delta);
+        }
+        if(gameKeys.player_movement_right.getKeyState()) {
+            player.setX(player.getX() + speed * delta);
+        }
+        
+        
         // Collision stuff
     }
 

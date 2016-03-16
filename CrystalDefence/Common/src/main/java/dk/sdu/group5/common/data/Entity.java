@@ -7,7 +7,7 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private int x, y;
+    private float x, y;
     private int lives;
 
     private final Set<String> properties;
@@ -18,19 +18,19 @@ public class Entity {
         properties = new HashSet<>();
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
