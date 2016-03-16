@@ -2,6 +2,7 @@ package dk.sdu.group5.core;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.group5.common.data.Difficulty;
+import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
@@ -36,6 +38,24 @@ class GameScreen implements Screen {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
+        
+                //Check input
+        Gdx.input.setInputProcessor(new InputAdapter () {
+            
+            @Override
+            public boolean keyDown(int k) {
+                //Searches the list of all used keys, and returns true if that key is in that list
+                GameKeys.getInstance().setKeyState(k, true); 
+                return true;
+            }
+            
+            @Override
+            public boolean keyUp(int k) {
+                //Searches the list of all used keys, and returns true if that key is in that list
+                GameKeys.getInstance().setKeyState(k, false);
+                return true;
+            }
+        });
     }
 
     /**
@@ -49,9 +69,6 @@ class GameScreen implements Screen {
 
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
-        
-        //Check input
-        //GameInputProcessor.getInstance().update();
         
         //update entities
         processes.forEach(p -> p.update(world, delta));

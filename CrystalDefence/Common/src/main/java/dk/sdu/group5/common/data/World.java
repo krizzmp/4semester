@@ -10,7 +10,7 @@ public class World
     CollisionDetector collisionDetector;
     List<Entity> entities;
     Difficulty difficulty;
-
+    
     public World()
     {
         entities = new LinkedList<>();
@@ -34,4 +34,5 @@ public class World
     public List<Entity> getEntities() {
         return entities;
     }
+    
 }
