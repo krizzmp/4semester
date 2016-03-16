@@ -29,7 +29,7 @@ public class PlayerGameProcess implements IGameProcess
         player.setX(250);
         player.setY(250);
         player.setTexture("playerTexture.png");
-        speed = 2;                                // Should probably be implementet into Entity
+        speed = 60;                                // Should probably be implementet into Entity
         try
         {
             player.addProperty("collidable");
@@ -47,22 +47,23 @@ public class PlayerGameProcess implements IGameProcess
     public void update(World world, float delta)
     {
         //Player Movement
-        if(GameKeys.getInstance().player_movement_up.getKeyState()) {
-            //System.out.println(GameKeys.getInstance().player_movement_up.getKeyState());
-            player.setY((int) (player.getY() + speed * delta));
+        GameKeys gameKeys = GameKeys.getInstance();
+        boolean upState = gameKeys.player_movement_up.getKeyState();
+        if(upState) {
+            float v = player.getY() + speed * delta;
+            player.setY(v);
         }
-        if(GameKeys.getInstance().player_movement_down.getKeyState()) {
-            player.setY((int) (player.getY() - speed * delta));
+        if(gameKeys.player_movement_down.getKeyState()) {
+            player.setY(player.getY() - speed * delta);
         }
-        if(GameKeys.getInstance().player_movement_left.getKeyState()) {
-            player.setX((int) (player.getX() - speed * delta));
+        if(gameKeys.player_movement_left.getKeyState()) {
+            player.setX(player.getX() - speed * delta);
         }
-        if(GameKeys.getInstance().player_movement_right.getKeyState()) {
-            player.setX((int) (player.getX() + speed * delta));
+        if(gameKeys.player_movement_right.getKeyState()) {
+            player.setX(player.getX() + speed * delta);
         }
         
         
-        // Render stuff
         // Collision stuff
     }
 

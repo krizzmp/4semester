@@ -1,7 +1,6 @@
 
 package dk.sdu.group5.common.data;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class GameKeys {
     public Key player_movement_right = new Key(Keys.RIGHT, false);
     public Key player_shoot = new Key(Keys.SPACE, false);
     
-    private List<Key> listOfKeys = new ArrayList<Key>(); 
+    private List<Key> listOfKeys = new ArrayList<>();
     
     public GameKeys() {
         listOfKeys.add(player_movement_up);
