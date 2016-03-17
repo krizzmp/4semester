@@ -14,8 +14,6 @@ class Game extends com.badlogic.gdx.Game {
     
     @Override
     public void create() {
-
-        // TODO: 02/03/16 add initializing logic, such as setting the first screen
         gameScreen = new GameScreen();
         //something like this:
         startScreen = new StartScreen(() -> {
