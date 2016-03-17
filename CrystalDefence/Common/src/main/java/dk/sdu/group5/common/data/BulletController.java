@@ -12,16 +12,17 @@ import java.util.logging.Logger;
 public class BulletController {
     
     private static BulletController instance;
-    private Entity bullet;
     private int speed = 2; // Should be removed and use Entity speed instead
     
+    private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
-    private long startLockTime;
-    private long currentLockTime;
+    private int startLockTime;
+    private int currentLockTime;
     
-    private int weaponMagazineSize = 0;
-    private List<Entity> weaponMagazine = new LinkedList<>();
+    private int weaponMagazineSize = 5;
+    private List<Bullet> weaponMagazine = new LinkedList<>();
+
     
     public static BulletController getInstance() {
         if (instance == null)
@@ -30,32 +31,33 @@ public class BulletController {
     }
     
     public void update(World world, float delta) {
-        currentLockTime = System.currentTimeMillis();
-        if(currentLockTime - startLockTime >= shootInterval) {
+        currentLockTime = (int) System.currentTimeMillis();
+        if(currentLockTime - startLockTime >= shootInterval * 1000) {
             isLocked = false;
         }
         
-        updateBullet(delta);
+        updateBullet(world, delta);
     }
     
-    public void shootBullet() {
-        if(!isLocked) {
-            bullet = new Entity();
-            bullet.setType(EntityType.BULLET);
-            bullet.setLives(1);
-            bullet.setTexture("bulletTexture.png");
-            bullet.setX(700);
-            bullet.setY(100);
-            try {
-                bullet.addProperty("collidable");
-                bullet.addProperty("damageable");
-            } catch (Exception e) {
-                Logger.getLogger(BulletController.class.getName()).log(Level.SEVERE, null, e);
-            }
+    public void shootBullet(World world) {
+        boolean magazineNotFull = false;
+        
+        if(weaponMagazineSize == 0) {
+            magazineNotFull = true;
+        } 
+        else if((weaponMagazine.size() < weaponMagazineSize)) {
+            magazineNotFull = true;
+        }
+        
+        if(!isLocked && magazineNotFull) {
+            System.out.println("created bullet");
+            
+            Bullet bullet = new Bullet(world);
 
             weaponMagazine.add(bullet);
-            startLockTime = System.currentTimeMillis();
+            startLockTime = (int) System.currentTimeMillis();
             isLocked = true;
+
         }
     }
     
@@ -74,11 +76,17 @@ public class BulletController {
         }
     }
     
-    private void updateBullet(float delta) {
-        Iterator<Entity> it = weaponMagazine.iterator();
+    private void updateBullet(World world, float delta) {
+        Iterator<Bullet> it = weaponMagazine.iterator();
 
         while(it.hasNext()) {
-
+            Bullet itBullet = it.next();
+            itBullet.update(delta);
+            if(itBullet.toBeRemoved()) {
+                itBullet.removeBullet(world);
+                itBullet = null;
+                it.remove();
+            }
         }
     }
 }

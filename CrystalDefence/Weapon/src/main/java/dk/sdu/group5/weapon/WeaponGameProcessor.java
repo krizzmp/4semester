@@ -13,7 +13,6 @@ import org.openide.util.lookup.ServiceProvider;
 public class WeaponGameProcessor implements IGameProcess {
 
     
-    
     @Override
     public void install() {
         
@@ -21,14 +20,14 @@ public class WeaponGameProcessor implements IGameProcess {
 
     @Override
     public void start(World world) {
-        
     }
 
     @Override
     public void update(World world, float delta) {
+        BulletController.getInstance().update(world, delta);
+        
         if(GameKeys.getInstance().player_shoot.getKeyState()) {
-            System.out.println("space pressed");
-            BulletController.getInstance().shootBullet();
+            BulletController.getInstance().shootBullet(world);
         }
     }
 
