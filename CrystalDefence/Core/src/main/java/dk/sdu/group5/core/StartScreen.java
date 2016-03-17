@@ -21,9 +21,11 @@ class StartScreen implements Screen {
     private Skin skin;
     private Stage stage;
     private Table table;
+    private Game game;
 
     StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
+
 
 
     }
@@ -76,6 +78,7 @@ class StartScreen implements Screen {
 
     @Override
     public void pause() {
+
 
     }
 
