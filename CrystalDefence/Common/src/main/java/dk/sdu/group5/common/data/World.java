@@ -10,10 +10,13 @@ public class World
     CollisionDetector collisionDetector;
     List<Entity> entities;
     Difficulty difficulty;
+    WeaponType weaponType;
+    
     
     public World()
     {
         entities = new LinkedList<>();
+        weaponType = WeaponType.PISTOL;
     }
 
     public World(Difficulty difficulty) {
@@ -33,6 +36,15 @@ public class World
 
     public List<Entity> getEntities() {
         return entities;
+    }
+    
+    public void setWeaponType(WeaponType type) {
+        weaponType = type;
+        BulletController.getInstance().setShootInterval(type);
+    }
+    
+    public WeaponType getWeaponType() {
+        return weaponType;
     }
     
 }
