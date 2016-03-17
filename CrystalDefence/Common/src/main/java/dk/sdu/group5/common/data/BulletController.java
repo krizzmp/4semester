@@ -17,9 +17,8 @@ public class BulletController {
     private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
-    private int startLockTime;
-    private int currentLockTime;
-    
+    private long startLockTime;
+
     private int weaponMagazineSize = 5;
     private List<Bullet> weaponMagazine = new LinkedList<>();
 
@@ -31,7 +30,7 @@ public class BulletController {
     }
     
     public void update(World world, float delta) {
-        currentLockTime = (int) System.currentTimeMillis();
+        long currentLockTime = System.currentTimeMillis();
         if(currentLockTime - startLockTime >= shootInterval * 1000) {
             isLocked = false;
         }
@@ -45,7 +44,7 @@ public class BulletController {
         if(weaponMagazineSize == 0) {
             magazineNotFull = true;
         } 
-        else if((weaponMagazine.size() < weaponMagazineSize)) {
+        else if(weaponMagazine.size() < weaponMagazineSize) {
             magazineNotFull = true;
         }
         
@@ -55,7 +54,7 @@ public class BulletController {
             Bullet bullet = new Bullet(world);
 
             weaponMagazine.add(bullet);
-            startLockTime = (int) System.currentTimeMillis();
+            startLockTime = System.currentTimeMillis();
             isLocked = true;
 
         }
