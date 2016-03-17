@@ -6,9 +6,6 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @ServiceProvider(service = IGameProcess.class)
 public class TowerGameProcess implements IGameProcess {
     private Entity tower;
@@ -40,11 +37,8 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        try {
-            world.RemoveEntity(tower);
-        } catch (Exception ex) {
-            Logger.getLogger(TowerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        world.RemoveEntity(tower);
+
     }
 
     @Override

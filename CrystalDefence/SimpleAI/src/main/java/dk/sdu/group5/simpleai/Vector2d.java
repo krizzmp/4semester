@@ -5,7 +5,6 @@ class Vector2d {
     final float y;
 
     Vector2d(float x, float y) {
-
         this.x = x;
         this.y = y;
     }
