@@ -77,7 +77,8 @@ public class Entity {
 
     @Override
     public String toString() {
-        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
+//        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
+        return String.format("%s{x: %.0f, y: %.0f, lives: %d}", type, x, y, lives);
     }
 
     public String getTexture() {
