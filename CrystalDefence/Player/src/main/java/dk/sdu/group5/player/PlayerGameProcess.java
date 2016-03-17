@@ -1,13 +1,17 @@
 package dk.sdu.group5.player;
 
+import dk.sdu.group5.common.data.AABB;
+import dk.sdu.group5.common.data.BoxCollider;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
-import org.openide.util.lookup.ServiceProvider;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.openide.util.lookup.ServiceProvider;
+
 @ServiceProvider(service = IGameProcess.class)
 public class PlayerGameProcess implements IGameProcess
 {
@@ -27,9 +31,9 @@ public class PlayerGameProcess implements IGameProcess
         player.setX(250);
         player.setY(250);
         player.setTexture("gridPattern.png");
-        try
-        {
-            player.addProperty("collidable");
+        player.setCollider(new BoxCollider(false, new AABB(-16, -16, 16, 16)));
+
+        try {
             player.addProperty("tangible");
             player.addProperty("damageable");
             world.AddEntity(player);

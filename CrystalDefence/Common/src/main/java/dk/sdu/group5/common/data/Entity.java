@@ -1,16 +1,15 @@
 package dk.sdu.group5.common.data;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private int x, y;
+    private float x, y;
     private int lives;
 
     private final Set<String> properties;
+    private BoxCollider collider;
     private EntityType type;
     private String texture;
 
@@ -18,19 +17,19 @@ public class Entity {
         properties = new HashSet<>();
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -64,6 +63,18 @@ public class Entity {
         if (!properties.remove(property)) {
             throw new Exception("No entry already exists matching the provided property!");
         }
+    }
+
+    public Set<String> getProperties() {
+        return properties;
+    }
+
+    public BoxCollider getCollider() {
+        return collider;
+    }
+
+    public void setCollider(BoxCollider collider) {
+        this.collider = collider;
     }
 
     @Override
