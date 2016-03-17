@@ -74,6 +74,7 @@
         <module>Enemy</module>
         <module>Core</module>
         <module>Tower</module>
+        <module>SimpleAI</module>
     </modules>
 
     <properties>

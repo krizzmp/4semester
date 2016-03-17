@@ -7,15 +7,24 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private float x, y;
-    private int lives;
-
     private final Set<String> properties;
+    private float x;
+    private float y;
+    private int lives;
     private EntityType type;
     private String texture;
+    private float Speed;
 
     public Entity() {
         properties = new HashSet<>();
+    }
+
+    public float getSpeed() {
+        return Speed;
+    }
+
+    public void setSpeed(float speed) {
+        Speed = speed;
     }
 
     public float getX() {
@@ -68,14 +77,15 @@ public class Entity {
 
     @Override
     public String toString() {
-        return type +"{x:"+x+", y:"+y+", lives:"+lives+"}";
+        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
+    }
+
+    public String getTexture() {
+        return texture;
     }
 
     public void setTexture(String texture) {
         this.texture = texture;
     }
 
-    public String getTexture() {
-        return texture;
-    }
 }
