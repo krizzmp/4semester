@@ -59,20 +59,12 @@ public class Entity {
         this.lives = lives;
     }
 
-    public void addProperty(String property) throws Exception {
-        // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
-        // if duplicate found.
-        if (!properties.add(property)) {
-            throw new Exception("A duplicate entry already exists matching the provided property!");
-        }
+    public boolean addProperty(String property) {
+        return properties.add(property);
     }
 
-    public void removeProperty(String property) throws Exception {
-        // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
-        // if duplicate found.
-        if (!properties.remove(property)) {
-            throw new Exception("No entry already exists matching the provided property!");
-        }
+    public boolean removeProperty(String property) {
+        return properties.remove(property);
     }
 
     @Override
