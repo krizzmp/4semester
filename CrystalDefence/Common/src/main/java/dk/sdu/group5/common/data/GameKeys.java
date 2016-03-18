@@ -17,6 +17,7 @@ public class GameKeys {
     public Key player_shoot_down = new Key(20, false);
     public Key player_shoot_left = new Key(21, false);
     public Key player_shoot_right = new Key(22, false);
+    public Key player_place_barrier = new Key(62, false);
     
     private List<Key> listOfKeys = new ArrayList<>();
     
@@ -29,6 +30,7 @@ public class GameKeys {
         listOfKeys.add(player_shoot_down);
         listOfKeys.add(player_shoot_left);
         listOfKeys.add(player_shoot_right); 
+        listOfKeys.add(player_place_barrier);
     }
     
     public static GameKeys getInstance() {
