@@ -12,14 +12,12 @@ import java.util.logging.Logger;
 public class BulletController {
     
     private static BulletController instance;
-    private int speed = 2; // Should be removed and use Entity speed instead
-    
     private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
     private long startLockTime;
 
-    private int weaponMagazineSize = 5;
+    private int weaponMagazineSize = 0;
     private List<Bullet> weaponMagazine = new LinkedList<>();
 
     

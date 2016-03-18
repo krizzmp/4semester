@@ -48,10 +48,9 @@ public class PlayerGameProcess implements IGameProcess {
         if (gameKeys.player_movement_right.getKeyState()) {
             player.setX(player.getX() + playerSpeed * delta);
         }
-
-
-        // Collision stuff
     }
+
+    // Collision stuff
 
     @Override
     public void stop(World world) {

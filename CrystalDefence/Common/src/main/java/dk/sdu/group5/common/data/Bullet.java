@@ -12,16 +12,13 @@ public class Bullet { // TODO: 17/03/16 move this to a seperate module
 
     private int activeTime = 10000;
     private long startTime = System.currentTimeMillis();
-
-    private int speed = 60;  // Should be removed later
-
-
+    
     public Bullet(World world) {
         bullet = new Entity();
         bullet.setType(EntityType.BULLET);
         bullet.setLives(1);
         bullet.setTexture("bulletTexture.png");
-        bullet.setSpeed(60);
+        bullet.setSpeed(120);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
         bullet.setX(player.getX()); // TODO: 17/03/16 change this to spawn in front of player instead of right on top of it
         bullet.setY(player.getY());

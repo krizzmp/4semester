@@ -25,12 +25,50 @@ public class WeaponGameProcessor implements IGameProcess {
     @Override
     public void update(World world, float delta) {
         BulletController.getInstance().update(world, delta);
+        GameKeys gameKeys = GameKeys.getInstance();
         
-        if(GameKeys.getInstance().player_shoot.getKeyState()) {
-            BulletController.getInstance().shootBullet(world);
+        // Shoot in 8 directions
+        // TODO: Implement  Note: A whole lot of if statements, can it be done different? - Martin F
+        if (gameKeys.player_shoot_up.getKeyState()) {
+            if (gameKeys.player_shoot_left.getKeyState()) {
+                // if up and left
+                BulletController.getInstance().shootBullet(world);
+            }
+            else if (gameKeys.player_shoot_right.getKeyState()) {
+                // if up and right
+                BulletController.getInstance().shootBullet(world);
+            }
+            else {
+                // if up
+                BulletController.getInstance().shootBullet(world);
+            }
+        }
+        else if (gameKeys.player_shoot_down.getKeyState()) {
+            if (gameKeys.player_shoot_left.getKeyState()) {
+                // if down and left
+                BulletController.getInstance().shootBullet(world);
+            }
+            else if (gameKeys.player_shoot_right.getKeyState()) {
+                // if down and right
+                BulletController.getInstance().shootBullet(world);
+            }
+            else {
+                // if down
+                BulletController.getInstance().shootBullet(world);
+            }
+        }
+        else {
+            if (gameKeys.player_shoot_left.getKeyState()) {
+                // if left
+                BulletController.getInstance().shootBullet(world);
+            }
+            if (gameKeys.player_shoot_right.getKeyState()) {
+                // if right
+                BulletController.getInstance().shootBullet(world);
+            }
         }
     }
-
+    
     @Override
     public void stop(World world) {
 
