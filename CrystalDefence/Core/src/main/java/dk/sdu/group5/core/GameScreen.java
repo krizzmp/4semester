@@ -65,8 +65,6 @@ class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // TODO: 03/03/16 add game rendering
-
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
         
