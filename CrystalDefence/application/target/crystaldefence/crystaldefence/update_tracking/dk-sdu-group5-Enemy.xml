@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="dk.sdu.group5.Enemy">
+    <module_version install_time="1458295698866" last="true" origin="installer" specification_version="1.0">
+        <file crc="4000295938" name="config/Modules/dk-sdu-group5-Enemy.xml"/>
+        <file crc="508674854" name="modules/dk-sdu-group5-Enemy.jar"/>
+    </module_version>
+</module>

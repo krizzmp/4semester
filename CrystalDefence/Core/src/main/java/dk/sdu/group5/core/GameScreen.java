@@ -58,12 +58,19 @@ class GameScreen implements Screen {
         Gdx.input.setInputProcessor (new InputAdapter() {
             public boolean keyDown(int keycode) {
                 if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK))
+                    if (state == state.PAUSE){
+                    state = state.RUN;
+                }else{
                     state = state.PAUSE;
+                }
 
-                    return false;
+                    return true;
             }
+
             });
+
         }
+
 
 
      
@@ -151,7 +158,9 @@ class GameScreen implements Screen {
 
 
     public void updateRunning(){
-
+        if(stage != null){
+            stage.clear();
+        }
         batch.begin();
 //        font.draw(batch, world.getEntities().toString(), 150, 220);
         world.getEntities().forEach(e -> {
@@ -178,6 +187,10 @@ class GameScreen implements Screen {
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
         addButton("Resume game", ()->state = state.RUN, style);
         addButton("Exit game", ()->Gdx.app.exit(), style);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
 
     }
