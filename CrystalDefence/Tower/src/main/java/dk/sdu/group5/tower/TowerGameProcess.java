@@ -29,7 +29,7 @@ public class TowerGameProcess implements IGameProcess {
             tower.addProperty("tangible");
             tower.addProperty("static");
             tower.addProperty("damageable");
-            world.AddEntity(tower);
+            world.addEntity(tower);
         } catch (Exception ex) {
             Logger.getLogger(TowerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -44,7 +44,7 @@ public class TowerGameProcess implements IGameProcess {
     @Override
     public void stop(World world) {
         try {
-            world.RemoveEntity(tower);
+            world.removeEntity(tower);
         } catch (Exception ex) {
             Logger.getLogger(TowerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
         }

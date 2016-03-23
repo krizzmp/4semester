@@ -13,11 +13,10 @@ import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.Lookup;
 
 import java.util.Collection;
 import java.util.Objects;
-
-import org.openide.util.Lookup;
 
 class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -50,12 +49,12 @@ class GameScreen implements Screen {
     public void render(float delta) {
         // TODO: 03/03/16 add game rendering
 
+        collisionController.update(world, delta);
+
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
         //update entities
         processes.forEach(p -> p.update(world, delta));
-
-        collisionController.update(world);
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

@@ -1,30 +1,30 @@
 package dk.sdu.group5.common.data;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class World {
-    private CollisionDetector collisionDetector;
-    private List<Entity> entities;
+    private final CollisionDetector collisionDetector;
+    private final Map<Entity, List<Entity>> collisions;
+    private final List<Entity> entities;
     private Difficulty difficulty;
 
     public World()
     {
+        collisionDetector = new CollisionDetector();
+        collisions = new HashMap<>();
         entities = new LinkedList<>();
     }
 
     public World(Difficulty difficulty) {
         this();
         this.difficulty = difficulty;
-
-        collisionDetector = new CollisionDetector();
     }
 
-    public void AddEntity(Entity entity) {
+    public void addEntity(Entity entity) {
         entities.add(entity);
     }
 
-    public void RemoveEntity(Entity entity)
+    public void removeEntity(Entity entity)
     {
         entities.remove(entity);
     }
@@ -37,6 +37,26 @@ public class World {
     public CollisionDetector getCollisionDetector()
     {
         return collisionDetector;
+    }
+
+    public void addCollision(Entity entity1, Entity entity2) {
+        if (!collisions.containsKey(entity1)) {
+            collisions.put(entity1, new ArrayList<>());
+        }
+        collisions.get(entity1).add(entity2);
+
+        if (!collisions.containsKey(entity2)) {
+            collisions.put(entity2, new ArrayList<>());
+        }
+        collisions.get(entity2).add(entity1);
+    }
+
+    public List<Entity> getCollisions(Entity srcEntity) {
+        return collisions.get(srcEntity);
+    }
+
+    public void clearCollisions() {
+        collisions.values().stream().forEach(List::clear);
     }
 
     public Difficulty getDifficulty()

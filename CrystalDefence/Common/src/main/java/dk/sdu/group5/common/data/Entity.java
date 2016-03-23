@@ -1,11 +1,14 @@
 package dk.sdu.group5.common.data;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
     private float x, y;
+    private Posf2d velocity;
     private int lives;
 
     private final Set<String> properties;
@@ -14,6 +17,7 @@ public class Entity {
     private String texture;
 
     public Entity() {
+        velocity = new Posf2d(0f, 0f);
         properties = new HashSet<>();
     }
 
@@ -31,6 +35,14 @@ public class Entity {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public Posf2d getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Posf2d velocity) {
+        this.velocity = velocity;
     }
 
     public EntityType getType() {

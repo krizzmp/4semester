@@ -1,20 +1,14 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.AABB;
-import dk.sdu.group5.common.data.BoxCollider;
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.lookup.ServiceProvider;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openide.util.lookup.ServiceProvider;
-
 @ServiceProvider(service = IGameProcess.class)
-public class PlayerGameProcess implements IGameProcess
-{
+public class PlayerGameProcess implements IGameProcess {
     private Entity player;
 
     @Override
@@ -23,8 +17,7 @@ public class PlayerGameProcess implements IGameProcess
     }
 
     @Override
-    public void start(World world)
-    {
+    public void start(World world) {
         player = new Entity();
         player.setType(EntityType.PLAYER);
         player.setLives(3);
@@ -36,30 +29,23 @@ public class PlayerGameProcess implements IGameProcess
         try {
             player.addProperty("tangible");
             player.addProperty("damageable");
-            world.AddEntity(player);
-        }
-        catch (Exception ex)
-        {
+            world.addEntity(player);
+        } catch (Exception ex) {
             Logger.getLogger(PlayerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void update(World world, float delta)
-    {
+    public void update(World world, float delta) {
         // Render stuff
         // Collision stuff
     }
 
     @Override
-    public void stop(World world)
-    {
-        try
-        {
-            world.RemoveEntity(player);
-        }
-        catch (Exception ex)
-        {
+    public void stop(World world) {
+        try {
+            world.removeEntity(player);
+        } catch (Exception ex) {
             Logger.getLogger(PlayerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
