@@ -76,6 +76,7 @@
         <module>Tower</module>
         <module>SimpleAI</module>
         <module>Weapon</module>
+        <module>AStarAI</module>
     </modules>
 
     <properties>
