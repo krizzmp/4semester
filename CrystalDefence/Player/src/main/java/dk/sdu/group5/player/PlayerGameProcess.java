@@ -1,9 +1,6 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -24,11 +21,12 @@ public class PlayerGameProcess implements IGameProcess {
         player.setX(250);
         player.setY(250);
         player.setTexture("playerTexture.png");
+        player.setCollider(new BoxCollider(false, new AABB(-16, -16, 16, 16)));
         player.setSpeed(60);
         player.addProperty("collidable");
         player.addProperty("tangible");
         player.addProperty("damageable");
-        world.AddEntity(player);
+        world.addEntity(player);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        world.RemoveEntity(player);
+        world.removeEntity(player);
     }
 
     @Override

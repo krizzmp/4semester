@@ -7,15 +7,18 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
+    private Posf2d velocity;
     private final Set<String> properties;
     private float x;
     private float y;
     private int lives;
+    private BoxCollider collider;
     private EntityType type;
     private String texture;
     private float Speed;
 
     public Entity() {
+        velocity = new Posf2d(0f, 0f);
         properties = new HashSet<>();
     }
 
@@ -43,6 +46,14 @@ public class Entity {
         this.y = y;
     }
 
+    public Posf2d getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Posf2d velocity) {
+        this.velocity = velocity;
+    }
+
     public EntityType getType() {
         return type;
     }
@@ -65,6 +76,18 @@ public class Entity {
 
     public boolean removeProperty(String property) {
         return properties.remove(property);
+    }
+
+    public Set<String> getProperties() {
+        return properties;
+    }
+
+    public BoxCollider getCollider() {
+        return collider;
+    }
+
+    public void setCollider(BoxCollider collider) {
+        this.collider = collider;
     }
 
     @Override
