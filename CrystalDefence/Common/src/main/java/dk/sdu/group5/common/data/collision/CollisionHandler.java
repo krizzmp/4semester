@@ -27,7 +27,7 @@ public class CollisionHandler {
     public void addCollision(ICollider collider, Entity srcEntity) {
         ICollisionCallback callback = callbacks.get(collider);
         if (callback != null) {
-            callback.OnCollision(srcEntity);
+            callback.onCollision(srcEntity);
         }
     }
 }
