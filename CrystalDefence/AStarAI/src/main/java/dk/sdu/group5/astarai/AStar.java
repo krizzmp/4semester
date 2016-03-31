@@ -1,13 +1,10 @@
 package dk.sdu.group5.astarai;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class AStar {
-    static Node as(Vec start, Vec goal, List<LineSegment> lineSegments) {
+    static Node aStar(Vec start, Vec goal, List<LineSegment> lineSegments) {
         PriorityQueue<Node> openList = new PriorityQueue<>();
         openList.add(new Node(start, null, 0, dist(start, goal)));
         Set<Node> closedList = new HashSet<>();
@@ -21,15 +18,19 @@ class AStar {
                 Node node = new Node(successor, q, g, h);
                 if (node.item == goal)
                     return node;
-                if (openList.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f < node.f))
+                if (containsCheaper(openList, node))
                     continue;
-                if (closedList.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f < node.f))
+                if (containsCheaper(closedList, node))
                     continue;
                 openList.add(node);
             }
             closedList.add(q);
         }
         return null;
+    }
+
+    private static boolean containsCheaper(Collection<Node> nodes, Node node) {
+        return nodes.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f < node.f);
     }
 
     static private List<Vec> connections(Node q, List<LineSegment> lineSegments) {
