@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="dk.sdu.group5.Common">
-    <module_version install_time="1458295692164" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1459435184939" last="true" origin="installer" specification_version="1.0">
         <file crc="2500902107" name="config/Modules/dk-sdu-group5-Common.xml"/>
-        <file crc="4288672951" name="modules/dk-sdu-group5-Common.jar"/>
+        <file crc="536815607" name="modules/dk-sdu-group5-Common.jar"/>
     </module_version>
 </module>

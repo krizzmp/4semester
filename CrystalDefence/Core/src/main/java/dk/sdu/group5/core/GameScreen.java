@@ -26,6 +26,7 @@ import java.util.Objects;
 
 
 class GameScreen implements Screen {
+    private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
@@ -48,6 +49,8 @@ class GameScreen implements Screen {
      */
     @Override
     public void show() {
+
+        state = State.RUN;
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
@@ -173,24 +176,10 @@ class GameScreen implements Screen {
         batch.end();
     }
     public void updatePaused(){
-        font = new BitmapFont();
-        font.setColor(Color.RED);
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
-        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
-        skin = new Skin();
-        skin.addRegions(textureAtlas);
-        table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
-        addButton("Resume game", ()->state = state.RUN, style);
-        addButton("Exit game", ()->Gdx.app.exit(), style);
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+        PS = new PauseScreen(this);
+        hide();
+        PS.show();
 
 
     }

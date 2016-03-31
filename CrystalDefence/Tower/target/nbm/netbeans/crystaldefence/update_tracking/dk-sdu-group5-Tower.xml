@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><module codename="dk.sdu.group5.Tower">
-    <module_version install_time="1458295693668" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1459435186318" last="true" origin="installer" specification_version="1.0">
         <file crc="2284332436" name="config/Modules/dk-sdu-group5-Tower.xml"/>
-        <file crc="3292655630" name="modules/dk-sdu-group5-Tower.jar"/>
+        <file crc="4173002493" name="modules/dk-sdu-group5-Tower.jar"/>
     </module_version>
 </module>
