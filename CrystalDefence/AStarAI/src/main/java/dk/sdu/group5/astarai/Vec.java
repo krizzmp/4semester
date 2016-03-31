@@ -12,4 +12,9 @@ public class Vec {
     public Vec minus(Vec from) {
         return new Vec(x - from.x, y - from.y);
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%.0f, %.0f)",x,y);
+    }
 }

@@ -24,10 +24,11 @@ public class LineSegment {
         return FU.any(this::intersects, lines);
     }
 
-    public static void main(String[] args) {
-        LineSegment ray = new LineSegment(new Vec(10, 10), new Vec(40, 40));
-        LineSegment seg = new LineSegment(new Vec(10, 30), new Vec(40, 20));
-        boolean intersects = ray.intersects(seg);
-        System.out.println(intersects);
+    @Override
+    public String toString() {
+        return "LS{" +
+                "p=" + p +
+                ", d=" + d +
+                '}';
     }
 }

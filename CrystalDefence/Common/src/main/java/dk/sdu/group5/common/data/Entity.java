@@ -22,6 +22,14 @@ public class Entity {
         properties = new HashSet<>();
     }
 
+    public Entity(float x, float y, BoxCollider collider, EntityType type) {
+        this();
+        this.x = x;
+        this.y = y;
+        this.collider = collider;
+        this.type = type;
+    }
+
     public float getSpeed() {
         return Speed;
     }

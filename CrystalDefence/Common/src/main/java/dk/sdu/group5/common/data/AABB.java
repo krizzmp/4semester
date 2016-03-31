@@ -3,28 +3,31 @@ package dk.sdu.group5.common.data;
 // Axis-aligned bounding box
 public class AABB {
 
-    private int minX, minY, maxX, maxY;
+    private float minX;
+    private float minY;
+    private float maxX;
+    private float maxY;
 
-    public AABB(int minX, int minY, int maxX, int maxY) {
+    public AABB(float minX, float minY, float maxX, float maxY) {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
     }
 
-    public int getMinX() {
+    public float getMinX() {
         return minX;
     }
 
-    public int getMinY() {
+    public float getMinY() {
         return minY;
     }
 
-    public int getMaxX() {
+    public float getMaxX() {
         return maxX;
     }
 
-    public int getMaxY() {
+    public float getMaxY() {
         return maxY;
     }
 }
