@@ -5,6 +5,7 @@ import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
@@ -52,8 +53,11 @@ public class PlayerGameProcess implements IGameProcess {
             player.setX(player.getX() + playerSpeed * delta);
         }
 
-
         // Collision stuff
+        for (Entity e : world.getCollisionDetector().collides(player, world.getEntities())) {
+            CollisionController.resolveCollision(player, e);
+            world.getCollisionHandler().addCollision(e.getCollider(), player);
+        }
     }
 
     @Override

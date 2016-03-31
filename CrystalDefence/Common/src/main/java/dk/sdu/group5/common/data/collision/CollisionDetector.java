@@ -15,12 +15,10 @@ public class CollisionDetector {
         List<Entity> collidedEntities = new ArrayList<>();
 
         for (Entity collidableEntity : collidableEntities) {
-            if (collidableEntity == srcEntity
-                    || !collides(srcEntity, collidableEntity)) {
-                continue;
+            if (collidableEntity != srcEntity
+                    && collides(srcEntity, collidableEntity)) {
+                collidedEntities.add(collidableEntity);
             }
-
-            collidedEntities.add(collidableEntity);
         }
 
         return collidedEntities;
