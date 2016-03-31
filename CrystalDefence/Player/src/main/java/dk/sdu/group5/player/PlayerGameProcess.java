@@ -1,6 +1,10 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -24,7 +28,7 @@ public class PlayerGameProcess implements IGameProcess {
         player.setX(250);
         player.setY(250);
         player.setTexture("gridPattern.png");
-        player.setCollider(new BoxCollider(false, new AABB(-16, -16, 16, 16)));
+        player.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
 
         try {
             player.addProperty("tangible");

@@ -1,6 +1,10 @@
 package dk.sdu.group5.tower;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -24,7 +28,7 @@ public class TowerGameProcess implements IGameProcess {
         tower.setX(350);
         tower.setY(280);
         tower.setTexture("gridPattern.png");
-        tower.setCollider(new BoxCollider(false, new AABB(-16, -16, 16, 16)));
+        tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
         try {
             tower.addProperty("tangible");
             tower.addProperty("static");

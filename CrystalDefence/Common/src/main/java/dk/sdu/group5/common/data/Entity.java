@@ -1,5 +1,7 @@
 package dk.sdu.group5.common.data;
 
+import dk.sdu.group5.common.data.collision.ICollider;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -12,7 +14,7 @@ public class Entity {
     private int lives;
 
     private final Set<String> properties;
-    private BoxCollider collider;
+    private ICollider collider;
     private EntityType type;
     private String texture;
 
@@ -81,11 +83,11 @@ public class Entity {
         return properties;
     }
 
-    public BoxCollider getCollider() {
+    public ICollider getCollider() {
         return collider;
     }
 
-    public void setCollider(BoxCollider collider) {
+    public void setCollider(ICollider collider) {
         this.collider = collider;
     }
 
