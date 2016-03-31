@@ -8,9 +8,6 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @ServiceProvider(service = IGameProcess.class)
 public class TowerGameProcess implements IGameProcess {
     private Entity tower;
@@ -29,14 +26,10 @@ public class TowerGameProcess implements IGameProcess {
         tower.setY(280);
         tower.setTexture("gridPattern.png");
         tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
-        try {
-            tower.addProperty("tangible");
-            tower.addProperty("static");
-            tower.addProperty("damageable");
-            world.addEntity(tower);
-        } catch (Exception ex) {
-            Logger.getLogger(TowerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        tower.addProperty("tangible");
+        tower.addProperty("static");
+        tower.addProperty("damageable");
+        world.addEntity(tower);
     }
 
     @Override

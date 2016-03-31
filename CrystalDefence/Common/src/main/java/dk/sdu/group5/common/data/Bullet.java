@@ -27,7 +27,7 @@ public class Bullet { // TODO: 17/03/16 move this to a seperate module
         bullet.setY(player.getY());
         bullet.addProperty("collidable");
         bullet.addProperty("damageable");
-        world.AddEntity(bullet);
+        world.addEntity(bullet);
     }
 
     private Optional<Entity> getPlayer(List<Entity> xs) {
@@ -49,6 +49,6 @@ public class Bullet { // TODO: 17/03/16 move this to a seperate module
     }
 
     public void removeBullet(World world) {
-        world.RemoveEntity(bullet);
+        world.removeEntity(bullet);
     }
 }
