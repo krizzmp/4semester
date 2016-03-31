@@ -74,6 +74,8 @@
         <module>Enemy</module>
         <module>Core</module>
         <module>Tower</module>
+        <module>SimpleAI</module>
+        <module>Weapon</module>
     </modules>
 
     <properties>

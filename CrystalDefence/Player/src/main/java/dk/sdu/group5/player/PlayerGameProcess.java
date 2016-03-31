@@ -2,6 +2,7 @@ package dk.sdu.group5.player;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
@@ -24,34 +25,43 @@ public class PlayerGameProcess implements IGameProcess {
     public void start(World world) {
         player = new Entity();
         player.setType(EntityType.PLAYER);
-        player.setLives(3);
+        player.setHealth(100);
         player.setX(250);
         player.setY(250);
-        player.setTexture("gridPattern.png");
+        player.setTexture("playerTexture.png");
+        player.setSpeed(60);
         player.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
-
-        try {
-            player.addProperty("tangible");
-            player.addProperty("damageable");
-            world.addEntity(player);
-        } catch (Exception ex) {
-            Logger.getLogger(PlayerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        player.addProperty("collidable");
+        player.addProperty("tangible");
+        player.addProperty("damageable");
+        world.addEntity(player);
     }
 
     @Override
     public void update(World world, float delta) {
-        // Render stuff
+        //Player Movement
+        GameKeys gameKeys = GameKeys.getInstance();
+        float playerSpeed = player.getSpeed();
+        if (gameKeys.player_movement_up.getKeyState()) {
+            player.setY(player.getY() + playerSpeed * delta);
+        }
+        if (gameKeys.player_movement_down.getKeyState()) {
+            player.setY(player.getY() - playerSpeed * delta);
+        }
+        if (gameKeys.player_movement_left.getKeyState()) {
+            player.setX(player.getX() - playerSpeed * delta);
+        }
+        if (gameKeys.player_movement_right.getKeyState()) {
+            player.setX(player.getX() + playerSpeed * delta);
+        }
+
+
         // Collision stuff
     }
 
     @Override
     public void stop(World world) {
-        try {
-            world.removeEntity(player);
-        } catch (Exception ex) {
-            Logger.getLogger(PlayerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        world.RemoveEntity(player);
     }
 
     @Override

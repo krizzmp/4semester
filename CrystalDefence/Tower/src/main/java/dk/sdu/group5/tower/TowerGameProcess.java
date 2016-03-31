@@ -24,7 +24,7 @@ public class TowerGameProcess implements IGameProcess {
     public void start(World world) {
         tower = new Entity();
         tower.setType(EntityType.TOWER);
-        tower.setLives(3);
+        tower.setHealth(3);
         tower.setX(350);
         tower.setY(280);
         tower.setTexture("gridPattern.png");
@@ -47,11 +47,8 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        try {
-            world.removeEntity(tower);
-        } catch (Exception ex) {
-            Logger.getLogger(TowerGameProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        world.RemoveEntity(tower);
+
     }
 
     @Override
