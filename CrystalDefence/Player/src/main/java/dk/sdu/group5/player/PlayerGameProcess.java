@@ -20,7 +20,7 @@ public class PlayerGameProcess implements IGameProcess {
     public void start(World world) {
         player = new Entity();
         player.setType(EntityType.PLAYER);
-        player.setLives(3);
+        player.setHealth(100);
         player.setX(250);
         player.setY(250);
         player.setTexture("playerTexture.png");
