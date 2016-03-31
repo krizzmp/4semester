@@ -9,9 +9,6 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @ServiceProvider(service = IGameProcess.class)
 public class PlayerGameProcess implements IGameProcess {
     private Entity player;
@@ -61,7 +58,7 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        world.RemoveEntity(player);
+        world.removeEntity(player);
     }
 
     @Override
