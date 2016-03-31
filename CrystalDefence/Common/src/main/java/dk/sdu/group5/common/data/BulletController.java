@@ -47,8 +47,7 @@ public class BulletController {
         }
         
         if(!isLocked && magazineNotFull) {
-            System.out.println("created bullet");
-            
+
             Bullet bullet = new Bullet(world, direction);
 
             weaponMagazine.add(bullet);

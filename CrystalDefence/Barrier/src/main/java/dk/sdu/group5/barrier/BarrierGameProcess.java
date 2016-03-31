@@ -73,9 +73,7 @@ public class BarrierGameProcess implements IGameProcess {
             }
             
             placeable = !checkCollision();
-            System.out.println("placeable: " + placeable);
             if(placeable) {
-                System.out.println("create bullet");
                 barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setLives(5);
@@ -100,7 +98,6 @@ public class BarrierGameProcess implements IGameProcess {
 
         while(it.hasNext()) {
             Entity itBarrier = it.next();
-            System.out.println("posX: " + posX + " posY: " + posY + " | x2: " + itBarrier.getX() + " y2: " + itBarrier.getY());
             if((posX > (itBarrier.getX() - BARRIER_WIDTH)) && (posX < (itBarrier.getX() + BARRIER_WIDTH)) ) {
                 if((posY > (itBarrier.getY() - BARRIER_HEIGHT)) && (posY < (itBarrier.getY() + BARRIER_HEIGHT)) ) {
                     return true;
