@@ -10,14 +10,17 @@ class AStar {
         Set<Node> closedList = new HashSet<>();
 
         while (openList.size() != 0) {
+//            System.out.println(openList);
             Node q = openList.poll();
             List<Vec> successors = connections(q, lineSegments);
             for (Vec successor : successors) {
                 double g = q.g + dist(successor, q.item);
                 double h = dist(successor, goal);
                 Node node = new Node(successor, q, g, h);
-                if (node.item == goal)
+                if (node.item.equals(goal)){
+//                    System.out.println("hay");
                     return node;
+                }
                 if (containsCheaper(openList, node))
                     continue;
                 if (containsCheaper(closedList, node))
@@ -54,18 +57,3 @@ class AStar {
     }
 }
 
-class Node {
-    final Vec item;
-    final Node parent;
-    final double g;
-    final double h;
-    final double f;
-
-    Node(Vec item, Node parent, double g, double h) {
-        this.item = item;
-        this.parent = parent;
-        this.g = g;
-        this.h = h;
-        f = g+h;
-    }
-}

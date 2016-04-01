@@ -6,32 +6,43 @@ import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static dk.sdu.group5.astarai.AStar.aStar;
+import static dk.sdu.group5.astarai.FU.flatMap;
+import static dk.sdu.group5.astarai.FU.lift2;
 
 public class Main {
     public static void main(String[] args) {
-        LineSegment ray = new LineSegment(new Vec(10, 10), new Vec(40, 40));
-        LineSegment seg = new LineSegment(new Vec(10, 30), new Vec(40, 20));
-        boolean intersects = ray.intersects(seg);
-        System.out.println(intersects);
+        t();
+        t();
+        t();
+        t();
+        t();
+    }
 
-        List<Entity> es = new ArrayList<>();
-        List<Vec> ps = new ArrayList<>();
+    static void t() {
+        Date startTime = new Date();
+        List<Entity> es = new ArrayList<>(3);
+        List<Vec> ps = new ArrayList<>(12);
         es.add(createBarrier(200, 200, 64, 64));
-        es.add(createBarrier(300,100,64,64));
-//        es.add(createBarrier(100,300,64,64));
-        ps.add(new Vec(100, 100));
-        ps.addAll(FU.flatMap(Main::getPoints, es));
-        ps.add(new Vec(300, 300));
-        System.out.println(ps);
-        List<LineSegment> rays = FU.lift2(LineSegment::new).apply(ps, ps); // rays
-        List<LineSegment> segments = FU.flatMap(Main::getLines, es); // segments
-        System.out.println(rays);
-        System.out.println(segments);
-        Stream<LineSegment> lineSegmentStream = rays.stream().filter(a -> !a.intersects(segments));
-        System.out.println(lineSegmentStream.collect(Collectors.toList()));
+        es.add(createBarrier(300, 100, 64, 64));
+        es.add(createBarrier(100, 300, 64, 64));
+        Vec start = new Vec(100, 100);
+        Vec goal = new Vec(300, 300);
+        ps.add(start);
+        ps.add(goal);
+        ps.addAll(flatMap(Main::getPoints, es));
+        List<LineSegment> rays = lift2(LineSegment::new).apply(ps, ps); // rays
+        List<LineSegment> segments = flatMap(Main::getLines, es);
+        List<LineSegment> lineSegmentStream = rays.stream().filter(a -> !a.intersects(segments)).collect(Collectors.toList());
+        Node node = aStar(start, goal, lineSegmentStream);
+//        System.out.println(node);
+        Date endTime = new Date();
+        System.out.println("---");
+        System.out.println(endTime.getTime() - startTime.getTime());
     }
 
     static Entity createBarrier(float x, float y, float w, float h) {
@@ -43,8 +54,8 @@ public class Main {
         List<LineSegment> lines = new ArrayList<>(4);
         float a = 0.2f;
         float b = 0.1f;
-        Vec vec11 = new Vec(maxX(e), maxY(e));
-        Vec vec01 = new Vec(minX(e), maxY(e));
+        Vec vec11 = new Vec(maxX(e) + 0.1, maxY(e));
+        Vec vec01 = new Vec(minX(e) + 0.1, maxY(e));
         Vec vec00 = new Vec(minX(e), minY(e));
         Vec vec10 = new Vec(maxX(e), minY(e));
         lines.add(new LineSegment(vec11.plus(-a, -b), vec10.plus(-a, b)));
@@ -56,8 +67,8 @@ public class Main {
 
     static List<Vec> getPoints(Entity e) {
         List<Vec> points = new ArrayList<>(4);
-        points.add(new Vec(maxX(e), maxY(e)));
-        points.add(new Vec(minX(e), maxY(e)));
+        points.add(new Vec(maxX(e) + 0.1, maxY(e)));
+        points.add(new Vec(minX(e) + 0.1, maxY(e)));
         points.add(new Vec(minX(e), minY(e)));
         points.add(new Vec(maxX(e), minY(e)));
         return points;
