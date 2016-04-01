@@ -25,6 +25,7 @@ public class PauseScreen implements Screen{
     private Stage stage;
     private Table table;
     private GameScreen game;
+    private float delta;
     PauseScreen(GameScreen game){
         this.game = game;
     }
@@ -44,7 +45,7 @@ public class PauseScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
-        addButton("Resume game", ()-> {hide(); game.show(); game.resume();}, style);
+        addButton("Resume game", ()-> {Game.getInstance().setScreen(game);}, style);
         addButton("Main Menu", ()-> mainmenu(), style);
         addButton("Exit game", ()-> Gdx.app.exit(), style);
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -59,9 +60,10 @@ public class PauseScreen implements Screen{
         //something like this:
         startScreen = new StartScreen(() -> {
 //            Gdx.app.exit();
-            gameScreen.show(); hide();
+            Game.getInstance().setScreen(gameScreen);
         });
-        this.hide(); startScreen.show();
+         Game.getInstance().setScreen(startScreen);
+
     }
 
     private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style) {
@@ -79,6 +81,7 @@ public class PauseScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        this.delta = delta;
         //painting the screen white
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
