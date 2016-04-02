@@ -26,7 +26,7 @@ public class Bullet {
         
         bullet = new Entity();
         bullet.setType(EntityType.BULLET);
-        bullet.setLives(1);
+        bullet.setHealth(1);
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);

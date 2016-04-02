@@ -19,7 +19,7 @@ public class TowerGameProcess implements IGameProcess {
     public void start(World world) {
         tower = new Entity();
         tower.setType(EntityType.TOWER);
-        tower.setLives(3);
+        tower.setHealth(3);
         tower.setX(350);
         tower.setY(280);
         tower.setTexture("gridPattern.png");
