@@ -12,14 +12,12 @@ import java.util.logging.Logger;
 public class BulletController {
     
     private static BulletController instance;
-    private int speed = 2; // Should be removed and use Entity speed instead
-    
     private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
     private long startLockTime;
 
-    private int weaponMagazineSize = 5;
+    private int weaponMagazineSize = 0;
     private List<Bullet> weaponMagazine = new LinkedList<>();
 
     
@@ -38,7 +36,7 @@ public class BulletController {
         updateBullet(world, delta);
     }
     
-    public void shootBullet(World world) {
+    public void shootBullet(World world, String direction) {
         boolean magazineNotFull = false;
         
         if(weaponMagazineSize == 0) {
@@ -49,9 +47,8 @@ public class BulletController {
         }
         
         if(!isLocked && magazineNotFull) {
-            System.out.println("created bullet");
-            
-            Bullet bullet = new Bullet(world);
+
+            Bullet bullet = new Bullet(world, direction);
 
             weaponMagazine.add(bullet);
             startLockTime = System.currentTimeMillis();
