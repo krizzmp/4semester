@@ -10,7 +10,7 @@ public class Entity {
     private final Set<String> properties;
     private float x;
     private float y;
-    private int lives;
+    private int health;
     private EntityType type;
     private String texture;
     private float Speed;
@@ -51,12 +51,12 @@ public class Entity {
         this.type = type;
     }
 
-    public int getLives() {
-        return lives;
+    public int getHealth() {
+        return health;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public boolean addProperty(String property) {
@@ -69,8 +69,8 @@ public class Entity {
 
     @Override
     public String toString() {
-//        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
-        return String.format("%s{x: %.0f, y: %.0f, lives: %d}", type, x, y, lives);
+//        return type + "{x:" + x + ", y:" + y + ", health:" + health + "}";
+        return String.format("%s{x: %.0f, y: %.0f, health: %d}", type, x, y, health);
     }
 
     public String getTexture() {
