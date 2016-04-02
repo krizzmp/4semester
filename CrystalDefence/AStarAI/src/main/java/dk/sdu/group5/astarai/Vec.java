@@ -13,11 +13,6 @@ public class Vec {
         return new Vec(x - from.x, y - from.y);
     }
 
-    @Override
-    public String toString() {
-        return String.format("(%.0f, %.0f)",x,y);
-    }
-
     public Vec plus(double x_, double y_) {
         return new Vec(x + x_, y + y_);
     }
@@ -30,6 +25,18 @@ public class Vec {
         return new Vec(x + d.x, y + d.y);
     }
 
+
+    Vec times(double n) {
+        return new Vec(x * n, y * n);
+    }
+
+    Vec unit() {
+        return divide(length());
+    }
+
+    Vec divide(double length) {
+        return new Vec(x / length, y / length);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,4 +58,10 @@ public class Vec {
         result = 31 * result + (int) (temp ^ temp >>> 32);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%.0f, %.0f)",x,y);
+    }
+
 }
