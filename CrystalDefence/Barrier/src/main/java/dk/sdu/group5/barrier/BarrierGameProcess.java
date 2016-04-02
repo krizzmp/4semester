@@ -73,10 +73,10 @@ public class BarrierGameProcess implements IGameProcess {
             }
             
             placeable = !checkCollision();
-            if(placeable) {
+            if(placeable && listBarriers.size() < maxBarriers) {
                 barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
-                barrier.setLives(5);
+                barrier.setHealth(50);
                 barrier.setTexture("gridPattern.png");
                 barrier.setSpeed(0);
                 barrier.setX(posX);
