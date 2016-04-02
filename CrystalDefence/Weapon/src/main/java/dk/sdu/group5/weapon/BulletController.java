@@ -25,6 +25,7 @@ public class BulletController {
     
     public void update(World world, float delta) {
         long currentLockTime = System.currentTimeMillis();
+        setShootInterval(world.getWeaponType());
         if(currentLockTime - startLockTime >= shootInterval * 1000) {
             isLocked = false;
         }

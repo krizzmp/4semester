@@ -6,4 +6,5 @@ public enum EntityType
     BULLET,
     ENEMY,
     PLAYER,
+    BARRIER,
 }

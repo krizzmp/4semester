@@ -76,6 +76,7 @@
         <module>Tower</module>
         <module>SimpleAI</module>
         <module>Weapon</module>
+        <module>Barrier</module>
     </modules>
 
     <properties>
