@@ -1,9 +1,6 @@
 
 package dk.sdu.group5.weapon;
 
-import dk.sdu.group5.common.data.BulletController;
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;

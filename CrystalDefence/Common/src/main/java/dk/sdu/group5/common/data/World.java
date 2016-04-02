@@ -40,7 +40,6 @@ public class World
     
     public void setWeaponType(WeaponType type) {
         weaponType = type;
-        BulletController.getInstance().setShootInterval(type);
     }
     
     public WeaponType getWeaponType() {

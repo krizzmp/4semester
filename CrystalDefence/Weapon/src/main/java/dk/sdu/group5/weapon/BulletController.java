@@ -1,13 +1,11 @@
 
-package dk.sdu.group5.common.data;
+package dk.sdu.group5.weapon;
 
+import dk.sdu.group5.common.data.WeaponType;
+import dk.sdu.group5.common.data.World;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class BulletController {
     
@@ -16,10 +14,8 @@ public class BulletController {
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
     private long startLockTime;
-
     private int weaponMagazineSize = 0;
     private List<Bullet> weaponMagazine = new LinkedList<>();
-
     
     public static BulletController getInstance() {
         if (instance == null)
@@ -29,6 +25,7 @@ public class BulletController {
     
     public void update(World world, float delta) {
         long currentLockTime = System.currentTimeMillis();
+        setShootInterval(world.getWeaponType());
         if(currentLockTime - startLockTime >= shootInterval * 1000) {
             isLocked = false;
         }
@@ -47,13 +44,10 @@ public class BulletController {
         }
         
         if(!isLocked && magazineNotFull) {
-
             Bullet bullet = new Bullet(world, direction);
-
             weaponMagazine.add(bullet);
             startLockTime = System.currentTimeMillis();
             isLocked = true;
-
         }
     }
     
@@ -74,7 +68,6 @@ public class BulletController {
     
     private void updateBullet(World world, float delta) {
         Iterator<Bullet> it = weaponMagazine.iterator();
-
         while(it.hasNext()) {
             Bullet itBullet = it.next();
             itBullet.update(delta);

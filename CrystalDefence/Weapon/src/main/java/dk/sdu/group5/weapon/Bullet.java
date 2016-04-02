@@ -1,17 +1,17 @@
-package dk.sdu.group5.common.data;
+package dk.sdu.group5.weapon;
 
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.World;
 import java.util.List;
 import java.util.Optional;
-
 // TODO: 17/03/16 move this to a seperate module. 
 // Wasn't this supposed to just be Weapon insted? -
 // There we can just remove all bullets when unloading. - Martin F
 public class Bullet { 
-
+    
     private Entity bullet;
-
     private boolean toBeRemoved = false;
-
     private int activeTime = 10000;
     private long startTime = System.currentTimeMillis();
     
@@ -20,7 +20,6 @@ public class Bullet {
     private int dx = 0; // 1 = right, -1 = left
     private int dy = 0; // 1 = up, -1 = down
     private float speed = 120;
-
     public Bullet(World world, String direction) {
         setDirection(direction);
         
@@ -37,11 +36,9 @@ public class Bullet {
         bullet.addProperty("damageable");
         world.AddEntity(bullet);
     }
-
     private Optional<Entity> getPlayer(List<Entity> xs) {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
-
     public void update(float delta) {
         bullet.setX(bullet.getX() + (bullet.getSpeed() * delta) * dx);
         bullet.setY(bullet.getY() + (bullet.getSpeed() * delta) * dy);
@@ -51,11 +48,9 @@ public class Bullet {
             toBeRemoved = true;
         }
     }
-
     public boolean toBeRemoved() {
         return toBeRemoved;
     }
-
     public void removeBullet(World world) {
         world.RemoveEntity(bullet);
     }
