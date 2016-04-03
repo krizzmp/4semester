@@ -9,7 +9,6 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private final Set<String> properties;
     private float x;
     private float y;
     private int health;

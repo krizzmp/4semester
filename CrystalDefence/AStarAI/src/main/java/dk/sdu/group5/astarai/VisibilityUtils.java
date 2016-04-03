@@ -45,18 +45,18 @@ public class VisibilityUtils {
     }
 
     private static float maxY(Entity e) {
-        return e.getCollider().getAABB().getMaxY();
+        return e.getCollider().getBounds().getMaxY() + e.getY();
     }
 
     private static float minY(Entity e) {
-        return e.getCollider().getAABB().getMinY();
+        return e.getCollider().getBounds().getMinY() + e.getY();
     }
 
     private static float minX(Entity e) {
-        return e.getCollider().getAABB().getMinX();
+        return e.getCollider().getBounds().getMinX() + e.getX();
     }
 
     private static float maxX(Entity e) {
-        return e.getCollider().getAABB().getMaxX();
+        return e.getCollider().getBounds().getMaxX() + e.getX();
     }
 }

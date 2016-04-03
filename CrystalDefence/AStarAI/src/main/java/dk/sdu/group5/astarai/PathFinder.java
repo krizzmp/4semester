@@ -1,41 +1,59 @@
 package dk.sdu.group5.astarai;
 
-import dk.sdu.group5.common.data.AABB;
-import dk.sdu.group5.common.data.BoxCollider;
 import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import static dk.sdu.group5.astarai.AStar.aStar;
 
 public class PathFinder {
-    static Vec getDirection(Vec start, List<Entity> barriers, Vec goal){
-        return getDirection(getPath(q(start, barriers, goal)));
-    }
-    static Node q(Vec start, List<Entity> barriers, Vec goal){
-        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start,barriers,goal));
+
+    static Node q(Vec start, List<Entity> barriers, Vec goal) {
+        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start, barriers, goal));
+        System.out.println("---");
+        System.out.println(start);
+        System.out.println(VisibilityUtils.getVisibilityLines(start, barriers, goal));
+        System.out.println(goal);
+        System.out.println(node);
         return node;
     }
-    static LinkedList<Vec> getPath(Vec start, List<Entity> barriers, Vec goal){
-        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start,barriers,goal));
+
+    static LinkedList<Vec> getPath(Vec start, List<Entity> barriers, Vec goal) {
+        Node node = q(start, barriers, goal);
         return getPath(node);
     }
-    static LinkedList<Vec> getPath(Node node){
+
+    static LinkedList<Vec> getPath(Node node) {
         LinkedList<Vec> vecs = new LinkedList<>();
         Node current = node;
-        while(true){
+        while (node != null) {
             vecs.addFirst(current.item);
-            if(current.parent == null){
+            if (current.parent == null) {
                 break;
             }
             current = current.parent;
         }
         return vecs;
     }
-    static Vec getDirection(List<Vec> vs){
+
+    static Vec getDirection(List<Vec> vs) {
+        if(vs.size()<2){
+            System.out.println(vs);
+            return new Vec(0.001,0.1);
+        }
         return vs.get(1).minus(vs.get(0));
+    }
+
+    static Vec getDirection(Vec start, List<Entity> barriers, Vec goal) {
+        return getDirection(getPath(start, barriers, goal));
+    }
+
+    static Vec getDirection(Entity e, List<Entity> barriers, Entity t) {
+        return getDirection(vec(e), barriers, vec(t));
+    }
+
+    private static Vec vec(Entity e) {
+        return new Vec(e.getX(), e.getY());
     }
 }

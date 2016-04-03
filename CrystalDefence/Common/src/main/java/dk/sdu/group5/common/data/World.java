@@ -60,9 +60,4 @@ public class World {
     public WeaponType getWeaponType() {
         return weaponType;
     }
-
-    public Difficulty getDifficulty()
-    {
-        return difficulty;
-    }
 }

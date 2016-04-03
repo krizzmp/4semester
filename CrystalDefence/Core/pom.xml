@@ -125,9 +125,14 @@
         </dependency>
         <dependency>
             <groupId>dk.sdu.group5</groupId>
-            <artifactId>SimpleAI</artifactId>
+            <artifactId>AStarAI</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>dk.sdu.group5</groupId>-->
+            <!--<artifactId>SimpleAI</artifactId>-->
+            <!--<version>${project.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Weapon</artifactId>

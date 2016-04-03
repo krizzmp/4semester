@@ -6,19 +6,17 @@ import java.util.stream.Collectors;
 class AStar {
     static Node aStar(Vec start, Vec goal, List<LineSegment> lineSegments) {
         PriorityQueue<Node> openList = new PriorityQueue<>();
-        openList.add(new Node(start, null, 0, dist(start, goal)));
+        Node q = new Node(start, null, 0, dist(start, goal));
+        openList.add(q);
         Set<Node> closedList = new HashSet<>();
-
         while (openList.size() != 0) {
-//            System.out.println(openList);
-            Node q = openList.poll();
+             q = openList.poll();
             List<Vec> successors = connections(q, lineSegments);
             for (Vec successor : successors) {
                 double g = q.g + dist(successor, q.item);
                 double h = dist(successor, goal);
                 Node node = new Node(successor, q, g, h);
                 if (node.item.equals(goal)){
-//                    System.out.println("hay");
                     return node;
                 }
                 if (containsCheaper(openList, node))
@@ -29,7 +27,7 @@ class AStar {
             }
             closedList.add(q);
         }
-        return null;
+        return q;
     }
 
     private static boolean containsCheaper(Collection<Node> nodes, Node node) {
