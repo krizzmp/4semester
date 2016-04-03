@@ -9,13 +9,13 @@ import static dk.sdu.group5.astarai.AStar.aStar;
 
 public class PathFinder {
 
-    static Node q(Vec start, List<Entity> barriers, Vec goal) {
-        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start, barriers, goal));
+    static Node q(Vec start, List<Entity> barriers, Vec goal, float size) {
+        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start, barriers, goal, size));
         return node;
     }
 
-    static LinkedList<Vec> getPath(Vec start, List<Entity> barriers, Vec goal) {
-        Node node = q(start, barriers, goal);
+    static LinkedList<Vec> getPath(Vec start, List<Entity> barriers, Vec goal, float size) {
+        Node node = q(start, barriers, goal, size);
         return getPath(node);
     }
 
@@ -40,12 +40,12 @@ public class PathFinder {
         return vs.get(1).minus(vs.get(0));
     }
 
-    static Vec getDirection(Vec start, List<Entity> barriers, Vec goal) {
-        return getDirection(getPath(start, barriers, goal));
+    static Vec getDirection(Vec start, List<Entity> barriers, Vec goal, float size) {
+        return getDirection(getPath(start, barriers, goal, size));
     }
 
     static Vec getDirection(Entity e, List<Entity> barriers, Entity t) {
-        return getDirection(vec(e), barriers, vec(t));
+        return getDirection(vec(e), barriers, vec(t), e.getCollider().getBounds().getMaxX()*2);
     }
 
     private static Vec vec(Entity e) {
