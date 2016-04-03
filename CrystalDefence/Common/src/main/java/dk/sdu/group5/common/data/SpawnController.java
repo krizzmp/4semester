@@ -22,13 +22,13 @@ public class SpawnController {
 
     public void update(World world, float delta) {
         timeSinceLastSpawn += delta;
-        ifShouldSpawn(world.difficulty, b -> {
+        ifShouldSpawn(world.getDifficulty(), b -> {
             Optional<Spawner> spawner = getSpawnerLessDifficultThan(b);
             spawner.ifPresent(s -> {
                 Entity entity = s.spawn();
                 setEntityPos(getPosOnEdge(800, 400), entity);
-                world.difficulty.currentDifficulty += s.getDifficulty();
-                world.entities.add(entity);
+                world.getDifficulty().currentDifficulty += s.getDifficulty();
+                world.getEntities().add(entity);
             });
             reset();
         });
@@ -99,15 +99,5 @@ public class SpawnController {
 
     public void unRegister(Spawner spawner) {
         spawners.remove(spawner);
-    }
-
-    private class Pos2d {
-        final int x;
-        final int y;
-
-        Pos2d(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
     }
 }

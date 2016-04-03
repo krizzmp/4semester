@@ -24,7 +24,6 @@ public class EnemyGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-
     }
 
     @Override
