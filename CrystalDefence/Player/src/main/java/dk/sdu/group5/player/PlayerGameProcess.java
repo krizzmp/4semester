@@ -37,16 +37,16 @@ public class PlayerGameProcess implements IGameProcess {
         //Player Movement
         GameKeys gameKeys = GameKeys.getInstance();
         float playerSpeed = player.getSpeed();
-        if (gameKeys.player_movement_up.getKeyState()) {
+        if(gameKeys.player_movement_up.getKeyState()) {
             player.setY(player.getY() + playerSpeed * delta);
         }
-        if (gameKeys.player_movement_down.getKeyState()) {
+        if(gameKeys.player_movement_down.getKeyState()) {
             player.setY(player.getY() - playerSpeed * delta);
         }
-        if (gameKeys.player_movement_left.getKeyState()) {
+        if(gameKeys.player_movement_left.getKeyState()) {
             player.setX(player.getX() - playerSpeed * delta);
         }
-        if (gameKeys.player_movement_right.getKeyState()) {
+        if(gameKeys.player_movement_right.getKeyState()) {
             player.setX(player.getX() + playerSpeed * delta);
         }
 
