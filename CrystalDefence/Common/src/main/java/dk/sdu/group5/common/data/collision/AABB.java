@@ -1,4 +1,4 @@
-package dk.sdu.group5.common.data;
+package dk.sdu.group5.common.data.collision;
 
 // Axis-aligned bounding box
 public class AABB {

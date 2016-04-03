@@ -1,5 +1,7 @@
 package dk.sdu.group5.common.data;
 
+import dk.sdu.group5.common.data.collision.ICollider;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -7,27 +9,19 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private Posf2d velocity;
     private final Set<String> properties;
     private float x;
     private float y;
-    private int lives;
-    private BoxCollider collider;
+    private int health;
+
+    private final Set<String> properties;
+    private ICollider collider;
     private EntityType type;
     private String texture;
     private float Speed;
 
     public Entity() {
-        velocity = new Posf2d(0f, 0f);
         properties = new HashSet<>();
-    }
-
-    public Entity(float x, float y, BoxCollider collider, EntityType type) {
-        this();
-        this.x = x;
-        this.y = y;
-        this.collider = collider;
-        this.type = type;
     }
 
     public float getSpeed() {
@@ -54,14 +48,6 @@ public class Entity {
         this.y = y;
     }
 
-    public Posf2d getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Posf2d velocity) {
-        this.velocity = velocity;
-    }
-
     public EntityType getType() {
         return type;
     }
@@ -70,12 +56,12 @@ public class Entity {
         this.type = type;
     }
 
-    public int getLives() {
-        return lives;
+    public int getHealth() {
+        return health;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public boolean addProperty(String property) {
@@ -90,18 +76,18 @@ public class Entity {
         return properties;
     }
 
-    public BoxCollider getCollider() {
+    public ICollider getCollider() {
         return collider;
     }
 
-    public void setCollider(BoxCollider collider) {
+    public void setCollider(ICollider collider) {
         this.collider = collider;
     }
 
     @Override
     public String toString() {
-//        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
-        return String.format("%s{x: %.0f, y: %.0f, lives: %d}", type, x, y, lives);
+//        return type + "{x:" + x + ", y:" + y + ", health:" + health + "}";
+        return String.format("%s{x: %.0f, y: %.0f, health: %d}", type, x, y, health);
     }
 
     public String getTexture() {

@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dk.sdu.group5.common.data.CollisionController;
 import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
 
@@ -67,10 +67,6 @@ class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // TODO: 03/03/16 add game rendering
-
-        collisionController.update(world, delta);
-
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
 
