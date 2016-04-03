@@ -83,7 +83,7 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.setY(posY);
                 barrier.addProperty("collidable");
                 barrier.addProperty("tangible");
-                world.AddEntity(barrier);
+                world.addEntity(barrier);
                 listBarriers.add(barrier);
             } 
 

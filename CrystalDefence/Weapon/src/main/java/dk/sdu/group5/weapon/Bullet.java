@@ -3,6 +3,9 @@ package dk.sdu.group5.weapon;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
+
 import java.util.List;
 import java.util.Optional;
 // TODO: 17/03/16 move this to a seperate module. 
@@ -29,12 +32,13 @@ public class Bullet {
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
-        
+        bullet.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+
         bullet.setX(player.getX() + offsetX);
         bullet.setY(player.getY() + offsetY); 
         bullet.addProperty("collidable");
         bullet.addProperty("damageable");
-        world.AddEntity(bullet);
+        world.addEntity(bullet);
     }
     private Optional<Entity> getPlayer(List<Entity> xs) {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
@@ -52,7 +56,7 @@ public class Bullet {
         return toBeRemoved;
     }
     public void removeBullet(World world) {
-        world.RemoveEntity(bullet);
+        world.removeEntity(bullet);
     }
     
     private void setDirection(String direction) {

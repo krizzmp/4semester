@@ -11,11 +11,6 @@ public class PathFinder {
 
     static Node q(Vec start, List<Entity> barriers, Vec goal) {
         Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start, barriers, goal));
-        System.out.println("---");
-        System.out.println(start);
-        System.out.println(VisibilityUtils.getVisibilityLines(start, barriers, goal));
-        System.out.println(goal);
-        System.out.println(node);
         return node;
     }
 
