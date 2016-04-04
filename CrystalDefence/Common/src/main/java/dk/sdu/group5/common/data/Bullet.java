@@ -27,6 +27,7 @@ public class Bullet {
         bullet.setY(50);
         try {
             bullet.addProperty("collidable");
+            //TODO: 04/04/16 Should not be "damageable"
             bullet.addProperty("damageable");
             world.AddEntity(bullet);
         } catch (Exception e) {
