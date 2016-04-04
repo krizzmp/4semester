@@ -5,14 +5,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
+//TODO 04/04/16 Should be moved to own component.
 public class BulletController {
     
     private static BulletController instance;
-    private int speed = 2; // Should be removed and use Entity speed instead
+    // TODO 04/04/16 Should be removed and use Entity speed instead
+    private int speed = 2;
     
     private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
@@ -50,6 +48,7 @@ public class BulletController {
         }
         
         if(!isLocked && magazineNotFull) {
+            // TODO 04/04/16 Remove
             System.out.println("created bullet");
             
             Bullet bullet = new Bullet(world);

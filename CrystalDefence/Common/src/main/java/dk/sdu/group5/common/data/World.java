@@ -10,6 +10,7 @@ public class World
     CollisionDetector collisionDetector;
     List<Entity> entities;
     Difficulty difficulty;
+    // TODO 04/04/16 Should probably be in Player.
     WeaponType weaponType;
     
     

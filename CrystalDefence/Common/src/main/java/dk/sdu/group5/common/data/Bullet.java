@@ -5,6 +5,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+//TODO 04/04/16 The creation of entities, and it corresponding addition and removal
+//in the world should not exist in common.
+//TODO 04/04/16 Bullet should probably just be a data class with 'toBeRemoved', 'activeTime', 'startTime' and 'currentTime'
+//This could then be mapped to a bullet entity in the bullet process.
 public class Bullet {
     
     private Entity bullet;
@@ -34,7 +38,8 @@ public class Bullet {
             Logger.getLogger(BulletController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
+    // TODO: 04/04/16 Should be moved outside common
     public void update(float delta) {
         bullet.setX(bullet.getX() + speed * delta);
         bullet.setY(50);
