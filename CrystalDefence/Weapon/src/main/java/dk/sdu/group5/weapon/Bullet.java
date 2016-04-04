@@ -3,6 +3,7 @@ package dk.sdu.group5.weapon;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
+
 import java.util.List;
 import java.util.Optional;
 // TODO: 17/03/16 move this to a seperate module. 
@@ -54,7 +55,8 @@ public class Bullet {
     public void removeBullet(World world) {
         world.RemoveEntity(bullet);
     }
-    
+
+    // TODO 04/04/16 Could just use vectors instead of strings.
     private void setDirection(String direction) {
         // TODO: 18/03/16 Implement entity.getTextureHeight/Width
         switch(direction) {

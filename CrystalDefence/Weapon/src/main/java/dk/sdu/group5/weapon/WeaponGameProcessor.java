@@ -23,7 +23,9 @@ public class WeaponGameProcessor implements IGameProcess {
     public void update(World world, float delta) {
         BulletController.getInstance().update(world, delta);
         GameKeys gameKeys = GameKeys.getInstance();
-        
+
+        // TODO 04/04/16 Does not always register the diagonal input directions.
+        // Using vectors would only require four if statements.
         // Shoot in 8 directions
         // Note: A whole lot of if statements. I can make it differently, but let's talk about it first - Martin F
         if (gameKeys.player_shoot_up.getKeyState()) {
