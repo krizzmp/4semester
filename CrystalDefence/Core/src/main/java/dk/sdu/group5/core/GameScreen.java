@@ -31,17 +31,26 @@ class GameScreen implements Screen {
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
-
+    public boolean gameOver = false;
+    private Skin skin;
+    private Stage stage;
+    private Table table;
+    public enum State
+    {
+        PAUSE,
+        RUN,
+        RESUME,
+        STOPPED
+    }
+    private State state = State.RUN;
 
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
      */
     @Override
     public void show() {
-        PS = new PauseScreen(this);
 
-
-
+        state = State.RUN;
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
@@ -51,9 +60,11 @@ class GameScreen implements Screen {
         world.getEntities().forEach(System.out::println);
         Gdx.input.setInputProcessor (new InputAdapter() {
             public boolean keyDown(int keycode) {
-                if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK)){
-                    Game.getInstance().setScreen(PS);
-
+                if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK))
+                    if (state == state.PAUSE){
+                    state = state.RUN;
+                }else{
+                    state = state.PAUSE;
                 }
 
                     return true;
@@ -83,20 +94,8 @@ class GameScreen implements Screen {
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-//        font.draw(batch, world.getEntities().toString(), 150, 220);
-        world.getEntities().forEach(e -> {
-            String texture = e.getTexture();
-            if (texture != null && !Objects.equals(texture, "")) {
-                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
-                font.draw(batch,e.toString(),e.getX(),e.getY());
-            }
-        });
-        batch.end();
-
-        }
-
+        update();
+    }
 
     /**
      *
@@ -117,7 +116,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void pause() {
-
+        if (state == state.RUN) state = state.PAUSE;
            
     }
     
@@ -128,7 +127,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void resume() {
-
+        if (state == state.PAUSE) state = state.RUN;
     }
 
     /**
@@ -136,6 +135,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void hide() {
+
 
     }
 
@@ -148,7 +148,42 @@ class GameScreen implements Screen {
     }
     
 
+    public void update() {
+        switch (state) {
+    case RUN:
+        updateRunning();
+        break;
+    case PAUSE:
+        updatePaused();
+        break;
 
+    }}
+
+
+
+    public void updateRunning(){
+        if(stage != null){
+            stage.clear();
+        }
+        batch.begin();
+//        font.draw(batch, world.getEntities().toString(), 150, 220);
+        world.getEntities().forEach(e -> {
+            String texture = e.getTexture();
+            if (texture != null && !Objects.equals(texture, "")) {
+                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
+                font.draw(batch,e.toString(),e.getX(),e.getY());
+            }
+        });
+        batch.end();
+    }
+    public void updatePaused(){
+
+        PS = new PauseScreen(this);
+        hide();
+        PS.show();
+
+
+    }
 
 
 }
