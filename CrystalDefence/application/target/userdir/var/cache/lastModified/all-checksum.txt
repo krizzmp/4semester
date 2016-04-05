@@ -1,9 +1,0 @@
-platform=1459435190437
-cluster.crystaldefence=1459435190436
-cluster.platform=1459435190437
-user=1459435190437
-crc=7
-locale=en_US
-branding=crystaldefence
-java.version=1.8.0_71
-java.vm.version=25.71-b15

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><module codename="dk.sdu.group5.CrystalDefence.branding">
-    <module_version install_time="1459435183927" last="true" origin="installer" specification_version="1.0">
-        <file crc="3175672300" name="config/Modules/dk-sdu-group5-CrystalDefence-branding.xml"/>
-        <file crc="1926687201" name="core/locale/core_crystaldefence.jar"/>
-        <file crc="1408230387" name="modules/dk-sdu-group5-CrystalDefence-branding.jar"/>
-        <file crc="3640648859" name="modules/locale/org-netbeans-core-windows_crystaldefence.jar"/>
-        <file crc="345723541" name="modules/locale/org-netbeans-core_crystaldefence.jar"/>
-    </module_version>
-</module>
