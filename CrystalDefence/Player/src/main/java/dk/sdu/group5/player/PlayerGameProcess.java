@@ -1,6 +1,9 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.data.collision.SquareCollider;
@@ -51,10 +54,10 @@ public class PlayerGameProcess implements IGameProcess {
         }
 
         // Collision stuff
-        for (Entity e : world.getCollisionDetector().collides(player, world.getEntities())) {
+        world.getCollisionDetector().collides(player, world.getEntities()).stream().map((e) -> {
             CollisionController.resolveCollision(player, e);
-            world.getCollisionHandler().addCollision(e.getCollider(), player);
-        }
+            return e;
+        }).forEach((e) -> world.getCollisionHandler().addCollision(e.getCollider(), player));
     }
 
     @Override
