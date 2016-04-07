@@ -3,6 +3,7 @@ package dk.sdu.group5.weapon;
 
 import dk.sdu.group5.common.data.WeaponType;
 import dk.sdu.group5.common.data.World;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class BulletController {
         Iterator<Bullet> it = weaponMagazine.iterator();
         while(it.hasNext()) {
             Bullet itBullet = it.next();
-            itBullet.update(delta);
+            itBullet.update(world, delta);
             if(itBullet.toBeRemoved()) {
                 itBullet.removeBullet(world);
                 itBullet = null;

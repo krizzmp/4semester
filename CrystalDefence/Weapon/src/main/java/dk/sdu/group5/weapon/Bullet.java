@@ -43,7 +43,8 @@ public class Bullet {
     private Optional<Entity> getPlayer(List<Entity> xs) {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
-    public void update(float delta) {
+
+    public void update(World world, float delta) {
         bullet.setX(bullet.getX() + (bullet.getSpeed() * delta) * dx);
         bullet.setY(bullet.getY() + (bullet.getSpeed() * delta) * dy);
         
@@ -51,6 +52,15 @@ public class Bullet {
         if (currentTime - startTime >= activeTime) {
             toBeRemoved = true;
         }
+
+        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
+                .forEach((e) -> {
+                    if (world.getCollisionDetector().collides(e, bullet)) {
+                        e.setHealth(e.getHealth() - 1);
+                        toBeRemoved = true;
+                        return;
+                    }
+                });
     }
     public boolean toBeRemoved() {
         return toBeRemoved;
