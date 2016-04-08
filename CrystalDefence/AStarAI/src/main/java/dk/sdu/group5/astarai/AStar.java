@@ -31,7 +31,7 @@ class AStar {
     }
 
     private static boolean containsCheaper(Collection<Node> nodes, Node node) {
-        return nodes.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f < node.f);
+        return nodes.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f <= node.f);
     }
 
     static private List<Vec> connections(Node q, List<LineSegment> lineSegments) {
