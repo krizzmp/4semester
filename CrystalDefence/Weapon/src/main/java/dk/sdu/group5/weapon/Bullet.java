@@ -32,7 +32,7 @@ public class Bullet {
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
-        bullet.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        bullet.setCollider(new SquareCollider(false, new AABB(-4.5f, -4.5f, 4.5f, 4.5f)));
 
         bullet.setX(player.getX() + offsetX);
         bullet.setY(player.getY() + offsetY); 
