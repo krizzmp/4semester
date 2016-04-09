@@ -21,6 +21,7 @@ public class Bullet {
     private int dx = 0; // 1 = right, -1 = left
     private int dy = 0; // 1 = up, -1 = down
     private float speed = 120;
+    
     public Bullet(World world, String direction) {
         setDirection(direction);
         
