@@ -6,6 +6,10 @@ import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.CollisionController;
+import dk.sdu.group5.common.data.collision.CollisionDetector;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,7 +20,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
     
-    private int maxBarriers = 3;
+    private int maxBarriers = 10; //TODO: Set a proper number of max barriers
     
     private float offsetX = 8f;
     private float offsetY = 8f;
@@ -71,40 +75,33 @@ public class BarrierGameProcess implements IGameProcess {
                 posX = player.getX() - offsetX - BARRIER_WIDTH; // 32 is barrier width.
                 posY = player.getY();
             }
-            
-            placeable = !checkCollision();
-            if(placeable && listBarriers.size() < maxBarriers) {
+
+            if(listBarriers.size() < maxBarriers) {
                 barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
                 barrier.setTexture("gridPattern.png");
                 barrier.setSpeed(0);
+                barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
                 barrier.setX(posX);
                 barrier.setY(posY);
                 barrier.addProperty("collidable");
+                barrier.addProperty("static");
                 barrier.addProperty("tangible");
-                world.addEntity(barrier);
-                listBarriers.add(barrier);
+                
+                if(checkCollision(world)) {
+                    world.addEntity(barrier);
+                    listBarriers.add(barrier);
+                }
             } 
 
         }
     }
     
-    private boolean checkCollision() {
-        // TODO: 31/03/16 Implement collision detection for all entities | Should probably be replaced with proper collision detection
-
-        // check for barriers | should be checked last
-        Iterator<Entity> it = listBarriers.iterator();
-
-        while(it.hasNext()) {
-            Entity itBarrier = it.next();
-            if((posX > (itBarrier.getX() - BARRIER_WIDTH)) && (posX < (itBarrier.getX() + BARRIER_WIDTH)) ) {
-                if((posY > (itBarrier.getY() - BARRIER_HEIGHT)) && (posY < (itBarrier.getY() + BARRIER_HEIGHT)) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private boolean checkCollision(World world) {
+        // Collision stuff
+        CollisionDetector cd = world.getCollisionDetector();
+        return cd.collides(barrier, world.getEntities()).isEmpty();
     }
     
     private Optional<Entity> getPlayer(List<Entity> xs) {
