@@ -34,7 +34,7 @@ public class PlayerGameProcess implements IGameProcess {
         player.addProperty("damageable");
         world.addEntity(player);
     }
-
+    
     @Override
     public void update(World world, float delta) {
         //Player Movement
