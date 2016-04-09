@@ -3,6 +3,8 @@ package dk.sdu.group5.enemy;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.Spawner;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 
 public class EnemySpawner extends Spawner {
     @Override
@@ -14,9 +16,10 @@ public class EnemySpawner extends Spawner {
     public Entity spawn() {
         Entity entity = new Entity();
         entity.setType(EntityType.ENEMY);
-        entity.setLives(3);
+        entity.setHealth(3);
         entity.setSpeed(40);
         entity.setTexture("gridPattern.png");
+        entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
         entity.addProperty("collidable");
         entity.addProperty("tangible");
         entity.addProperty("damageable");

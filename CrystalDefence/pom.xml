@@ -74,8 +74,10 @@
         <module>Enemy</module>
         <module>Core</module>
         <module>Tower</module>
-        <module>SimpleAI</module>
+        <!--<module>SimpleAI</module>-->
         <module>Weapon</module>
+        <module>AStarAI</module>
+        <module>Barrier</module>
     </modules>
 
     <properties>
