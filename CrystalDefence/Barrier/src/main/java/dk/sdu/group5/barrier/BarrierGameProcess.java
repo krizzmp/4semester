@@ -20,7 +20,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
     
-    private int maxBarriers = 10;
+    private int maxBarriers = 10; //TODO: Set a proper number of max barriers
     
     private float offsetX = 8f;
     private float offsetY = 8f;
