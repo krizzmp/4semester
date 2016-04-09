@@ -8,9 +8,7 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 
 import java.util.List;
 import java.util.Optional;
-// TODO: 17/03/16 move this to a seperate module. 
-// Wasn't this supposed to just be Weapon insted? -
-// There we can just remove all bullets when unloading. - Martin F
+
 public class Bullet { 
     
     private Entity bullet;
