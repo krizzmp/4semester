@@ -18,7 +18,9 @@ public class GameKeys {
     public final Key player_shoot_left = new Key(21, false);
     public final Key player_shoot_right = new Key(22, false);
     public final Key player_place_barrier = new Key(62, false);
-    
+    public final Key pause_backspace = new Key(67, false);
+    public final Key pause_escape = new Key(131, false);
+
     private final List<Key> listOfKeys = new ArrayList<>();
     
     private GameKeys() {
@@ -31,6 +33,8 @@ public class GameKeys {
         listOfKeys.add(player_shoot_left);
         listOfKeys.add(player_shoot_right); 
         listOfKeys.add(player_place_barrier);
+        listOfKeys.add(pause_backspace);
+        listOfKeys.add(pause_escape);
     }
     
     public static GameKeys getInstance() {

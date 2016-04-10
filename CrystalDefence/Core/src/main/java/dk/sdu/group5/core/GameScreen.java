@@ -57,7 +57,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void show() {
-
+        PS = new PauseScreen(this);
         state = State.RUN;
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -67,32 +67,7 @@ class GameScreen implements Screen {
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
         Gdx.input.setInputProcessor (new InputAdapter() {
-            public boolean keyDown(int keycode) {
-                if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK))
-                    if (state == state.PAUSE){
-                    state = state.RUN;
-                }else{
-                    state = state.PAUSE;
-                }
-
-                    return true;
-            }
-
-            });
-
-        }
-
-
-
-
-
-
-                //Check input
-        Gdx.input.setInputProcessor(new InputAdapter () {
-
-            @Override
             public boolean keyDown(int k) {
-                //Searches the list of all used keys, and returns true if that key is in that list
                 GameKeys.getInstance().setKeyState(k, true);
                 return true;
             }
@@ -114,6 +89,11 @@ class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+
+        if(GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()){
+            PS = new PauseScreen(this);
+            Game.getInstance().setScreen(PS);
+        }
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
 
@@ -199,19 +179,7 @@ class GameScreen implements Screen {
 
 
     public void updateRunning(){
-        if(stage != null){
-            stage.clear();
-        }
-        batch.begin();
-//        font.draw(batch, world.getEntities().toString(), 150, 220);
-        world.getEntities().forEach(e -> {
-            String texture = e.getTexture();
-            if (texture != null && !Objects.equals(texture, "")) {
-                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
-                font.draw(batch,e.toString(),e.getX(),e.getY());
-            }
-        });
-        batch.end();
+
     }
     public void updatePaused(){
 

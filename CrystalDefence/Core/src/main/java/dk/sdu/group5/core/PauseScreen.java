@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import dk.sdu.group5.common.data.GameKeys;
 
 /**
  * Created by Hivemaster on 31-03-2016.
@@ -33,6 +34,8 @@ public class PauseScreen implements Screen{
 
     @Override
     public void show() {
+        GameKeys.getInstance().setKeyState(67, false);
+        GameKeys.getInstance().setKeyState(131, false);
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
