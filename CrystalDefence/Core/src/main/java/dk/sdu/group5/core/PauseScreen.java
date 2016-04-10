@@ -18,8 +18,7 @@ import dk.sdu.group5.common.data.GameKeys;
 /**
  * Created by Hivemaster on 31-03-2016.
  */
-public class PauseScreen implements Screen{
-
+public class PauseScreen implements Screen {
 
     private BitmapFont font;
     private Skin skin;
@@ -27,10 +26,10 @@ public class PauseScreen implements Screen{
     private Table table;
     private GameScreen game;
     private float delta;
-    PauseScreen(GameScreen game){
+
+    PauseScreen(GameScreen game) {
         this.game = game;
     }
-
 
     @Override
     public void show() {
@@ -48,15 +47,20 @@ public class PauseScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
-        addButton("Resume game", ()-> {Game.getInstance().setScreen(game);}, style);
-        addButton("Main Menu", ()-> mainmenu(), style);
-        addButton("Exit game", ()-> Gdx.app.exit(), style);
+        
+        addButton("Resume game", () -> {
+            Game.getInstance().setScreen(game);
+        }, style);
+        addButton("Main Menu", () -> mainmenu(), style);
+        addButton("Exit game", () -> Gdx.app.exit(), style);
+        
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
-    public void mainmenu(){
+
+    public void mainmenu() {
         GameScreen gameScreen;
         StartScreen startScreen;
         gameScreen = new GameScreen();
@@ -65,13 +69,13 @@ public class PauseScreen implements Screen{
 //            Gdx.app.exit();
             Game.getInstance().setScreen(gameScreen);
         });
-         Game.getInstance().setScreen(startScreen);
+        Game.getInstance().setScreen(startScreen);
 
     }
 
     private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style) {
         final TextButton button = new TextButton(text, style);
-        button.addListener(new ClickListener(){
+        button.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
@@ -92,7 +96,6 @@ public class PauseScreen implements Screen{
         stage.draw();
     }
 
-
     @Override
     public void resize(int i, int i1) {
 
@@ -100,7 +103,6 @@ public class PauseScreen implements Screen{
 
     @Override
     public void pause() {
-
 
     }
 

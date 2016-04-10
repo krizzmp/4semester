@@ -27,8 +27,6 @@ class StartScreen implements Screen {
     StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
 
-
-
     }
 
     @Override
@@ -47,12 +45,12 @@ class StartScreen implements Screen {
         TextButtonStyle style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
 
         addButton("start game", onEnter, style);
-        addButton("exit game", ()->Gdx.app.exit(), style);
+        addButton("exit game", () -> Gdx.app.exit(), style);
     }
 
     private void addButton(String text, Runnable onEnter, TextButtonStyle style) {
         TextButton button = new TextButton(text, style);
-        button.addListener(new ClickListener(){
+        button.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
@@ -79,7 +77,6 @@ class StartScreen implements Screen {
 
     @Override
     public void pause() {
-
 
     }
 

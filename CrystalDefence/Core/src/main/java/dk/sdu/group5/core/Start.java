@@ -5,11 +5,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import org.openide.modules.ModuleInstall;
 
 public class Start implements Runnable {
+
     @Override
     public void run() {
-        System.out.println("hi");
-        LwjglApplicationConfiguration cfg =
-                new LwjglApplicationConfiguration();
+        LwjglApplicationConfiguration cfg
+                = new LwjglApplicationConfiguration();
         cfg.title = "Crystal Defence";
         cfg.width = 800;
         cfg.height = 400;

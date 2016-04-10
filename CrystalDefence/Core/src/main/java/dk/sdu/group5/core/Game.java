@@ -14,26 +14,30 @@ class Game extends com.badlogic.gdx.Game {
     private Stage stage;
 
     private static Game game;
-    private Game(){
+
+    private Game() {
 
     }
-    public static Game getInstance(){
-        if (game == null){
+
+    public static Game getInstance() {
+        if (game == null) {
             game = new Game();
         }
         return game;
     }
+
     @Override
     public void create() {
         gameScreen = new GameScreen();
         //something like this:
         startScreen = new StartScreen(() -> {
-          //Gdx.app.exit();
+            //Gdx.app.exit();
             setScreen(gameScreen);
         });
         setScreen(startScreen);
     }
-    public void screen(Screen screen){
+
+    public void screen(Screen screen) {
         setScreen(screen);
     }
 

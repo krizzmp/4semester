@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 class GameScreen implements Screen {
+
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
@@ -42,14 +43,7 @@ class GameScreen implements Screen {
     private Skin skin;
     private Stage stage;
     private Table table;
-    public enum State
-    {
-        PAUSE,
-        RUN,
-        RESUME,
-        STOPPED
-    }
-    private State state = State.RUN;
+
     CollisionController collisionController = new CollisionController();
 
     public GameScreen() {
@@ -60,7 +54,6 @@ class GameScreen implements Screen {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
-
     }
 
     /**
@@ -68,7 +61,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void show() {
-        Gdx.input.setInputProcessor (new InputAdapter() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int k) {
                 GameKeys.getInstance().setKeyState(k, true);
                 return true;
@@ -82,9 +75,7 @@ class GameScreen implements Screen {
             }
         });
 
-
     }
-
 
     /**
      * Called when the screen should render itself.
@@ -94,7 +85,7 @@ class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        if(GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()){
+        if (GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()) {
 
             Game.getInstance().setScreen(PS = new PauseScreen(this));
         }
@@ -117,15 +108,10 @@ class GameScreen implements Screen {
             }
         });
         batch.end();
-        update();
     }
 
     /**
-     *
-     */
-
-    /**
-     * @param width  the width of the window
+     * @param width the width of the window
      * @param height the height of the window
      * @see ApplicationListener#resize(int, int)
      */
@@ -139,7 +125,6 @@ class GameScreen implements Screen {
      */
     @Override
     public void pause() {
-        if (state == state.RUN) state = state.PAUSE;
 
     }
 
@@ -148,7 +133,7 @@ class GameScreen implements Screen {
      */
     @Override
     public void resume() {
-        if (state == state.PAUSE) state = state.RUN;
+
     }
 
     /**
@@ -167,32 +152,4 @@ class GameScreen implements Screen {
     public void dispose() {
 
     }
-
-
-    public void update() {
-        switch (state) {
-    case RUN:
-        updateRunning();
-        break;
-    case PAUSE:
-        updatePaused();
-        break;
-
-    }}
-
-
-
-    public void updateRunning(){
-
-    }
-    public void updatePaused(){
-
-        PS = new PauseScreen(this);
-        hide();
-        PS.show();
-
-
-    }
-
-
 }
