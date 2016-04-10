@@ -16,6 +16,6 @@ public class Start implements Runnable {
         cfg.useGL30 = false;
         cfg.resizable = false;
 
-        LwjglApplication lwjglApplication = new LwjglApplication(Game.getInstance(), cfg);
+        new LwjglApplication(new Game(), cfg);
     }
 }

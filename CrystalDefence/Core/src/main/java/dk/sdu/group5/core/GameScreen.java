@@ -1,6 +1,10 @@
 package dk.sdu.group5.core;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,13 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import dk.sdu.group5.common.data.Difficulty;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
 import java.util.Objects;
-
 
 class GameScreen implements Screen {
     private PauseScreen PS;
@@ -43,6 +50,7 @@ class GameScreen implements Screen {
         STOPPED
     }
     private State state = State.RUN;
+    CollisionController collisionController = new CollisionController();
 
     /**
      * Called when this screen becomes the current screen for a {@link Game}.
@@ -55,8 +63,8 @@ class GameScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.CYAN);
         processes = Lookup.getDefault().lookupAll(IGameProcess.class);
-        world = new World();
-        processes.forEach((p) -> p.start(world));
+        world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
+        processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
         Gdx.input.setInputProcessor (new InputAdapter() {
             public boolean keyDown(int keycode) {
@@ -76,7 +84,27 @@ class GameScreen implements Screen {
 
 
 
-     
+
+
+
+                //Check input
+        Gdx.input.setInputProcessor(new InputAdapter () {
+
+            @Override
+            public boolean keyDown(int k) {
+                //Searches the list of all used keys, and returns true if that key is in that list
+                GameKeys.getInstance().setKeyState(k, true);
+                return true;
+            }
+
+            @Override
+            public boolean keyUp(int k) {
+                //Searches the list of all used keys, and returns true if that key is in that list
+                GameKeys.getInstance().setKeyState(k, false);
+                return true;
+            }
+        });
+    }
 
 
     /**
@@ -86,14 +114,25 @@ class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // TODO: 03/03/16 add game rendering
+        //spawn enemies
+        SpawnController.getInstance().update(world, delta);
 
         //update entities
-        processes.forEach((p) -> p.update(world, delta));
+        processes.forEach(p -> p.update(world, delta));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        world.getEntities().forEach(e -> {
+            String texturePath = e.getTexture();
+            if (texturePath != null && !Objects.equals(texturePath, "")) {
+                Texture texture = new Texture(Gdx.files.classpath(texturePath));
+                batch.draw(texture, e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
+                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
+            }
+        });
+        batch.end();
         update();
     }
 
@@ -117,10 +156,8 @@ class GameScreen implements Screen {
     @Override
     public void pause() {
         if (state == state.RUN) state = state.PAUSE;
-           
+
     }
-    
-    
 
     /**
      * @see ApplicationListener#resume()
@@ -131,11 +168,11 @@ class GameScreen implements Screen {
     }
 
     /**
-     * Called when this screen is no longer the current screen for a {@link Game}.
+     * Called when this screen is no longer the current screen for a
+     * {@link Game}.
      */
     @Override
     public void hide() {
-
 
     }
 
@@ -146,7 +183,7 @@ class GameScreen implements Screen {
     public void dispose() {
 
     }
-    
+
 
     public void update() {
         switch (state) {

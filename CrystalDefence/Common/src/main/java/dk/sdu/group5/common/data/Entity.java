@@ -1,5 +1,8 @@
 package dk.sdu.group5.common.data;
 
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.ICollider;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -7,30 +10,41 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
-    private int x, y;
-    private int lives;
+    private float x;
+    private float y;
+    private int health;
 
     private final Set<String> properties;
+    private ICollider collider;
     private EntityType type;
     private String texture;
+    private float Speed;
 
     public Entity() {
         properties = new HashSet<>();
     }
 
-    public int getX() {
+    public float getSpeed() {
+        return Speed;
+    }
+
+    public void setSpeed(float speed) {
+        Speed = speed;
+    }
+
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -42,40 +56,54 @@ public class Entity {
         this.type = type;
     }
 
-    public int getLives() {
-        return lives;
+    public int getHealth() {
+        return health;
+        
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public void addProperty(String property) throws Exception {
-        // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
-        // if duplicate found.
-        if (!properties.add(property)) {
-            throw new Exception("A duplicate entry already exists matching the provided property!");
-        }
+    public boolean addProperty(String property) {
+        return properties.add(property);
     }
 
-    public void removeProperty(String property) throws Exception {
-        // TO-BE-RESOLVED: Silent handling, throw exception or return boolean
-        // if duplicate found.
-        if (!properties.remove(property)) {
-            throw new Exception("No entry already exists matching the provided property!");
-        }
+    public boolean removeProperty(String property) {
+        return properties.remove(property);
+    }
+
+    public Set<String> getProperties() {
+        return properties;
+    }
+
+    public ICollider getCollider() {
+        return collider;
+    }
+
+    public void setCollider(ICollider collider) {
+        this.collider = collider;
     }
 
     @Override
     public String toString() {
-        return type.toString()+"{x:"+x+", y:"+y+", lives:"+lives+"}";
+//        return type + "{x:" + x + ", y:" + y + ", health:" + health + "}";
+        return String.format("%s{x: %.0f, y: %.0f, health: %d}", type, x, y, health);
+    }
+
+    public String getTexture() {
+        return texture;
     }
 
     public void setTexture(String texture) {
         this.texture = texture;
     }
 
-    public String getTexture() {
-        return texture;
+    public boolean is(String collidable) {
+        return properties.contains(collidable);
+    }
+
+    public AABB getBounds() {
+        return collider.getBounds();
     }
 }

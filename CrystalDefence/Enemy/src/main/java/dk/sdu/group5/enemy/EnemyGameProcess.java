@@ -1,18 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.group5.enemy;
 
+import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.lookup.ServiceProvider;
 
-/**
- *
- * @author Klaus
- */
+
+@ServiceProvider(service = IGameProcess.class)
 public class EnemyGameProcess implements IGameProcess {
 
     private EnemySpawner enemySpawner;
@@ -30,16 +25,19 @@ public class EnemyGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-
+        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
+                .forEach(e -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
+                        .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
+                        .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
     }
 
     @Override
     public void stop(World world) {
-
+        SpawnController.getInstance().unRegister(enemySpawner);
     }
 
     @Override
     public void uninstall() {
-        SpawnController.getInstance().unRegister(enemySpawner);
+
     }
 }
