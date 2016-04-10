@@ -52,13 +52,7 @@ class GameScreen implements Screen {
     private State state = State.RUN;
     CollisionController collisionController = new CollisionController();
 
-    /**
-     * Called when this screen becomes the current screen for a {@link Game}.
-     */
-    @Override
-    public void show() {
-        PS = new PauseScreen(this);
-        state = State.RUN;
+    public GameScreen() {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
@@ -66,6 +60,14 @@ class GameScreen implements Screen {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
+
+    }
+
+    /**
+     * Called when this screen becomes the current screen for a {@link Game}.
+     */
+    @Override
+    public void show() {
         Gdx.input.setInputProcessor (new InputAdapter() {
             public boolean keyDown(int k) {
                 GameKeys.getInstance().setKeyState(k, true);
@@ -79,6 +81,8 @@ class GameScreen implements Screen {
                 return true;
             }
         });
+
+
     }
 
 
@@ -91,8 +95,8 @@ class GameScreen implements Screen {
     public void render(float delta) {
 
         if(GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()){
-            PS = new PauseScreen(this);
-            Game.getInstance().setScreen(PS);
+
+            Game.getInstance().setScreen(PS = new PauseScreen(this));
         }
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
