@@ -1,6 +1,6 @@
 package dk.sdu.group5.common.data;
 
-public class Pos2d {
+class Pos2d {
     final int x;
     final int y;
 

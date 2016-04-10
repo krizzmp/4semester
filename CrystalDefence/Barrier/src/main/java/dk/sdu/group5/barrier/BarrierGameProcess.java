@@ -7,11 +7,10 @@ import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
-import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.data.collision.CollisionDetector;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
-import java.util.Iterator;
+
 import java.util.LinkedList;
 import java.util.Optional;
 import org.openide.util.lookup.ServiceProvider;
@@ -59,8 +58,8 @@ public class BarrierGameProcess implements IGameProcess {
             // default is the right direction
             posX = player.getX() + offsetX + 32; // 32 is player width.
             posY = player.getY();
-            
-            if(gameKeys.player_movement_up.getKeyState()) {    
+
+            if(gameKeys.player_movement_up.getKeyState()) {
                 // Place up
                 posX = player.getX();
                 posY = player.getY() + offsetY + 32; // 32 is player height.
@@ -88,16 +87,16 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.addProperty("collidable");
                 barrier.addProperty("static");
                 barrier.addProperty("tangible");
-                
+
                 if(checkCollision(world)) {
                     world.addEntity(barrier);
                     listBarriers.add(barrier);
                 }
-            } 
+            }
 
         }
     }
-    
+
     private boolean checkCollision(World world) {
         // Collision stuff
         CollisionDetector cd = world.getCollisionDetector();

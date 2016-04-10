@@ -21,11 +21,11 @@ class Vector2d {
         return divide(length());
     }
 
-    Vector2d divide(float length) {
+    private Vector2d divide(float length) {
         return new Vector2d(x / length, y / length);
     }
 
-    float length() {
+    private float length() {
         return (float) Math.sqrt(x * x + y * y);
     }
 

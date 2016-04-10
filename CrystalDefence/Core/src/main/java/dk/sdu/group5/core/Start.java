@@ -3,7 +3,7 @@ package dk.sdu.group5.core;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-public class Start implements Runnable {
+class Start implements Runnable {
     @Override
     public void run() {
         System.out.println("hi");
@@ -15,6 +15,6 @@ public class Start implements Runnable {
         cfg.useGL30 = false;
         cfg.resizable = false;
 
-        LwjglApplication lwjglApplication = new LwjglApplication(new Game(), cfg);
+        new LwjglApplication(new Game(), cfg);
     }
 }

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import static dk.sdu.group5.astarai.FU.flatMap;
 import static dk.sdu.group5.astarai.FU.lift2;
 
-public class VisibilityUtils {
+class VisibilityUtils {
     static List<LineSegment> getVisibilityLines(Vec start, List<Entity> barriers, Vec goal, float size){
         List<Vec> ps = new ArrayList<>();
         ps.add(start);
@@ -17,10 +17,9 @@ public class VisibilityUtils {
         ps.addAll(flatMap(e->getPoints(e,size), barriers));
         List<LineSegment> rays = lift2(LineSegment::new).apply(ps, ps); // rays
         List<LineSegment> segments = flatMap(e->getLines(e,size), barriers);
-        List<LineSegment> lineSegmentStream = rays.stream().filter(a -> !a.intersects(segments)).collect(Collectors.toList());
-        return lineSegmentStream;
+        return rays.stream().filter(a -> !a.intersects(segments)).collect(Collectors.toList());
     }
-    static List<LineSegment> getLines(Entity e, float size) {
+    private static List<LineSegment> getLines(Entity e, float size) {
         List<LineSegment> lines = new ArrayList<>(4);
         float a = 0.2f;
         float b = 0.1f;
@@ -35,7 +34,7 @@ public class VisibilityUtils {
         return lines;
     }
 
-    static List<Vec> getPoints(Entity e, float size) {
+    private static List<Vec> getPoints(Entity e, float size) {
         List<Vec> points = new ArrayList<>(4);
         points.add(new Vec(maxX(e,size) + 0.1, maxY(e,size)));
         points.add(new Vec(minX(e,size) + 0.1, maxY(e,size)));

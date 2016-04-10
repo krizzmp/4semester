@@ -3,12 +3,12 @@ package dk.sdu.group5.common.data.collision;
 // Axis-aligned bounding box
 public class AABB {
 
-    private float minX;
-    private float minY;
-    private float maxX;
-    private float maxY;
+    private final float minX;
+    private final float minY;
+    private final float maxX;
+    private final float maxY;
 
-    public AABB(float minX, float minY, float maxX, float maxY) {
+    public AABB(float minX, float minY, @SuppressWarnings("SameParameterValue") float maxX, @SuppressWarnings("SameParameterValue") float maxY) {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;

@@ -10,6 +10,8 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.List;
+
 @ServiceProvider(service = IGameProcess.class)
 public class PlayerGameProcess implements IGameProcess {
     private Entity player;
@@ -34,7 +36,7 @@ public class PlayerGameProcess implements IGameProcess {
         player.addProperty("damageable");
         world.addEntity(player);
     }
-    
+
     @Override
     public void update(World world, float delta) {
         //Player Movement
@@ -54,10 +56,11 @@ public class PlayerGameProcess implements IGameProcess {
         }
 
         // Collision stuff
-        world.getCollisionDetector().collides(player, world.getEntities()).stream().map((e) -> {
-            CollisionController.resolveCollision(player, e);
-            return e;
-        }).forEach((e) -> world.getCollisionHandler().addCollision(e.getCollider(), player));
+        List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
+        collisions.stream().forEach(e -> {
+            CollisionController.applyKnockBack(player, e);// applies knockback?
+            world.getCollisionHandler().addCollision(e.getCollider(), player);
+        });
     }
 
     @Override

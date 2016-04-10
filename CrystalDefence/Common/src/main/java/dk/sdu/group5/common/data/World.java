@@ -11,9 +11,9 @@ public class World {
     private final CollisionDetector detector;
     private final List<Entity> entities;
     private Difficulty difficulty;
-    WeaponType weaponType;
+    private WeaponType weaponType;
 
-    public World()
+    private World()
     {
         collisionHandler = new CollisionHandler();
         detector = new CollisionDetector();

@@ -1,8 +1,8 @@
 package dk.sdu.group5.astarai;
 
 public class Vec {
-    double x;
-    double y;
+    final double x;
+    final double y;
 
     public Vec(double x, double y) {
         this.x = x;
@@ -34,7 +34,7 @@ public class Vec {
         return divide(length());
     }
 
-    Vec divide(double length) {
+    private Vec divide(double length) {
         return new Vec(x / length, y / length);
     }
     @Override

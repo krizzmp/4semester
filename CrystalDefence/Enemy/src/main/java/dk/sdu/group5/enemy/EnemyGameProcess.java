@@ -26,7 +26,7 @@ public class EnemyGameProcess implements IGameProcess {
     @Override
     public void update(World world, float delta) {
         world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
-                .forEach((e) -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
+                .forEach(e -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
                         .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
                         .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
     }

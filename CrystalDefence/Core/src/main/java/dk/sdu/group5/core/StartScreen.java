@@ -18,7 +18,7 @@ import static com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 class StartScreen implements Screen {
 
     private BitmapFont font;
-    private Runnable onEnter;
+    private final Runnable onEnter;
     private Skin skin;
     private Stage stage;
     private Table table;

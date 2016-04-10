@@ -1,5 +1,6 @@
 package dk.sdu.group5.common.data;
 
+import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.ICollider;
 
 import java.util.HashSet;
@@ -98,4 +99,11 @@ public class Entity {
         this.texture = texture;
     }
 
+    public boolean is(String collidable) {
+        return properties.contains(collidable);
+    }
+
+    public AABB getBounds() {
+        return collider.getBounds();
+    }
 }

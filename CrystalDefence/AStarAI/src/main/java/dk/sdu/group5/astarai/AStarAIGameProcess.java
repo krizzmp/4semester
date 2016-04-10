@@ -41,17 +41,14 @@ public class AStarAIGameProcess implements IGameProcess {
         })));
     }
 
-    Boolean isBarrier(Entity self, Entity entity) {
+    private Boolean isBarrier(Entity self, Entity entity) {
         if(entity.getType() == EntityType.TOWER){
             return true;
         }
         if(entity.getType() == EntityType.PLAYER){
             return false;
         }
-        if(entity == self){
-            return false;
-        }
-        return true;
+        return entity != self;
     }
 
     private Vec vectorOf(Entity enemy) {

@@ -3,20 +3,19 @@ package dk.sdu.group5.astarai;
 
 import java.util.List;
 
-public class LineSegment {
-    Vec p;
-    Vec d;
+class LineSegment {
+    final Vec p;
+    final Vec d;
 
     public LineSegment(Vec from, Vec to) {
-        this.p = from;
-        this.d = to.minus(from);
+        p = from;
+        d = to.minus(from);
     }
 
-    public boolean intersects(LineSegment line) {
+    private boolean intersects(LineSegment line) {
         LineSegment r = this;
-        LineSegment s = line;
-        double t2 = (r.d.x * (s.p.y - r.p.y) + r.d.y * (r.p.x - s.p.x)) / (s.d.x * r.d.y - s.d.y * r.d.x);
-        double t1 = (s.p.x + s.d.x * t2 - r.p.x) / r.d.x;
+        double t2 = (r.d.x * (line.p.y - r.p.y) + r.d.y * (r.p.x - line.p.x)) / (line.d.x * r.d.y - line.d.y * r.d.x);
+        double t1 = (line.p.x + line.d.x * t2 - r.p.x) / r.d.x;
         return t1 >= 0 && t1 < 1 && t2 > 0 && t2 < 1;
     }
 

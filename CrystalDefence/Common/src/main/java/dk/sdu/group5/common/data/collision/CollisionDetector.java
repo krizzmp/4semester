@@ -3,7 +3,6 @@ package dk.sdu.group5.common.data.collision;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.Posf2d;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,19 +11,11 @@ public class CollisionDetector {
         List<Entity> collidableEntities = entities.stream().filter(e -> e.getCollider() != null)
                 .collect(Collectors.toList());
 
-        List<Entity> collidedEntities = new ArrayList<>();
-
-        for (Entity collidableEntity : collidableEntities) {
-            if (collidableEntity != srcEntity
-                    && collides(srcEntity, collidableEntity)) {
-                collidedEntities.add(collidableEntity);
-            }
-        }
-
-        return collidedEntities;
+        return collidableEntities.stream().filter(collidableEntity -> collidableEntity != srcEntity
+                && collides(srcEntity, collidableEntity)).collect(Collectors.toList());
     }
 
-    public boolean collides(Entity e1, Entity e2){
+    private boolean collides(Entity e1, Entity e2){
         return intersects(e1.getCollider(),e2.getCollider(),e1,e2);
     }
 

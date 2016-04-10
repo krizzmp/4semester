@@ -15,7 +15,7 @@ public class BulletController {
     private boolean isLocked = false; 
     private long startLockTime;
     private int weaponMagazineSize = 0;
-    private List<Bullet> weaponMagazine = new LinkedList<>();
+    private final List<Bullet> weaponMagazine = new LinkedList<>();
     
     public static BulletController getInstance() {
         if (instance == null)
@@ -51,7 +51,7 @@ public class BulletController {
         }
     }
     
-    public void setShootInterval(WeaponType type) {
+    private void setShootInterval(WeaponType type) {
         if(type == WeaponType.PISTOL) {
             shootInterval = 1.0f;
             weaponMagazineSize = 0;
@@ -73,7 +73,6 @@ public class BulletController {
             itBullet.update(delta);
             if(itBullet.toBeRemoved()) {
                 itBullet.removeBullet(world);
-                itBullet = null;
                 it.remove();
             }
         }

@@ -11,17 +11,17 @@ import java.util.Optional;
 
 public class Bullet { 
     
-    private Entity bullet;
+    private final Entity bullet;
     private boolean toBeRemoved = false;
     private int activeTime = 10000;
-    private long startTime = System.currentTimeMillis();
+    private final long startTime = System.currentTimeMillis();
     
     private int offsetX = 0;
     private int offsetY = 0;
     private int dx = 0; // 1 = right, -1 = left
     private int dy = 0; // 1 = up, -1 = down
     private float speed = 120;
-    
+
     public Bullet(World world, String direction) {
         setDirection(direction);
         
@@ -43,8 +43,8 @@ public class Bullet {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
     public void update(float delta) {
-        bullet.setX(bullet.getX() + (bullet.getSpeed() * delta) * dx);
-        bullet.setY(bullet.getY() + (bullet.getSpeed() * delta) * dy);
+        bullet.setX(bullet.getX() + bullet.getSpeed() * delta * dx);
+        bullet.setY(bullet.getY() + bullet.getSpeed() * delta * dy);
         
         long currentTime = System.currentTimeMillis();
         if (currentTime - startTime >= activeTime) {
