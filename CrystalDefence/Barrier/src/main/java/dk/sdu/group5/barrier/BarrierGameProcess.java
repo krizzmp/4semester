@@ -89,7 +89,10 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.addProperty("static");
                 barrier.addProperty("tangible");
 
-
+                if(checkCollision(world)) {
+                    world.addEntity(barrier);
+                    listBarriers.add(barrier);
+                }
             }
             listBarriers.stream().forEach(b->{
                 List<Entity> collisions = world.getCollisionDetector().collides(b, world.getEntities());
