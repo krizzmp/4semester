@@ -6,7 +6,6 @@ class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        System.out.println("hi");
         new Start().run();
         System.out.println("app created");
     }
