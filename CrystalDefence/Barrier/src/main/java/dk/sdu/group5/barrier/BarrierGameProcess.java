@@ -94,15 +94,16 @@ public class BarrierGameProcess implements IGameProcess {
                     listBarriers.add(barrier);
                 }
             }
-            listBarriers.stream().forEach(b->{
-                List<Entity> collisions = world.getCollisionDetector().collides(b, world.getEntities());
-                collisions.stream().forEach(e -> {
-                    CollisionController.applyKnockBack(b, e);// applies knockback?
-                    world.getCollisionHandler().addCollision(e.getCollider(), b);
-                });
-            });
+
 
         }
+        listBarriers.stream().forEach(b->{
+            List<Entity> collisions = world.getCollisionDetector().collides(b, world.getEntities());
+            collisions.stream().forEach(e -> {
+                CollisionController.applyKnockBack(b, e);// applies knockback?
+                world.getCollisionHandler().addCollision(e.getCollider(), b);
+            });
+        });
     }
 
     private boolean checkCollision(World world) {
