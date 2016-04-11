@@ -15,7 +15,7 @@ public class CollisionDetector {
                 && collides(srcEntity, collidableEntity)).collect(Collectors.toList());
     }
 
-    private boolean collides(Entity e1, Entity e2){
+    public boolean collides(Entity e1, Entity e2) {
         return intersects(e1.getCollider(),e2.getCollider(),e1,e2);
     }
 
