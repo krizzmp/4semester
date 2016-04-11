@@ -73,7 +73,7 @@ public class BulletController {
         Iterator<Bullet> it = weaponMagazine.iterator();
         while(it.hasNext()) {
             Bullet itBullet = it.next();
-            itBullet.update(delta);
+            itBullet.update(world, delta);
             if(itBullet.toBeRemoved()) {
                 itBullet.removeBullet(world);
                 it.remove();

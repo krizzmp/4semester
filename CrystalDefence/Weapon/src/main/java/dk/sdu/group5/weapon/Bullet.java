@@ -31,7 +31,7 @@ public class Bullet {
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
-        bullet.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        bullet.setCollider(new SquareCollider(false, new AABB(-4.5f, -4.5f, 4.5f, 4.5f)));
 
         bullet.setX(player.getX() + offsetX);
         bullet.setY(player.getY() + offsetY); 
@@ -42,16 +42,24 @@ public class Bullet {
     private Optional<Entity> getPlayer(List<Entity> xs) {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
-    public void update(float delta) {
-        bullet.setX(bullet.getX() + bullet.getSpeed() * delta * dx);
-        bullet.setY(bullet.getY() + bullet.getSpeed() * delta * dy);
+
+    public void update(World world, float delta) {
+        bullet.setX(bullet.getX() + (bullet.getSpeed() * delta) * dx);
+        bullet.setY(bullet.getY() + (bullet.getSpeed() * delta) * dy);
         
         long currentTime = System.currentTimeMillis();
         if (currentTime - startTime >= activeTime) {
             toBeRemoved = true;
         }
 
-        // TODO: 11/04/16 Missing collision detection with enemy
+        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
+                .forEach((e) -> {
+                    if (world.getCollisionDetector().collides(e, bullet)) {
+                        e.setHealth(e.getHealth() - 1);
+                        toBeRemoved = true;
+                        return;
+                    }
+                });
     }
     public boolean toBeRemoved() {
         return toBeRemoved;
