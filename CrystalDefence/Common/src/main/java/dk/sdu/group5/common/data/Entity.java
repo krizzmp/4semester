@@ -2,6 +2,7 @@ package dk.sdu.group5.common.data;
 
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.ICollider;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,11 +11,10 @@ import java.util.UUID;
 public class Entity {
 
     private final UUID ID = UUID.randomUUID();
+    private final Set<String> properties;
     private float x;
     private float y;
     private int health;
-
-    private final Set<String> properties;
     private ICollider collider;
     private EntityType type;
     private String texture;
@@ -22,6 +22,17 @@ public class Entity {
 
     public Entity() {
         properties = new HashSet<>();
+    }
+
+    public Entity(EntityType entityType, float speed, float x, float y, String texture, int health, float width, float height) {
+        this();
+        setType(entityType);
+        setSpeed(speed);
+        setX(x);
+        setY(y);
+        setTexture(texture);
+        setHealth(health);
+        setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width / 2, height / 2)));
     }
 
     public float getSpeed() {
@@ -58,7 +69,7 @@ public class Entity {
 
     public int getHealth() {
         return health;
-        
+
     }
 
     public void setHealth(int health) {

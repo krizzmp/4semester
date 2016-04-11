@@ -9,15 +9,15 @@ public class GameKeys {
     private static GameKeys instance;
     
     // use this for keycode reference: https://libgdx.badlogicgames.com/nightlies/docs/api/constant-values.html
-    public final Key player_movement_up = new Key(51, false);
-    public final Key player_movement_down = new Key(47, false);
-    public final Key player_movement_left = new Key(29, false);
-    public final Key player_movement_right = new Key(32, false);
-    public final Key player_shoot_up = new Key(19, false);
-    public final Key player_shoot_down = new Key(20, false);
-    public final Key player_shoot_left = new Key(21, false);
-    public final Key player_shoot_right = new Key(22, false);
-    public final Key player_place_barrier = new Key(62, false);
+    public final Key player_movement_up = new Key(51, false); // W
+    public final Key player_movement_down = new Key(47, false); // S
+    public final Key player_movement_left = new Key(29, false); // A
+    public final Key player_movement_right = new Key(32, false); // D
+    public final Key player_shoot_up = new Key(19, false); // up
+    public final Key player_shoot_down = new Key(20, false); // down
+    public final Key player_shoot_left = new Key(21, false); // left
+    public final Key player_shoot_right = new Key(22, false); // right
+    public final Key player_place_barrier = new Key(62, false); // space
     
     private final List<Key> listOfKeys = new ArrayList<>();
     

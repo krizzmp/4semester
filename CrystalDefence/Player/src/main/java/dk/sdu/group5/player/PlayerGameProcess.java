@@ -23,14 +23,14 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        player = new Entity();
-        player.setType(EntityType.PLAYER);
-        player.setHealth(100);
-        player.setX(250);
-        player.setY(250);
-        player.setTexture("playerTexture.png");
-        player.setSpeed(60);
-        player.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture.png", 100, 32, 32);
+//        player.setType(EntityType.PLAYER);
+//        player.setHealth(100);
+//        player.setX(250);
+//        player.setY(250);
+//        player.setTexture("playerTexture.png");
+//        player.setSpeed(60);
+//        player.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
         player.addProperty("collidable");
         player.addProperty("tangible");
         player.addProperty("damageable");
@@ -42,16 +42,16 @@ public class PlayerGameProcess implements IGameProcess {
         //Player Movement
         GameKeys gameKeys = GameKeys.getInstance();
         float playerSpeed = player.getSpeed();
-        if(gameKeys.player_movement_up.getKeyState()) {
+        if (gameKeys.player_movement_up.getKeyState()) {
             player.setY(player.getY() + playerSpeed * delta);
         }
-        if(gameKeys.player_movement_down.getKeyState()) {
+        if (gameKeys.player_movement_down.getKeyState()) {
             player.setY(player.getY() - playerSpeed * delta);
         }
-        if(gameKeys.player_movement_left.getKeyState()) {
+        if (gameKeys.player_movement_left.getKeyState()) {
             player.setX(player.getX() - playerSpeed * delta);
         }
-        if(gameKeys.player_movement_right.getKeyState()) {
+        if (gameKeys.player_movement_right.getKeyState()) {
             player.setX(player.getX() + playerSpeed * delta);
         }
 

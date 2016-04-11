@@ -7,7 +7,7 @@ public class Difficulty {
     int numberOfEnemiesKilled;
     final float spawnRate;
 
-    public Difficulty(@SuppressWarnings("SameParameterValue") int maxConcurrentDifficulty, @SuppressWarnings("SameParameterValue") float spawnRate) {
+    public Difficulty( int maxConcurrentDifficulty, float spawnRate) {
         this.maxConcurrentDifficulty = maxConcurrentDifficulty;
         currentDifficulty = 0;
         this.spawnRate = spawnRate;
