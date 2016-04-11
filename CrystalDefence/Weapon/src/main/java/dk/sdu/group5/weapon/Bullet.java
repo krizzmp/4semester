@@ -50,6 +50,8 @@ public class Bullet {
         if (currentTime - startTime >= activeTime) {
             toBeRemoved = true;
         }
+
+        // TODO: 11/04/16 Missing collision detection with enemy
     }
     public boolean toBeRemoved() {
         return toBeRemoved;

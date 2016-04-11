@@ -1,7 +1,6 @@
 
 package dk.sdu.group5.barrier;
 
-import java.util.List;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
@@ -11,10 +10,11 @@ import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.data.collision.CollisionDetector;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.lookup.ServiceProvider;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
-import org.openide.util.lookup.ServiceProvider;
 
 
 @ServiceProvider(service = IGameProcess.class)
@@ -57,12 +57,14 @@ public class BarrierGameProcess implements IGameProcess {
             Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
             
             // default is the right direction
+            // TODO: 11/04/16 Player width can be found through the entity's collider
             posX = player.getX() + offsetX + 32; // 32 is player width.
             posY = player.getY();
 
             if(gameKeys.player_movement_up.getKeyState()) {
                 // Place up
                 posX = player.getX();
+                // TODO: 11/04/16 Player height can be found through the entity's collider
                 posY = player.getY() + offsetY + 32; // 32 is player height.
             }
             else if(gameKeys.player_movement_down.getKeyState()) {
@@ -97,6 +99,7 @@ public class BarrierGameProcess implements IGameProcess {
 
 
         }
+
         listBarriers.stream().forEach(b->{
             List<Entity> collisions = world.getCollisionDetector().collides(b, world.getEntities());
             collisions.stream().forEach(e -> {
