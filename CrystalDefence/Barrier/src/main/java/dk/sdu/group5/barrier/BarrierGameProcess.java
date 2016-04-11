@@ -7,6 +7,7 @@ import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.data.collision.CollisionDetector;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
@@ -79,7 +80,7 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
-                barrier.setTexture("gridPattern.png");
+                barrier.setTexture("barrierTexture.png");
                 barrier.setSpeed(0);
                 barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
                 barrier.setX(posX);
@@ -88,10 +89,11 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.addProperty("static");
                 barrier.addProperty("tangible");
 
-                if(checkCollision(world)) {
-                    world.addEntity(barrier);
-                    listBarriers.add(barrier);
-                }
+                List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
+                collisions.stream().forEach(e -> {
+                    CollisionController.applyKnockBack(player, e);// applies knockback?
+                    world.getCollisionHandler().addCollision(e.getCollider(), player);
+                });
             }
 
         }
