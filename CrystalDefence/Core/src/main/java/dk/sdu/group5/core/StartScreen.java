@@ -22,19 +22,14 @@ class StartScreen implements Screen {
     private Skin skin;
     private Stage stage;
     private Table table;
-    private Game game;
+    private TextButtonStyle style;
 
     StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
 
-    }
-
-    @Override
-    public void show() {
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
         skin = new Skin();
@@ -42,7 +37,12 @@ class StartScreen implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        TextButtonStyle style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+        style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
 
         addButton("start game", onEnter, style);
         addButton("exit game", () -> Gdx.app.exit(), style);

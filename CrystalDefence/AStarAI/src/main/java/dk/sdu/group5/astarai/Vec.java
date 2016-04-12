@@ -1,12 +1,20 @@
 package dk.sdu.group5.astarai;
 
 public class Vec {
-    final double x;
-    final double y;
+    private final double x;
+    private final double y;
 
     public Vec(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 
     public Vec minus(Vec from) {
