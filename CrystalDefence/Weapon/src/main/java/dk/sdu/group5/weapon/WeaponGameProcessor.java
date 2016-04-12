@@ -1,4 +1,3 @@
-
 package dk.sdu.group5.weapon;
 
 import dk.sdu.group5.common.data.GameKeys;
@@ -8,71 +7,68 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class WeaponGameProcessor implements IGameProcess {
-
+    private BulletController bc;
+    private GameKeys gameKeys;
     
     @Override
     public void install() {
         
     }
-
     @Override
     public void start(World world) {
+        bc = new BulletController();
+        gameKeys = GameKeys.getInstance();
     }
-
     @Override
     public void update(World world, float delta) {
-        BulletController.getInstance().update(world, delta);
-        GameKeys gameKeys = GameKeys.getInstance();
+        bc.update(world, delta);
         
         // Shoot in 8 directions
         // Note: A whole lot of if statements. I can make it differently, but let's talk about it first - Martin F
         if (gameKeys.player_shoot_up.getKeyState()) {
             if (gameKeys.player_shoot_left.getKeyState()) {
                 // if up and left
-                BulletController.getInstance().shootBullet(world, "upLeft");
+                bc.shootBullet(world, "upLeft");
             }
             else if (gameKeys.player_shoot_right.getKeyState()) {
                 // if up and right
-                BulletController.getInstance().shootBullet(world,"upRight");
+                bc.shootBullet(world,"upRight");
             }
             else {
                 // if up
-                BulletController.getInstance().shootBullet(world,"up");
+                bc.shootBullet(world,"up");
             }
         }
         else if (gameKeys.player_shoot_down.getKeyState()) {
             if (gameKeys.player_shoot_left.getKeyState()) {
                 // if down and left
-                BulletController.getInstance().shootBullet(world,"downLeft");
+                bc.shootBullet(world,"downLeft");
             }
             else if (gameKeys.player_shoot_right.getKeyState()) {
                 // if down and right
-                BulletController.getInstance().shootBullet(world,"downRight");
+                bc.shootBullet(world,"downRight");
             }
             else {
                 // if down
-                BulletController.getInstance().shootBullet(world,"down");
+                bc.shootBullet(world,"down");
             }
         }
         else {
             if (gameKeys.player_shoot_left.getKeyState()) {
                 // if left
-                BulletController.getInstance().shootBullet(world,"left");
+                bc.shootBullet(world,"left");
             }
             if (gameKeys.player_shoot_right.getKeyState()) {
                 // if right
-                BulletController.getInstance().shootBullet(world,"right");
+                bc.shootBullet(world,"right");
             }
         }
     }
     
     @Override
     public void stop(World world) {
-
     }
-
     @Override
     public void uninstall() {
-
     }    
 }
