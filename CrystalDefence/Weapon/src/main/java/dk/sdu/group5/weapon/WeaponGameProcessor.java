@@ -5,6 +5,8 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
+//TODO 04/04/16 Bullet entities should be created in here, and the BulletController update should be in its own component.
+//Or the update should be in here.
 @ServiceProvider(service = IGameProcess.class)
 public class WeaponGameProcessor implements IGameProcess {
     private BulletController bc;

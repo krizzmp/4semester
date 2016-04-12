@@ -1,28 +1,21 @@
-
 package dk.sdu.group5.weapon;
 
 import dk.sdu.group5.common.data.WeaponType;
 import dk.sdu.group5.common.data.World;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class BulletController {
     
-    private static BulletController instance;
     private float bulletRemoveTime = 5.0f;
     private float shootInterval = 1.0f;
     private boolean isLocked = false; 
     private long startLockTime;
     private int weaponMagazineSize = 0;
-    private final List<Bullet> weaponMagazine = new LinkedList<>();
-
-    // TODO: 11/04/16 Is it necessary to have it as a singleton?
-    public static BulletController getInstance() {
-        if (instance == null)
-            instance = new BulletController();
-        return instance;
+    private final List<Bullet> weaponMagazine;
+    public BulletController() {
+        weaponMagazine = new LinkedList<>();
     }
     
     public void update(World world, float delta) {
@@ -31,9 +24,8 @@ public class BulletController {
         if(currentLockTime - startLockTime >= shootInterval * 1000) {
             isLocked = false;
         }
-
-        // TODO: 11/04/16 Should probably be called updateBullets?
-        updateBullet(world, delta);
+        
+        updateBullets(world, delta);
     }
     
     public void shootBullet(World world, String direction) {
@@ -69,7 +61,7 @@ public class BulletController {
         }
     }
     
-    private void updateBullet(World world, float delta) {
+    private void updateBullets(World world, float delta) {
         Iterator<Bullet> it = weaponMagazine.iterator();
         while(it.hasNext()) {
             Bullet itBullet = it.next();
