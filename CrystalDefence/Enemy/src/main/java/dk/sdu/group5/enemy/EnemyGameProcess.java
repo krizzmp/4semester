@@ -29,6 +29,8 @@ public class EnemyGameProcess implements IGameProcess {
                 .forEach(e -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
                         .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
                         .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
+
+        // TODO: 12/04/16 Missing Enemy-Tower collision check
     }
 
     @Override

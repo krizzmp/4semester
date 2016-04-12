@@ -35,8 +35,6 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        // Render stuff
-        // Collision stuff
     }
 
     @Override
