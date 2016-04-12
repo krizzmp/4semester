@@ -14,6 +14,7 @@ public class BulletController {
     private long startLockTime;
     private int weaponMagazineSize = 0;
     private final List<Bullet> weaponMagazine;
+    
     public BulletController() {
         weaponMagazine = new LinkedList<>();
     }
