@@ -36,9 +36,9 @@ public class CollisionController {
 
     private static void move(Entity e, float xDepth, float yDepth) {
         if (Math.abs(xDepth) < Math.abs(yDepth)) {
-            e.setX(e.getX() + xDepth);
+            e.setX(e.getX() + xDepth+4);
         } else {
-            e.setY(e.getY() + yDepth);
+            e.setY(e.getY() + yDepth+4);
         }
     }
 
