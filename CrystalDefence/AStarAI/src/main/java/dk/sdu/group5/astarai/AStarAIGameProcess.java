@@ -24,8 +24,6 @@ public class AStarAIGameProcess implements IGameProcess {
 
     }
 
-
-    // NOTE: 12/04/16 Does this only attack the player?
     @Override
     public void update(World world, float delta) {
         List<Entity> entities = world.getEntities();
