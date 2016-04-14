@@ -1,22 +1,15 @@
 package dk.sdu.group5.common.data;
 
-import dk.sdu.group5.common.data.collision.CollisionDetector;
-import dk.sdu.group5.common.data.collision.CollisionHandler;
-
 import java.util.LinkedList;
 import java.util.List;
 
 public class World {
-    private final CollisionHandler collisionHandler;
-    private final CollisionDetector detector;
     private final List<Entity> entities;
     private Difficulty difficulty;
     private WeaponType weaponType;
 
     private World()
     {
-        collisionHandler = new CollisionHandler();
-        detector = new CollisionDetector();
         entities = new LinkedList<>();
         weaponType = WeaponType.PISTOL;
     }
@@ -36,15 +29,6 @@ public class World {
 
     public List<Entity> getEntities() {
         return entities;
-    }
-
-    public CollisionHandler getCollisionHandler()
-    {
-        return collisionHandler;
-    }
-
-    public CollisionDetector getCollisionDetector() {
-        return detector;
     }
 
     public Difficulty getDifficulty()

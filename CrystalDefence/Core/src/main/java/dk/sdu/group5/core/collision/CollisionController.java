@@ -1,11 +1,40 @@
-package dk.sdu.group5.common.data.collision;
+package dk.sdu.group5.core.collision;
 
 import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.ICollider;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CollisionController {
 
-    // TODO: Move somewhere else
-    public static void applyKnockBack(Entity e1, Entity e2) {
+    CollisionDetector collisionDetector;
+
+    public CollisionController(CollisionDetector collisionDetector) {
+        this.collisionDetector = collisionDetector;
+    }
+
+    public void update(World world, float delta) {
+        List<Entity> collidableEnts = world.getEntities().stream()
+                .filter(e -> e.getCollider() != null)
+                .collect(Collectors.toList());
+
+        List<Entity> dynamicEnts = collidableEnts.stream()
+                .filter(e -> !e.getProperties().contains("static"))
+                .collect(Collectors.toList());
+
+        for (Entity dynamicEnt : dynamicEnts) {
+            for (Entity collidableEnt : collidableEnts) {
+                if (dynamicEnt != collidableEnt && collisionDetector.collides(dynamicEnt, collidableEnt)) {
+                    applyKnockBack(dynamicEnt, collidableEnt);
+                    // Add collisions here
+                }
+            }
+        }
+    }
+
+    public void applyKnockBack(Entity e1, Entity e2) {
         ICollider e1Collider = e1.getCollider();
         ICollider e2Collider = e2.getCollider();
         if (notNull(e1Collider, e2Collider) && notTrigger(e1Collider, e2Collider) && isCollidable(e1, e2)) {
@@ -24,7 +53,7 @@ public class CollisionController {
         }
     }
 
-    private static void moveBoth(Entity e1, Entity e2, float xDepth, float yDepth) {
+    private void moveBoth(Entity e1, Entity e2, float xDepth, float yDepth) {
         if (Math.abs(xDepth) < Math.abs(yDepth)) {
             e1.setX(e1.getX() + xDepth / 2f);
             e2.setX(e2.getX() - xDepth / 2f);
@@ -34,7 +63,7 @@ public class CollisionController {
         }
     }
 
-    private static void move(Entity e, float xDepth, float yDepth) {
+    private void move(Entity e, float xDepth, float yDepth) {
         if (Math.abs(xDepth) < Math.abs(yDepth)) {
             e.setX(e.getX() + xDepth+4);
         } else {
@@ -42,7 +71,7 @@ public class CollisionController {
         }
     }
 
-    private static float getyDepth(Entity e1, Entity e2) {
+    private float getyDepth(Entity e1, Entity e2) {
         float yDepth = 0f;
         if (e1.getY() < e2.getY()) {
             yDepth = yDepthMax(e1, e2);
@@ -52,7 +81,7 @@ public class CollisionController {
         return yDepth;
     }
 
-    private static float getxDepth(Entity e1, Entity e2) {
+    private float getxDepth(Entity e1, Entity e2) {
         float xDepth = 0f;
         if (e1.getX() < e2.getX()) {
             xDepth = xDepthMax(e1, e2);
@@ -62,47 +91,47 @@ public class CollisionController {
         return xDepth;
     }
 
-    private static boolean isCollidable(Entity e1, Entity e2) {
+    private boolean isCollidable(Entity e1, Entity e2) {
         return e1.is("collidable") && e2.is("collidable");
     }
 
-    private static boolean notTrigger(ICollider e1Collider, ICollider e2Collider) {
+    private boolean notTrigger(ICollider e1Collider, ICollider e2Collider) {
         return e1Collider.notTrigger() && e2Collider.notTrigger();
     }
 
-    private static boolean notNull(ICollider e1collider, ICollider e2Collider) {
+    private boolean notNull(ICollider e1collider, ICollider e2Collider) {
         return e1collider != null && e2Collider != null;
     }
 
-    private static float yDepthMin(Entity e1, Entity e2) {
+    private float yDepthMin(Entity e1, Entity e2) {
         return yMax(e2) - yMin(e1);
     }
 
-    private static float yDepthMax(Entity e1, Entity e2) {
+    private float yDepthMax(Entity e1, Entity e2) {
         return yMin(e2) - yMax(e1);
     }
 
-    private static float xDepthMin(Entity e1, Entity e2) {
+    private float xDepthMin(Entity e1, Entity e2) {
         return xMax(e2) - xMin(e1);
     }
 
-    private static float xDepthMax(Entity e1, Entity e2) {
+    private float xDepthMax(Entity e1, Entity e2) {
         return xMin(e2) - xMax(e1);
     }
 
-    private static float yMin(Entity e) {
+    private float yMin(Entity e) {
         return e.getY() + e.getBounds().getMinY();
     }
 
-    private static float yMax(Entity e) {
+    private float yMax(Entity e) {
         return e.getY() + e.getBounds().getMaxY();
     }
 
-    private static float xMin(Entity e) {
+    private float xMin(Entity e) {
         return e.getX() + e.getBounds().getMinX();
     }
 
-    private static float xMax(Entity e) {
+    private float xMax(Entity e) {
         return e.getX() + e.getBounds().getMaxX();
     }
 

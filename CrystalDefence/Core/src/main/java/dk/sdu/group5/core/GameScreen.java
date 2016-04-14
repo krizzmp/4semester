@@ -1,32 +1,23 @@
 package dk.sdu.group5.core;
 
-import com.badlogic.gdx.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
-import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.services.IGameProcess;
+import dk.sdu.group5.core.collision.CollisionController;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
@@ -44,7 +35,7 @@ class GameScreen implements Screen {
     private Stage stage;
     private Table table;
 
-    CollisionController collisionController = new CollisionController();
+    CollisionController collisionController;
 
     public GameScreen() {
         batch = new SpriteBatch();
@@ -54,6 +45,8 @@ class GameScreen implements Screen {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
+
+        collisionController = new CollisionController();
     }
 
     /**
@@ -94,6 +87,8 @@ class GameScreen implements Screen {
 
         //update entities
         processes.forEach(p -> p.update(world, delta));
+
+        collisionController.update(world, delta);
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

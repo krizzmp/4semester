@@ -1,7 +1,8 @@
-package dk.sdu.group5.common.data.collision;
+package dk.sdu.group5.core.collision;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.Posf2d;
+import dk.sdu.group5.common.data.collision.ICollider;
 
 import java.util.List;
 import java.util.stream.Collectors;
