@@ -12,10 +12,9 @@ import java.util.Optional;
 public class Bullet {
 
     private final Entity bullet;
+    private final long startTime = System.currentTimeMillis();
     private boolean toBeRemoved = false;
     private int activeTime = 10000;
-    private final long startTime = System.currentTimeMillis();
-
     private int offsetX = 0;
     private int offsetY = 0;
     private int dx = 0; // 1 = right, -1 = left
@@ -53,14 +52,14 @@ public class Bullet {
             toBeRemoved = true;
         }
 
-        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
-                .forEach((e) -> {
-                    if (world.getCollisionDetector().collides(e, bullet)) {
-                        e.setHealth(e.getHealth() - 1);
-                        toBeRemoved = true;
-                        return;
-                    }
-                });
+//        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
+//                .forEach((e) -> {
+//                    if (world..collides(e, bullet)) {
+//                        e.setHealth(e.getHealth() - 1);
+//                        toBeRemoved = true;
+//                        return;
+//                    }
+//                });
     }
 
     public boolean toBeRemoved() {

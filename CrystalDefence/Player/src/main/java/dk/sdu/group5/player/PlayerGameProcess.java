@@ -4,13 +4,8 @@ import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
-import dk.sdu.group5.common.data.collision.AABB;
-import dk.sdu.group5.common.data.collision.CollisionController;
-import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
-
-import java.util.List;
 
 @ServiceProvider(service = IGameProcess.class)
 public class PlayerGameProcess implements IGameProcess {
@@ -56,11 +51,11 @@ public class PlayerGameProcess implements IGameProcess {
         }
 
         // Collision stuff
-        List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
-        collisions.stream().forEach(e -> {
-            CollisionController.applyKnockBack(player, e);// applies knockback?
-            world.getCollisionHandler().addCollision(e.getCollider(), player);
-        });
+//        List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
+//        collisions.stream().forEach(e -> {
+//            CollisionController.applyKnockBack(player, e);// applies knockback?
+//            world.getCollisionHandler().addCollision(e.getCollider(), player);
+//        });
     }
 
     @Override

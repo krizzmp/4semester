@@ -6,10 +6,10 @@ import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
-import dk.sdu.group5.common.data.collision.CollisionController;
-import dk.sdu.group5.common.data.collision.CollisionDetector;
 import dk.sdu.group5.common.data.collision.SquareCollider;
+import dk.sdu.group5.common.services.ICollisionService;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.LinkedList;
@@ -19,22 +19,18 @@ import java.util.Optional;
 
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
-    
+
+    private final int BARRIER_HEIGHT = 32;
+    private final int BARRIER_WIDTH = 32;
     private int maxBarriers = 10; //TODO: Set a proper number of max barriers
-    
     private float offsetX = 8f;
     private float offsetY = 8f;
     private float posX;
     private float posY;
-    private final int BARRIER_HEIGHT = 32;
-    private final int BARRIER_WIDTH = 32;
-    
-    private Entity barrier;
-    
     private boolean placeable = false;
-    
-    
+
     private List<Entity> listBarriers = new LinkedList<>();
+    private ICollisionService collisionService;
 
     @Override
     public void install() {
@@ -43,7 +39,7 @@ public class BarrierGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        
+        collisionService = Lookup.getDefault().lookup(ICollisionService.class);
     }
 
     @Override
@@ -79,7 +75,7 @@ public class BarrierGameProcess implements IGameProcess {
             }
 
             if(listBarriers.size() < maxBarriers) {
-                barrier = new Entity();
+                Entity barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
                 barrier.setTexture("barrierTexture.png");
@@ -91,7 +87,7 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.addProperty("static");
                 barrier.addProperty("tangible");
 
-                if(checkCollision(world)) {
+                if (checkCollision(barrier, world.getEntities())) {
                     world.addEntity(barrier);
                     listBarriers.add(barrier);
                 }
@@ -99,24 +95,21 @@ public class BarrierGameProcess implements IGameProcess {
 
 
         }
-
-        listBarriers.stream().forEach(b->{
-            List<Entity> collisions = world.getCollisionDetector().collides(b, world.getEntities());
-            collisions.stream().forEach(e -> {
-                CollisionController.applyKnockBack(b, e);// applies knockback?
-                world.getCollisionHandler().addCollision(e.getCollider(), b);
-            });
-        });
     }
 
-    private boolean checkCollision(World world) {
+    private boolean checkCollision(Entity barrier, List<Entity> entities) {
         // Collision stuff
-        CollisionDetector cd = world.getCollisionDetector();
-        return cd.collides(barrier, world.getEntities()).isEmpty();
+        for (Entity ent : entities) {
+            if (collisionService.collides(barrier, ent)) {
+                return false;
+            }
+        }
+
+        return true;
     }
-    
-    private Optional<Entity> getPlayer(List<Entity> xs) {
-        return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
+
+    private Optional<Entity> getPlayer(List<Entity> entities) {
+        return entities.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
     
     @Override

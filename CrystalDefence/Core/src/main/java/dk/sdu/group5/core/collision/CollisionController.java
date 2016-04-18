@@ -3,16 +3,17 @@ package dk.sdu.group5.core.collision;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.ICollider;
+import dk.sdu.group5.common.services.ICollisionService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CollisionController {
 
-    CollisionDetector collisionDetector;
+    ICollisionService collisionService;
 
-    public CollisionController(CollisionDetector collisionDetector) {
-        this.collisionDetector = collisionDetector;
+    public CollisionController(ICollisionService collisionService) {
+        this.collisionService = collisionService;
     }
 
     public void update(World world, float delta) {
@@ -26,7 +27,7 @@ public class CollisionController {
 
         for (Entity dynamicEnt : dynamicEnts) {
             for (Entity collidableEnt : collidableEnts) {
-                if (dynamicEnt != collidableEnt && collisionDetector.collides(dynamicEnt, collidableEnt)) {
+                if (dynamicEnt != collidableEnt && collisionService.collides(dynamicEnt, collidableEnt)) {
                     applyKnockBack(dynamicEnt, collidableEnt);
                     // Add collisions here
                 }
@@ -34,7 +35,7 @@ public class CollisionController {
         }
     }
 
-    public void applyKnockBack(Entity e1, Entity e2) {
+    private void applyKnockBack(Entity e1, Entity e2) {
         ICollider e1Collider = e1.getCollider();
         ICollider e2Collider = e2.getCollider();
         if (notNull(e1Collider, e2Collider) && notTrigger(e1Collider, e2Collider) && isCollidable(e1, e2)) {
@@ -65,9 +66,9 @@ public class CollisionController {
 
     private void move(Entity e, float xDepth, float yDepth) {
         if (Math.abs(xDepth) < Math.abs(yDepth)) {
-            e.setX(e.getX() + xDepth+4);
+            e.setX(e.getX() + xDepth);
         } else {
-            e.setY(e.getY() + yDepth+4);
+            e.setY(e.getY() + yDepth);
         }
     }
 

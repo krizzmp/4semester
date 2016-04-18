@@ -1,6 +1,5 @@
 package dk.sdu.group5.enemy;
 
-import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
@@ -25,10 +24,10 @@ public class EnemyGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
-                .forEach(e -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
-                        .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
-                        .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
+//        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
+//                .forEach(e -> world.getCollisionDetector().collides(e, world.getEntities()).stream()
+//                        .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
+//                        .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
 
         // TODO: 12/04/16 Missing Enemy-Tower collision check
     }
