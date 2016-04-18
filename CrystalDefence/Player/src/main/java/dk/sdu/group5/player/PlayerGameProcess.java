@@ -49,13 +49,6 @@ public class PlayerGameProcess implements IGameProcess {
         if (gameKeys.player_movement_right.getKeyState()) {
             player.setX(player.getX() + playerSpeed * delta);
         }
-
-        // Collision stuff
-//        List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
-//        collisions.stream().forEach(e -> {
-//            CollisionController.applyKnockBack(player, e);// applies knockback?
-//            world.getCollisionHandler().addCollision(e.getCollider(), player);
-//        });
     }
 
     @Override

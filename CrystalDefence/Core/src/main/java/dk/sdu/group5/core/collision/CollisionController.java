@@ -16,7 +16,9 @@ public class CollisionController {
         this.collisionService = collisionService;
     }
 
-    public void update(World world, float delta) {
+    public void update(World world) {
+        world.clearCollisions();
+
         List<Entity> collidableEnts = world.getEntities().stream()
                 .filter(e -> e.getCollider() != null)
                 .collect(Collectors.toList());
@@ -25,24 +27,25 @@ public class CollisionController {
                 .filter(e -> !e.getProperties().contains("static"))
                 .collect(Collectors.toList());
 
-        for (Entity dynamicEnt : dynamicEnts) {
-            for (Entity collidableEnt : collidableEnts) {
-                if (dynamicEnt != collidableEnt && collisionService.collides(dynamicEnt, collidableEnt)) {
-                    applyKnockBack(dynamicEnt, collidableEnt);
-                    // Add collisions here
-                }
+        dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
+                && collisionService.collides(de, ce)).forEach(ce -> {
+            applyKnockBack(de, ce);
+            world.addCollision(de, ce);
+            if (ce.is("static")) {
+                world.addCollision(ce, de);
             }
-        }
+        }));
     }
 
+    // Perhaps applyImpulse
     private void applyKnockBack(Entity e1, Entity e2) {
         ICollider e1Collider = e1.getCollider();
         ICollider e2Collider = e2.getCollider();
         if (notNull(e1Collider, e2Collider) && notTrigger(e1Collider, e2Collider) && isCollidable(e1, e2)) {
             float xDepth, yDepth;
 
-            xDepth = getxDepth(e1, e2);
-            yDepth = getyDepth(e1, e2);
+            xDepth = getXDepth(e1, e2);
+            yDepth = getYDepth(e1, e2);
 
             if (e2.is("static")) {
                 move(e1, xDepth, yDepth);
@@ -72,7 +75,7 @@ public class CollisionController {
         }
     }
 
-    private float getyDepth(Entity e1, Entity e2) {
+    private float getYDepth(Entity e1, Entity e2) {
         float yDepth = 0f;
         if (e1.getY() < e2.getY()) {
             yDepth = yDepthMax(e1, e2);
@@ -82,7 +85,7 @@ public class CollisionController {
         return yDepth;
     }
 
-    private float getxDepth(Entity e1, Entity e2) {
+    private float getXDepth(Entity e1, Entity e2) {
         float xDepth = 0f;
         if (e1.getX() < e2.getX()) {
             xDepth = xDepthMax(e1, e2);

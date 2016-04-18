@@ -3,13 +3,11 @@ package dk.sdu.group5.simpleai;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
-import dk.sdu.group5.common.data.collision.CollisionController;
 import dk.sdu.group5.common.services.IGameProcess;
-import org.openide.util.lookup.ServiceProvider;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class SimpleAIGameProcess implements IGameProcess {
@@ -36,14 +34,6 @@ public class SimpleAIGameProcess implements IGameProcess {
             e.setX(newPoint.x);
             e.setY(newPoint.y);
         }));
-
-        // Collision stuff
-        entities.forEach(e -> {
-            for (Entity collidedEntity : world.getCollisionDetector().collides(e, world.getEntities())) {
-                CollisionController.resolveCollision(e, collidedEntity);
-                world.getCollisionHandler().addCollision(collidedEntity.getCollider(), e);
-            }
-        });
     }
 
     private Optional<Entity> getFirstTower(List<Entity> entities) {

@@ -1,16 +1,20 @@
 package dk.sdu.group5.common.data;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class World {
     private final List<Entity> entities;
+    private final Map<Entity, List<Entity>> collisions;
     private Difficulty difficulty;
     private WeaponType weaponType;
 
     private World()
     {
         entities = new LinkedList<>();
+        collisions = new HashMap<>();
         weaponType = WeaponType.PISTOL;
     }
 
@@ -29,6 +33,22 @@ public class World {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public void addCollision(Entity srcEntity, Entity targetEntity) {
+        if (!collisions.containsKey(srcEntity)) {
+            collisions.put(srcEntity, new LinkedList<>());
+        }
+
+        collisions.get(srcEntity).add(targetEntity);
+    }
+
+    public void clearCollisions() {
+        collisions.clear();
+    }
+
+    public List<Entity> getCollisions(Entity entity) {
+        return collisions.getOrDefault(entity, new LinkedList<>());
     }
 
     public Difficulty getDifficulty()

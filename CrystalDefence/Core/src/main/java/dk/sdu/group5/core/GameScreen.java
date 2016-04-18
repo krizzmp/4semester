@@ -89,7 +89,7 @@ class GameScreen implements Screen {
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
-        collisionController.update(world, delta);
+        collisionController.update(world);
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

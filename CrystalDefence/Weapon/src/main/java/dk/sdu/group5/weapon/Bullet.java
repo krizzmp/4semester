@@ -27,6 +27,7 @@ public class Bullet {
         bullet = new Entity();
         bullet.setType(EntityType.BULLET);
         bullet.setHealth(1);
+
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
@@ -52,14 +53,17 @@ public class Bullet {
             toBeRemoved = true;
         }
 
-//        world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
-//                .forEach((e) -> {
-//                    if (world..collides(e, bullet)) {
-//                        e.setHealth(e.getHealth() - 1);
-//                        toBeRemoved = true;
-//                        return;
-//                    }
-//                });
+        world.getEntities().stream().filter((entity) -> (entity.getType() == EntityType.BULLET)).forEach((bullet) -> {
+            world.getCollisions(bullet).stream().forEach(collidedEntity -> {
+                if (collidedEntity.getType() == EntityType.ENEMY) {
+                    collidedEntity.setHealth(collidedEntity.getHealth() - 1);
+                }
+
+                if (collidedEntity.getType() != EntityType.PLAYER) {
+                    toBeRemoved = true;
+                }
+            });
+        });
     }
 
     public boolean toBeRemoved() {
