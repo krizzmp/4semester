@@ -26,8 +26,8 @@ public class BarrierGameProcess implements IGameProcess {
     private float offsetY = 8f;
     private float posX;
     private float posY;
-    private final int BARRIER_HEIGHT = 32;
-    private final int BARRIER_WIDTH = 32;
+    private final int BARRIER_HEIGHT = 48;
+    private final int BARRIER_WIDTH = 48;
     
     private Entity barrier;
     
@@ -58,14 +58,14 @@ public class BarrierGameProcess implements IGameProcess {
             
             // default is the right direction
             // TODO: 11/04/16 Player width can be found through the entity's collider
-            posX = player.getX() + offsetX + 32; // 32 is player width.
+            posX = player.getX() + offsetX + 48; // 32 is player width.
             posY = player.getY();
 
             if(gameKeys.player_movement_up.getKeyState()) {
                 // Place up
                 posX = player.getX();
                 // TODO: 11/04/16 Player height can be found through the entity's collider
-                posY = player.getY() + offsetY + 32; // 32 is player height.
+                posY = player.getY() + offsetY + 48; // 32 is player height.
             }
             else if(gameKeys.player_movement_down.getKeyState()) {
                 // Place down
@@ -82,7 +82,7 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
-                barrier.setTexture("barrierTexture.png");
+                barrier.setTexture("barrierTexture02.png");
                 barrier.setSpeed(0);
                 barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
                 barrier.setX(posX);

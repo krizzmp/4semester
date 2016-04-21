@@ -18,7 +18,7 @@ public class EnemySpawner extends Spawner {
         entity.setType(EntityType.ENEMY);
         entity.setHealth(3);
         entity.setSpeed(40);
-        entity.setTexture("gridPattern.png");
+        entity.setTexture("enemyTexture.png");
         entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
         entity.addProperty("collidable");
         entity.addProperty("tangible");

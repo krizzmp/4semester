@@ -23,7 +23,7 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture.png", 100, 32, 32);
+        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02.png", 100, 48, 48);
 //        player.setType(EntityType.PLAYER);
 //        player.setHealth(100);
 //        player.setX(250);
