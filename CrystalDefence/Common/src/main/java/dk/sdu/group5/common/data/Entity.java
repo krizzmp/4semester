@@ -1,5 +1,9 @@
 package dk.sdu.group5.common.data;
 
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.ICollider;
+import dk.sdu.group5.common.data.collision.SquareCollider;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -10,13 +14,25 @@ public class Entity {
     private final Set<String> properties;
     private float x;
     private float y;
-    private int lives;
+    private int health;
+    private ICollider collider;
     private EntityType type;
     private String texture;
     private float Speed;
 
     public Entity() {
         properties = new HashSet<>();
+    }
+
+    public Entity(EntityType entityType, float speed, float x, float y, String texture, int health, float width, float height) {
+        this();
+        setType(entityType);
+        setSpeed(speed);
+        setX(x);
+        setY(y);
+        setTexture(texture);
+        setHealth(health);
+        setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width, height)));
     }
 
     public float getSpeed() {
@@ -51,12 +67,13 @@ public class Entity {
         this.type = type;
     }
 
-    public int getLives() {
-        return lives;
+    public int getHealth() {
+        return health;
+
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public boolean addProperty(String property) {
@@ -67,10 +84,22 @@ public class Entity {
         return properties.remove(property);
     }
 
+    public Set<String> getProperties() {
+        return properties;
+    }
+
+    public ICollider getCollider() {
+        return collider;
+    }
+
+    public void setCollider(ICollider collider) {
+        this.collider = collider;
+    }
+
     @Override
     public String toString() {
-//        return type + "{x:" + x + ", y:" + y + ", lives:" + lives + "}";
-        return String.format("%s{x: %.0f, y: %.0f, lives: %d}", type, x, y, lives);
+//        return type + "{x:" + x + ", y:" + y + ", health:" + health + "}";
+        return String.format("%s{x: %.0f, y: %.0f, health: %d}", type, x, y, health);
     }
 
     public String getTexture() {
@@ -81,4 +110,11 @@ public class Entity {
         this.texture = texture;
     }
 
+    public boolean is(String collidable) {
+        return properties.contains(collidable);
+    }
+
+    public AABB getBounds() {
+        return collider.getBounds();
+    }
 }

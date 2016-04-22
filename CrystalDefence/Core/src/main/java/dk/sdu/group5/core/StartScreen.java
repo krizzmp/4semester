@@ -18,23 +18,18 @@ import static com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 class StartScreen implements Screen {
 
     private BitmapFont font;
-    private Runnable onEnter;
+    private final Runnable onEnter;
     private Skin skin;
     private Stage stage;
     private Table table;
+    private TextButtonStyle style;
 
     StartScreen(Runnable onEnter) {
         this.onEnter = onEnter;
 
-
-    }
-
-    @Override
-    public void show() {
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
         skin = new Skin();
@@ -42,15 +37,20 @@ class StartScreen implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        TextButtonStyle style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+        style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
 
         addButton("start game", onEnter, style);
-        addButton("exit game", ()->Gdx.app.exit(), style);
+        addButton("exit game", () -> Gdx.app.exit(), style);
     }
 
     private void addButton(String text, Runnable onEnter, TextButtonStyle style) {
         TextButton button = new TextButton(text, style);
-        button.addListener(new ClickListener(){
+        button.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);

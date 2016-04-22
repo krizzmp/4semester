@@ -7,7 +7,7 @@ public class Key {
     private boolean state;
     
     public Key(int keycode, boolean state){
-        this.key = keycode;
+        key = keycode;
         this.state = state;
     }
     
@@ -20,7 +20,7 @@ public class Key {
     }
     
     public void setKey(int keycode) {       // Should probably also check the key is a viable ligGDX keycode 
-        this.key = keycode;
+        key = keycode;
     }
     
     public void setState(boolean state) {

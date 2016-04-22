@@ -22,13 +22,13 @@ public class SpawnController {
 
     public void update(World world, float delta) {
         timeSinceLastSpawn += delta;
-        ifShouldSpawn(world.difficulty, b -> {
-            Optional<Spawner> spawner = getSpawnerLessDifficultThan(b);
+        ifShouldSpawn(world.getDifficulty(), b -> {
+            Optional<Spawner> spawner = getSpawner(b);
             spawner.ifPresent(s -> {
                 Entity entity = s.spawn();
                 setEntityPos(getPosOnEdge(800, 400), entity);
-                world.difficulty.currentDifficulty += s.getDifficulty();
-                world.entities.add(entity);
+                world.getDifficulty().currentDifficulty += s.getDifficulty();
+                world.getEntities().add(entity);
             });
             reset();
         });
@@ -47,47 +47,46 @@ public class SpawnController {
         }
     }
 
-    private Pos2d getPosOnEdge(int width, int height) {
+    private Posf2d getPosOnEdge(int width, int height) {
         int rnd = rnd(4);
-        Pos2d pos2d = new Pos2d(0, 0);
+        Posf2d pos = new Posf2d(0, 0);
         switch (rnd) {
             case 0:
-                pos2d = new Pos2d(rnd(width), 0);
+                pos = new Posf2d(rnd(width), 0);
                 break;
             case 1:
-                pos2d = new Pos2d(rnd(width), height);
+                pos = new Posf2d(rnd(width), height);
                 break;
             case 2:
-                pos2d = new Pos2d(0, rnd(height));
+                pos = new Posf2d(0, rnd(height));
                 break;
             case 3:
-                pos2d = new Pos2d(width, rnd(height));
+                pos = new Posf2d(width, rnd(height));
                 break;
         }
 
-        return pos2d;
+        return pos;
     }
 
     private int rnd(int i) {
         return random.nextInt(i);
     }
 
-    private void setEntityPos(Pos2d pos, Entity entity) {
-        entity.setX(pos.x);
-        entity.setY(pos.y);
+    private void setEntityPos(Posf2d pos, Entity entity) {
+        entity.setX(pos.getX());
+        entity.setY(pos.getY());
     }
 
-    private Optional<Spawner> getSpawnerLessDifficultThan(int difficulty) {
-        Predicate<Spawner> isTheRightDifficulty = spawner -> spawner.getDifficulty() <= difficulty;
-        List<Spawner> filteredSpawners = spawners.stream().filter(isTheRightDifficulty).collect(Collectors.toList());
+    private Optional<Spawner> getSpawner(int maxDifficulty) {
+        Predicate<Spawner> validDifficulty = spawner -> spawner.getDifficulty() <= maxDifficulty;
+        List<Spawner> filteredSpawners = spawners.stream().filter(validDifficulty).collect(Collectors.toList());
         return chooseOne(filteredSpawners);
     }
 
     private <T> Optional<T> chooseOne(List<T> spawners) {
         int size = spawners.size();
         if (size > 0) {
-            int i = rnd(size);
-            return Optional.of(spawners.get(i));
+            return Optional.of(spawners.get(rnd(size)));
         } else {
             return Optional.empty();
         }
@@ -99,15 +98,5 @@ public class SpawnController {
 
     public void unRegister(Spawner spawner) {
         spawners.remove(spawner);
-    }
-
-    private class Pos2d {
-        final int x;
-        final int y;
-
-        Pos2d(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
     }
 }

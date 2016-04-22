@@ -4,11 +4,10 @@ import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
-import org.openide.util.lookup.ServiceProvider;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class SimpleAIGameProcess implements IGameProcess {
