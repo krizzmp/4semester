@@ -42,6 +42,7 @@ public class GameoverScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
+        addButton("New Game", ()-> startgame(), style);
         addButton("Main Menu", ()-> mainmenu(), style);
         addButton("Exit game", ()-> Gdx.app.exit(), style);
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -59,6 +60,12 @@ public class GameoverScreen implements Screen {
             Game.getInstance().setScreen(gameScreen);
         });
         Game.getInstance().setScreen(startScreen);
+
+
+    }
+    public void startgame(){
+        GameScreen gameScreen = new GameScreen();
+        Game.getInstance().setScreen(gameScreen);
 
     }
 
