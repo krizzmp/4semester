@@ -85,6 +85,10 @@ class GameScreen implements Screen {
             }
         });
         batch.end();
+        if(world.isGameover()){
+            Game.getInstance().setScreen(new GameoverScreen());
+            this.dispose();
+        }
     }
 
     /**

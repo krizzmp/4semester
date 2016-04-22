@@ -12,6 +12,17 @@ public class World {
     private final List<Entity> entities;
     private Difficulty difficulty;
     WeaponType weaponType;
+    private boolean gameover = false;
+
+    public boolean isGameover() {
+        return gameover;
+    }
+
+    public void setGameover(boolean gameover) {
+        this.gameover = gameover;
+    }
+
+
 
     public World()
     {

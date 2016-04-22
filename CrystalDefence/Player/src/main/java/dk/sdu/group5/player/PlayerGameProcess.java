@@ -58,6 +58,9 @@ public class PlayerGameProcess implements IGameProcess {
             CollisionController.resolveCollision(player, e);
             return e;
         }).forEach((e) -> world.getCollisionHandler().addCollision(e.getCollider(), player));
+        if(player.getHealth() < 0){
+            world.setGameover(true);
+        }
     }
 
     @Override
