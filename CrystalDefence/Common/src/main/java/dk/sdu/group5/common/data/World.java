@@ -11,7 +11,7 @@ public class World {
     private final CollisionDetector detector;
     private final List<Entity> entities;
     private Difficulty difficulty;
-    WeaponType weaponType;
+    private WeaponType weaponType;
     private boolean gameover = false;
 
     public boolean isGameover() {
@@ -24,7 +24,7 @@ public class World {
 
 
 
-    public World()
+    private World()
     {
         collisionHandler = new CollisionHandler();
         detector = new CollisionDetector();

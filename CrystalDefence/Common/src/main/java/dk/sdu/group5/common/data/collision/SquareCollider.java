@@ -2,8 +2,8 @@ package dk.sdu.group5.common.data.collision;
 
 public class SquareCollider implements ICollider {
 
-    private boolean trigger;
-    private AABB bounds;
+    private final boolean trigger;
+    private final AABB bounds;
 
     public SquareCollider(boolean trigger, AABB bounds) {
 
@@ -16,7 +16,8 @@ public class SquareCollider implements ICollider {
         return bounds;
     }
 
-    public boolean isTrigger() {
-        return trigger;
+    @Override
+    public boolean notTrigger() {
+        return !trigger;
     }
 }

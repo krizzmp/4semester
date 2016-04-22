@@ -1,10 +1,11 @@
 package dk.sdu.group5.core;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.openal.AL;
 
 class Game extends com.badlogic.gdx.Game {
 
@@ -21,16 +22,20 @@ class Game extends com.badlogic.gdx.Game {
     private Game(){
 
     }
-    
+
     @Override
     public void create() {
         gameScreen = new GameScreen();
         //something like this:
         startScreen = new StartScreen(() -> {
-          //Gdx.app.exit();
+            //Gdx.app.exit();
             setScreen(gameScreen);
         });
         setScreen(startScreen);
+    }
+
+    public void screen(Screen screen) {
+        setScreen(screen);
     }
 
     @Override

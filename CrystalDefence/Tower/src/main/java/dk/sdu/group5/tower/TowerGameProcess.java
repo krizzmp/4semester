@@ -24,8 +24,8 @@ public class TowerGameProcess implements IGameProcess {
         tower.setHealth(3);
         tower.setX(350);
         tower.setY(280);
-        tower.setTexture("gridPattern.png");
-        tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        tower.setTexture("towerTexture.png");
+        tower.setCollider(new SquareCollider(false, new AABB(-16, -32, 16, 32)));
         tower.addProperty("tangible");
         tower.addProperty("collidable");
         tower.addProperty("static");
@@ -35,8 +35,6 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        // Render stuff
-        // Collision stuff
     }
 
     @Override

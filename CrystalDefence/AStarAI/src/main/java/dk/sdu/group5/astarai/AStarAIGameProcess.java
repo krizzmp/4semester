@@ -24,44 +24,38 @@ public class AStarAIGameProcess implements IGameProcess {
 
     }
 
-
     @Override
     public void update(World world, float delta) {
         List<Entity> entities = world.getEntities();
         Optional<Entity> tower = getFirstTower(entities);
         Optional<Entity> player = getFirstPlayer(entities);
         player.ifPresent(p -> tower.ifPresent(t -> forEachEnemy(entities, e -> {
-            List<Entity> barriers = entities.stream().filter(x->isBarrier(e,x)).collect(Collectors.toList());
-            Vec e1 = vectorOf(e);
-            Vec vec = PathFinder.getDirection(e,barriers,p);
-            Vec a = vec.unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
-            Vec newPoint = e1.plus(a);
-            e.setX((float) newPoint.x);
-            e.setY((float) newPoint.y);
+            // TODO: 12/04/16 Perhaps change barriers to avoidables
+            List<Entity> barriers = entities.stream().filter(x -> x != e && isBarrier(x)).collect(Collectors.toList());
+            Vec enemyPos = getEntityPosition(e);
+            Vec direction = PathFinder.getDirection(e, barriers, p);
+            Vec entityVel = direction.unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
+            Vec newPoint = enemyPos.plus(entityVel);
+            e.setX((float) newPoint.getX());
+            e.setY((float) newPoint.getY());
         })));
     }
 
-    Boolean isBarrier(Entity self, Entity entity) {
-        if(entity.getType() == EntityType.TOWER){
-            return true;
-        }
-        if(entity.getType() == EntityType.PLAYER){
-            return false;
-        }
-        if(entity == self){
-            return false;
-        }
-        return true;
+    // TODO: 12/04/16 Perhaps change name to shouldAvoid?
+    // TODO: 12/04/16 Should bullets be considered a barrier?
+    private Boolean isBarrier(Entity entity) {
+        return entity.getType() != EntityType.PLAYER;
     }
 
-    private Vec vectorOf(Entity enemy) {
-        return new Vec(enemy.getX(), enemy.getY());
+    private Vec getEntityPosition(Entity entity) {
+        return new Vec(entity.getX(), entity.getY());
     }
 
 
     private Optional<Entity> getFirstTower(List<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.TOWER).findFirst();
     }
+
     private Optional<Entity> getFirstPlayer(List<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }

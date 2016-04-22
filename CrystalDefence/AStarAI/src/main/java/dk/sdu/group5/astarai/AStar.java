@@ -3,55 +3,61 @@ package dk.sdu.group5.astarai;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class AStar {
-    static Node aStar(Vec start, Vec goal, List<LineSegment> lineSegments) {
-        PriorityQueue<Node> openList = new PriorityQueue<>();
-        Node q = new Node(start, null, 0, dist(start, goal));
-        openList.add(q);
-        Set<Node> closedList = new HashSet<>();
-        while (openList.size() != 0) {
-             q = openList.poll();
-            List<Vec> successors = connections(q, lineSegments);
-            for (Vec successor : successors) {
-                double g = q.g + dist(successor, q.item);
-                double h = dist(successor, goal);
-                Node node = new Node(successor, q, g, h);
-                if (node.item.equals(goal)){
+public class AStar {
+
+    /*
+    * g is the cost of the path from the current node to the root node.
+    * h is the heuristic function.
+     */
+    public static Node aStar(Vec startPos, Vec goalPos, List<LineSegment> lineSegments) {
+        PriorityQueue<Node> openNodeList = new PriorityQueue<>();
+        Node currentNode = new Node(startPos, null, 0, distance(startPos, goalPos));
+        openNodeList.add(currentNode);
+        Set<Node> closedNodeList = new HashSet<>();
+        while (openNodeList.size() != 0) {
+            currentNode = openNodeList.poll();
+            List<Vec> successorsPoints = connections(currentNode, lineSegments);
+            for (Vec successorPoint : successorsPoints) {
+                double g = currentNode.getG() + distance(successorPoint, currentNode.getItem());
+                double h = distance(successorPoint, goalPos);
+                Node node = new Node(successorPoint, currentNode, g, h);
+                if (node.getItem().equals(goalPos)) {
                     return node;
                 }
-                if (containsCheaper(openList, node))
+                if (containsCheaper(openNodeList, node))
                     continue;
-                if (containsCheaper(closedList, node))
+                if (containsCheaper(closedNodeList, node))
                     continue;
-                openList.add(node);
+                openNodeList.add(node);
             }
-            closedList.add(q);
+            closedNodeList.add(currentNode);
         }
-        return q;
+        return currentNode;
     }
 
     private static boolean containsCheaper(Collection<Node> nodes, Node node) {
-        return nodes.stream().filter(n -> n.item.equals(node.item)).anyMatch(n -> n.f < node.f);
+        return nodes.stream().filter(n -> n.getItem().equals(node.getItem())).anyMatch(n -> n.getF() <= node.getF());
     }
 
-    static private List<Vec> connections(Node q, List<LineSegment> lineSegments) {
-        return lineSegments.stream().map(ls -> j(q, ls)).filter(x -> x != null).collect(Collectors.toList());
+    private static List<Vec> connections(Node node, List<LineSegment> lineSegments) {
+        return lineSegments.stream().map(ls -> getConnectedNodePoint(node, ls)).filter(x -> x != null)
+                .collect(Collectors.toList());
     }
 
-    static private Vec j(Node q, LineSegment ls) {
-        Vec p1 = ls.p;
-        Vec p2 = ls.p.plus(ls.d);
-        if (q.item.equals(p1)) {
-            return p2;
+    private static Vec getConnectedNodePoint(Node node, LineSegment lineSegment) {
+        Vec point1 = lineSegment.getStartPos();
+        Vec point2 = lineSegment.getStartPos().plus(lineSegment.getDirection());
+        if (node.getItem().equals(point1)) {
+            return point2;
         }
-        if (q.item.equals(p2)) {
-            return p1;
+        if (node.getItem().equals(point2)) {
+            return point1;
         }
         return null;
     }
 
-    static private double dist(Vec start, Vec goal) {
-        return goal.minus(start).length();
+    private static double distance(Vec startPos, Vec goalPos) {
+        return goalPos.minus(startPos).length();
     }
 }
 

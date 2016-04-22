@@ -1,14 +1,26 @@
 package dk.sdu.group5.core;
 
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
@@ -21,17 +33,20 @@ import java.util.Collection;
 import java.util.Objects;
 
 class GameScreen implements Screen {
+
+    private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
+    public boolean gameOver = false;
+    private Skin skin;
+    private Stage stage;
+    private Table table;
+
     CollisionController collisionController = new CollisionController();
 
-    /**
-     * Called when this screen becomes the current screen for a {@link Game}.
-     */
-    @Override
-    public void show() {
+    public GameScreen() {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
@@ -39,13 +54,15 @@ class GameScreen implements Screen {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
+    }
 
-                //Check input
-        Gdx.input.setInputProcessor(new InputAdapter () {
-
-            @Override
+    /**
+     * Called when this screen becomes the current screen for a {@link Game}.
+     */
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
             public boolean keyDown(int k) {
-                //Searches the list of all used keys, and returns true if that key is in that list
                 GameKeys.getInstance().setKeyState(k, true);
                 return true;
             }
@@ -57,8 +74,8 @@ class GameScreen implements Screen {
                 return true;
             }
         });
-    }
 
+    }
 
     /**
      * Called when the screen should render itself.
@@ -67,6 +84,11 @@ class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+
+        if (GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()) {
+
+            Game.getInstance().setScreen(PS = new PauseScreen(this));
+        }
         //spawn enemies
         SpawnController.getInstance().update(world, delta);
 
@@ -77,11 +99,14 @@ class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
+        Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
+        batch.draw(texture2, 0, 0);
         world.getEntities().forEach(e -> {
-            String texture = e.getTexture();
-            if (texture != null && !Objects.equals(texture, "")) {
-                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
-                font.draw(batch, e.toString(), e.getX(), e.getY());
+            String texturePath = e.getTexture();
+            if (texturePath != null && !Objects.equals(texturePath, "")) {
+                Texture texture = new Texture(Gdx.files.classpath(texturePath));
+                batch.draw(texture, e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
+//                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
         });
         batch.end();
@@ -92,7 +117,7 @@ class GameScreen implements Screen {
     }
 
     /**
-     * @param width  the width of the window
+     * @param width the width of the window
      * @param height the height of the window
      * @see ApplicationListener#resize(int, int)
      */

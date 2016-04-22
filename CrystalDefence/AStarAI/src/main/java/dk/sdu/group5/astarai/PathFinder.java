@@ -9,46 +9,46 @@ import static dk.sdu.group5.astarai.AStar.aStar;
 
 public class PathFinder {
 
-    static Node q(Vec start, List<Entity> barriers, Vec goal, float size) {
-        Node node = aStar(start, goal, VisibilityUtils.getVisibilityLines(start, barriers, goal, size));
-        return node;
+    private static Node generateSolution(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
+        return aStar(startPos, goalPos, VisibilityUtils.getVisibilityLines(startPos, barriers, goalPos, size));
     }
 
-    static LinkedList<Vec> getPath(Vec start, List<Entity> barriers, Vec goal, float size) {
-        Node node = q(start, barriers, goal, size);
+    private static LinkedList<Vec> getPath(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
+        Node node = generateSolution(startPos, barriers, goalPos, size);
         return getPath(node);
     }
 
-    static LinkedList<Vec> getPath(Node node) {
-        LinkedList<Vec> vecs = new LinkedList<>();
-        Node current = node;
+    private static LinkedList<Vec> getPath(Node node) {
+        LinkedList<Vec> points = new LinkedList<>();
+        Node currentNode = node;
         while (node != null) {
-            vecs.addFirst(current.item);
-            if (current.parent == null) {
+            points.addFirst(currentNode.getItem());
+            if (currentNode.getParent() == null) {
                 break;
             }
-            current = current.parent;
+            currentNode = currentNode.getParent();
         }
-        return vecs;
+        return points;
     }
 
-    static Vec getDirection(List<Vec> vs) {
-        if(vs.size()<2){
-            System.out.println(vs);
-            return new Vec(0.001,0.1);
+    private static Vec getDirection(List<Vec> points) {
+        if (points.size() < 2) {
+            return new Vec(0.001, 0.1);
         }
-        return vs.get(1).minus(vs.get(0));
+        return points.get(1).minus(points.get(0));
     }
 
-    static Vec getDirection(Vec start, List<Entity> barriers, Vec goal, float size) {
-        return getDirection(getPath(start, barriers, goal, size));
+    // TODO: 12/04/16 Maybe a better name for size? Perhaps offset or extend?
+    private static Vec getDirection(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
+        return getDirection(getPath(startPos, barriers, goalPos, size));
     }
 
-    static Vec getDirection(Entity e, List<Entity> barriers, Entity t) {
-        return getDirection(vec(e), barriers, vec(t), e.getCollider().getBounds().getMaxX()*2);
+    static Vec getDirection(Entity srcEntity, List<Entity> barriers, Entity targetEntity) {
+        return getDirection(getEntityPosition(srcEntity), barriers, getEntityPosition(targetEntity),
+                srcEntity.getCollider().getBounds().getMaxX() * 2);
     }
 
-    private static Vec vec(Entity e) {
-        return new Vec(e.getX(), e.getY());
+    private static Vec getEntityPosition(Entity entity) {
+        return new Vec(entity.getX(), entity.getY());
     }
 }
