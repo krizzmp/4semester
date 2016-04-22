@@ -6,7 +6,7 @@ import dk.sdu.group5.common.data.Spawner;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 
-public class EnemySpawner extends Spawner {
+class EnemySpawner extends Spawner {
     @Override
     public int getDifficulty() {
         return 100;
@@ -19,7 +19,7 @@ public class EnemySpawner extends Spawner {
         entity.setHealth(3);
         entity.setSpeed(40);
         entity.setTexture("gridPattern.png");
-        entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
         entity.addProperty("collidable");
         entity.addProperty("tangible");
         entity.addProperty("damageable");

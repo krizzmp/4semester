@@ -7,7 +7,7 @@ import java.util.List;
 
 import static dk.sdu.group5.astarai.AStar.aStar;
 
-public class PathFinder {
+class PathFinder {
 
     private static Node generateSolution(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
         return aStar(startPos, goalPos, VisibilityUtils.getVisibilityLines(startPos, barriers, goalPos, size));
@@ -45,7 +45,7 @@ public class PathFinder {
 
     static Vec getDirection(Entity srcEntity, List<Entity> barriers, Entity targetEntity) {
         return getDirection(getEntityPosition(srcEntity), barriers, getEntityPosition(targetEntity),
-                srcEntity.getCollider().getBounds().getMaxX() * 2);
+                srcEntity.getCollider().getBounds().getOriginX() + srcEntity.getCollider().getBounds().getWidth() * 2);
     }
 
     private static Vec getEntityPosition(Entity entity) {

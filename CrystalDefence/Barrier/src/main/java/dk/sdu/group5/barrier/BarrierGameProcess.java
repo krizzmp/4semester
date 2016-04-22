@@ -7,7 +7,7 @@ import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
-import dk.sdu.group5.common.services.ICollisionService;
+import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -30,7 +30,7 @@ public class BarrierGameProcess implements IGameProcess {
     private boolean placeable = false;
 
     private List<Entity> listBarriers = new LinkedList<>();
-    private ICollisionService collisionService;
+    private ICollisionDetectorService collisionService;
 
     @Override
     public void install() {
@@ -39,7 +39,7 @@ public class BarrierGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        collisionService = Lookup.getDefault().lookup(ICollisionService.class);
+        collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BarrierGameProcess implements IGameProcess {
                 barrier.setHealth(50);
                 barrier.setTexture("barrierTexture.png");
                 barrier.setSpeed(0);
-                barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+                barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
                 barrier.setX(posX);
                 barrier.setY(posY);
                 barrier.addProperty("collidable");

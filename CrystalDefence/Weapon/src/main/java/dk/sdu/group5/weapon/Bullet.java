@@ -9,7 +9,7 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import java.util.List;
 import java.util.Optional;
 
-public class Bullet {
+class Bullet {
 
     private final Entity bullet;
     private final long startTime = System.currentTimeMillis();
@@ -21,7 +21,7 @@ public class Bullet {
     private int dy = 0; // 1 = up, -1 = down
     private float speed = 120;
 
-    public Bullet(World world, String direction) {
+    Bullet(World world, String direction) {
         setDirection(direction);
 
         bullet = new Entity();
@@ -31,7 +31,7 @@ public class Bullet {
         bullet.setTexture("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
-        bullet.setCollider(new SquareCollider(false, new AABB(-4.5f, -4.5f, 4.5f, 4.5f)));
+        bullet.setCollider(new SquareCollider(false, new AABB(-4.5f, -4.5f, 9f, 9f)));
 
         bullet.setX(player.getX() + offsetX);
         bullet.setY(player.getY() + offsetY);
@@ -44,7 +44,7 @@ public class Bullet {
         return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
 
-    public void update(World world, float delta) {
+    void update(World world, float delta) {
         bullet.setX(bullet.getX() + (bullet.getSpeed() * delta) * dx);
         bullet.setY(bullet.getY() + (bullet.getSpeed() * delta) * dy);
 
@@ -53,24 +53,23 @@ public class Bullet {
             toBeRemoved = true;
         }
 
-        world.getEntities().stream().filter((entity) -> (entity.getType() == EntityType.BULLET)).forEach((bullet) -> {
-            world.getCollisions(bullet).stream().forEach(collidedEntity -> {
-                if (collidedEntity.getType() == EntityType.ENEMY) {
-                    collidedEntity.setHealth(collidedEntity.getHealth() - 1);
-                }
+        world.getEntities().stream().filter((entity) -> (entity.getType() == EntityType.BULLET))
+                .forEach((bullet) -> world.getCollisions(bullet).stream().forEach(collidedEntity -> {
+                    if (collidedEntity.getType() == EntityType.ENEMY) {
+                        collidedEntity.setHealth(collidedEntity.getHealth() - 1);
+                    }
 
-                if (collidedEntity.getType() != EntityType.PLAYER) {
-                    toBeRemoved = true;
-                }
-            });
-        });
+                    if (collidedEntity.getType() != EntityType.PLAYER) {
+                        toBeRemoved = true;
+                    }
+                }));
     }
 
-    public boolean toBeRemoved() {
+    boolean toBeRemoved() {
         return toBeRemoved;
     }
 
-    public void removeBullet(World world) {
+    void removeBullet(World world) {
         world.removeEntity(bullet);
     }
 

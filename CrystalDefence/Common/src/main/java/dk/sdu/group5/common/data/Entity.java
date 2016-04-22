@@ -32,7 +32,7 @@ public class Entity {
         setY(y);
         setTexture(texture);
         setHealth(health);
-        setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width / 2, height / 2)));
+        setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width, height)));
     }
 
     public float getSpeed() {

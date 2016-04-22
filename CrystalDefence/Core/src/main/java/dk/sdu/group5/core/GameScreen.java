@@ -16,9 +16,8 @@ import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
 import dk.sdu.group5.common.data.World;
-import dk.sdu.group5.common.services.ICollisionService;
+import dk.sdu.group5.common.services.ICollisionSolverService;
 import dk.sdu.group5.common.services.IGameProcess;
-import dk.sdu.group5.core.collision.CollisionController;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
@@ -27,7 +26,7 @@ import java.util.Objects;
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    CollisionController collisionController;
+    private ICollisionSolverService collisionSolverService;
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
@@ -46,8 +45,7 @@ class GameScreen implements Screen {
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
 
-        ICollisionService collisionService = Lookup.getDefault().lookup(ICollisionService.class);
-        collisionController = new CollisionController(collisionService);
+        collisionSolverService = Lookup.getDefault().lookup(ICollisionSolverService.class);
     }
 
     /**
@@ -89,7 +87,7 @@ class GameScreen implements Screen {
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
-        collisionController.update(world);
+        collisionSolverService.update(world);
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

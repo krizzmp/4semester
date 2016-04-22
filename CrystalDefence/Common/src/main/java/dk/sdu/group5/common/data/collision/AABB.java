@@ -3,31 +3,31 @@ package dk.sdu.group5.common.data.collision;
 // Axis-aligned bounding box
 public class AABB {
 
-    private final float minX;
-    private final float minY;
-    private final float maxX;
-    private final float maxY;
+    private final float originX;
+    private final float originY;
+    private final float width;
+    private final float height;
 
-    public AABB(float minX, float minY, @SuppressWarnings("SameParameterValue") float maxX, @SuppressWarnings("SameParameterValue") float maxY) {
-        this.minX = minX;
-        this.minY = minY;
-        this.maxX = maxX;
-        this.maxY = maxY;
+    public AABB(float originX, float originY, float width, float height) {
+        this.originX = originX;
+        this.originY = originY;
+        this.width = width;
+        this.height = height;
     }
 
-    public float getMinX() {
-        return minX;
+    public float getOriginX() {
+        return originX;
     }
 
-    public float getMinY() {
-        return minY;
+    public float getOriginY() {
+        return originY;
     }
 
-    public float getMaxX() {
-        return maxX;
+    public float getWidth() {
+        return width;
     }
 
-    public float getMaxY() {
-        return maxY;
+    public float getHeight() {
+        return height;
     }
 }

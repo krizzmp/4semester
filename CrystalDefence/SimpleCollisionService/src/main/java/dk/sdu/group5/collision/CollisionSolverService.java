@@ -1,19 +1,23 @@
-package dk.sdu.group5.core.collision;
+package dk.sdu.group5.collision;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.ICollider;
-import dk.sdu.group5.common.services.ICollisionService;
+import dk.sdu.group5.common.services.ICollisionDetectorService;
+import dk.sdu.group5.common.services.ICollisionSolverService;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CollisionController {
+@ServiceProvider(service = ICollisionSolverService.class)
+public class CollisionSolverService implements ICollisionSolverService {
 
-    ICollisionService collisionService;
+    private ICollisionDetectorService collisionService;
 
-    public CollisionController(ICollisionService collisionService) {
-        this.collisionService = collisionService;
+    public CollisionSolverService() {
+        this.collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
     }
 
     public void update(World world) {
@@ -29,7 +33,7 @@ public class CollisionController {
 
         dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
                 && collisionService.collides(de, ce)).forEach(ce -> {
-            applyKnockBack(de, ce);
+            applyImpulse(de, ce);
             world.addCollision(de, ce);
             if (ce.is("static")) {
                 world.addCollision(ce, de);
@@ -37,8 +41,7 @@ public class CollisionController {
         }));
     }
 
-    // Perhaps applyImpulse
-    private void applyKnockBack(Entity e1, Entity e2) {
+    private void applyImpulse(Entity e1, Entity e2) {
         ICollider e1Collider = e1.getCollider();
         ICollider e2Collider = e2.getCollider();
         if (notNull(e1Collider, e2Collider) && notTrigger(e1Collider, e2Collider) && isCollidable(e1, e2)) {
@@ -124,19 +127,18 @@ public class CollisionController {
     }
 
     private float yMin(Entity e) {
-        return e.getY() + e.getBounds().getMinY();
+        return e.getY() + e.getBounds().getOriginY();
     }
 
     private float yMax(Entity e) {
-        return e.getY() + e.getBounds().getMaxY();
+        return e.getY() + e.getBounds().getOriginY() + e.getBounds().getHeight();
     }
 
     private float xMin(Entity e) {
-        return e.getX() + e.getBounds().getMinX();
+        return e.getX() + e.getBounds().getOriginX();
     }
 
     private float xMax(Entity e) {
-        return e.getX() + e.getBounds().getMaxX();
+        return e.getX() + e.getBounds().getOriginX() + e.getBounds().getWidth();
     }
-
 }

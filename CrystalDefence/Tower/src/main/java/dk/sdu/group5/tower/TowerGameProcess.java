@@ -25,7 +25,7 @@ public class TowerGameProcess implements IGameProcess {
         tower.setX(350);
         tower.setY(280);
         tower.setTexture("gridPattern.png");
-        tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
+        tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
         tower.addProperty("tangible");
         tower.addProperty("collidable");
         tower.addProperty("static");

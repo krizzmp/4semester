@@ -44,7 +44,7 @@ public class AStarAIGameProcess implements IGameProcess {
     // TODO: 12/04/16 Perhaps change name to shouldAvoid?
     // TODO: 12/04/16 Should bullets be considered a barrier?
     private Boolean isBarrier(Entity entity) {
-        return entity.getType() != EntityType.PLAYER;
+        return entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.BULLET && entity.getType() != EntityType.ENEMY;
     }
 
     private Vec getEntityPosition(Entity entity) {
