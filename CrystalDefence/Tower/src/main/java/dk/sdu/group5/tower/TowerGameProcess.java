@@ -35,6 +35,9 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
+        if(tower.getHealth() < 0){
+            world.setGameover(true);
+        }
     }
 
     @Override
