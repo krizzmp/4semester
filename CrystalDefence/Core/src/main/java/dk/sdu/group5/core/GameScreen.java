@@ -156,8 +156,7 @@ class GameScreen implements Screen {
         //call start in all components
         processes.forEach(p -> p.start(world));
 
-        ICollisionService collisionService = Lookup.getDefault().lookup(ICollisionService.class);
-        collisionController = new CollisionController(collisionService);
+        collisionSolverService = Lookup.getDefault().lookup(ICollisionSolverService.class);
     }
 
     public void stop() {
