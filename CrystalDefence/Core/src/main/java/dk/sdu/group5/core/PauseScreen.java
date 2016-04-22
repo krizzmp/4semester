@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.services.IGameProcess;
+import java.util.Collection;
+import org.openide.util.Lookup;
 
 /**
  * Created by Hivemaster on 31-03-2016.
@@ -26,6 +29,7 @@ public class PauseScreen implements Screen {
     private Table table;
     private GameScreen game;
     private float delta;
+    private Collection<? extends IGameProcess> processes;
 
     PauseScreen(GameScreen game) {
         this.game = game;
@@ -70,7 +74,9 @@ public class PauseScreen implements Screen {
             Game.getInstance().setScreen(gameScreen);
         });
         Game.getInstance().setScreen(startScreen);
-
+        
+        game.stop();
+        
     }
 
     private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style) {

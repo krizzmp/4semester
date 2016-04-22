@@ -114,7 +114,8 @@ public class BarrierGameProcess implements IGameProcess {
     
     @Override
     public void stop(World world) {
-        
+        listBarriers.stream().forEach(e -> world.removeEntity(e));
+        listBarriers.clear();
     }
 
     @Override

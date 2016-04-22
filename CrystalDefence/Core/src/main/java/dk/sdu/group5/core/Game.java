@@ -28,10 +28,11 @@ class Game extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-        gameScreen = new GameScreen();
         //something like this:
         startScreen = new StartScreen(() -> {
             //Gdx.app.exit();
+            gameScreen = new GameScreen();
+            gameScreen.start();
             setScreen(gameScreen);
         });
         setScreen(startScreen);

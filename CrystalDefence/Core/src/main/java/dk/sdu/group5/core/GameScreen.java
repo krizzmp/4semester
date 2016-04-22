@@ -146,4 +146,22 @@ class GameScreen implements Screen {
     public void dispose() {
 
     }
+
+    public void start() {
+        processes = Lookup.getDefault().lookupAll(IGameProcess.class);
+
+        world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
+        world.getEntities().forEach(System.out::println);
+
+        //call start in all components
+        processes.forEach(p -> p.start(world));
+
+        ICollisionService collisionService = Lookup.getDefault().lookup(ICollisionService.class);
+        collisionController = new CollisionController(collisionService);
+    }
+
+    public void stop() {
+        // Call stop on all components
+        processes.forEach(p -> p.stop(world));
+    }
 }
