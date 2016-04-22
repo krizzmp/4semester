@@ -24,13 +24,6 @@ public class PlayerGameProcess implements IGameProcess {
     @Override
     public void start(World world) {
         player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02.png", 100, 48, 48);
-//        player.setType(EntityType.PLAYER);
-//        player.setHealth(100);
-//        player.setX(250);
-//        player.setY(250);
-//        player.setTexture("playerTexture.png");
-//        player.setSpeed(60);
-//        player.setCollider(new SquareCollider(false, new AABB(-16, -16, 16, 16)));
         player.addProperty("collidable");
         player.addProperty("tangible");
         player.addProperty("damageable");
