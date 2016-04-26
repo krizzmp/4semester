@@ -43,12 +43,6 @@ public class PlayerGameProcess implements IGameProcess {
             player.setX(player.getX() + playerSpeed * delta);
         }
 
-        // Collision stuff
-        List<Entity> collisions = world.getCollisionDetector().collides(player, world.getEntities());
-        collisions.stream().forEach(e -> {
-            CollisionController.applyKnockBack(player, e);// applies knockback?
-            world.getCollisionHandler().addCollision(e.getCollider(), player);
-        });
         if(player.getHealth() < 0){
             world.setGameover(true);
         }
