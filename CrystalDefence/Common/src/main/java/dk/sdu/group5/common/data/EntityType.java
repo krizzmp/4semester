@@ -7,4 +7,5 @@ public enum EntityType
     ENEMY,
     PLAYER,
     BARRIER,
+    ENVIRONMENT
 }
