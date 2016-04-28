@@ -19,33 +19,43 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.ICollisionSolverService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
+import org.openide.util.Lookup.Result;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    private ICollisionSolverService collisionSolverService;
+    private Optional<? extends ICollisionSolverService> collisionSolverService;
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
-    private Skin skin;
-    private Stage stage;
-    private Table table;
 
     public GameScreen() {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
+        start();
+    }
+
+    public void start() {
+
         processes = Lookup.getDefault().lookupAll(IGameProcess.class);
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
+        Result<IGameProcess> result = Lookup.getDefault().lookupResult(IGameProcess.class);
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
-
-        collisionSolverService = Lookup.getDefault().lookup(ICollisionSolverService.class);
+        result.addLookupListener(lookupListenerGameProccess);
+        Result<ICollisionSolverService> result2 = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
+        result2.allInstances().stream().findFirst();
+        collisionSolverService = result2.allInstances().stream().findFirst();
+        result2.addLookupListener(lookupListenerCollisionSolver);
     }
 
     /**
@@ -68,6 +78,19 @@ class GameScreen implements Screen {
         });
 
     }
+    private final LookupListener lookupListenerCollisionSolver = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+            collisionSolverService = Lookup.getDefault().lookupResult(ICollisionSolverService.class).allInstances().stream().findFirst();
+        }
+    };
+
+    private final LookupListener lookupListenerGameProccess = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+            processes = Lookup.getDefault().lookupAll(IGameProcess.class);
+        }
+    };
 
     /**
      * Called when the screen should render itself.
@@ -87,7 +110,7 @@ class GameScreen implements Screen {
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
-        collisionSolverService.update(world);
+        collisionSolverService.ifPresent(cs->cs.update(world));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -153,17 +176,7 @@ class GameScreen implements Screen {
 
     }
 
-    public void start() {
-        processes = Lookup.getDefault().lookupAll(IGameProcess.class);
 
-        world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
-        world.getEntities().forEach(System.out::println);
-
-        //call start in all components
-        processes.forEach(p -> p.start(world));
-
-        collisionSolverService = Lookup.getDefault().lookup(ICollisionSolverService.class);
-    }
 
     public void stop() {
         // Call stop on all components
