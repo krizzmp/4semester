@@ -72,21 +72,21 @@ public class BarrierGameProcess implements IGameProcess {
                 posX = player.getX() - offsetX - BARRIER_WIDTH; // 32 is barrier width.
                 posY = player.getY();
             }
-            //if (posX % 48 != 0) {
-              //  if (posX % 48 < 24) {
-                //    posX = posX - posX % 48;
-               // } else {
-                 //   posX = posX + (48 - (posX % 48));
-                //}
-            //}
+            if (posX % 48 != 0) {
+                if (posX % 48 < 24) {
+                    posX = posX - posX % 48;
+                } else {
+                    posX = posX + (48 - (posX % 48));
+                }
+            }
 
-            //if (posY % 48 != 0) {
-            //    if (posY % 48 < 24) {
-            //        posY = posY - posY % 48;
-            //    } else {
-            //        posY = posY + (48 - (posY % 48));
-             //   }
-            //}
+            if (posY % 48 != 0) {
+                if (posY % 48 < 24) {
+                    posY = posY - posY % 48;
+                } else {
+                    posY = posY + (48 - (posY % 48));
+                }
+            }
 
             if (listBarriers.size() < maxBarriers) {
                 Entity barrier = new Entity();
