@@ -74,7 +74,7 @@ public class BarrierGameProcess implements IGameProcess {
             }
             if (posX % 48 != 0) {
                 if (posX % 48 < 24) {
-                    posX = posX - posX % 48;
+                    posX = posX - (posX % 48);
                 } else {
                     posX = posX + (48 - (posX % 48));
                 }
@@ -82,7 +82,7 @@ public class BarrierGameProcess implements IGameProcess {
 
             if (posY % 48 != 0) {
                 if (posY % 48 < 24) {
-                    posY = posY - posY % 48;
+                    posY = posY - (posY % 48);
                 } else {
                     posY = posY + (48 - (posY % 48));
                 }
