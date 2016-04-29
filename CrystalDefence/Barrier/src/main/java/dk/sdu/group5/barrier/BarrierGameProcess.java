@@ -55,7 +55,7 @@ public class BarrierGameProcess implements IGameProcess {
             //TODO: 31/03/16 Replace key detection with look direction. - Martin F.
             //TODO: 31/03/16 Implement via tilesystem (Map component). - Martin F.
             Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
-            
+
             // default is the right direction
             // TODO: 11/04/16 Player width can be found through the entity's collider
             posX = player.getX() + offsetX + 48; // 32 is player width.
@@ -82,7 +82,7 @@ public class BarrierGameProcess implements IGameProcess {
                 Entity barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
-                barrier.setTexture("barrierTexture02.png");
+                barrier.setTexturePath("barrierTexture02.png");
                 barrier.setSpeed(0);
                 barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
                 barrier.setX(posX);

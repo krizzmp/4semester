@@ -87,9 +87,9 @@ class GameScreen implements Screen {
         batch.begin();
 //        font.draw(batch, world.getEntities().toString(), 150, 220);
         world.getEntities().forEach(e -> {
-            String texture = e.getTexture();
-            if (texture != null && !Objects.equals(texture, "")) {
-                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
+            String texturePath = e.getTexture();
+            if (texturePath != null && !Objects.equals(texturePath, "")) {
+                batch.draw(new Texture(Gdx.files.classpath(texturePath)), e.getX(), e.getY());
                 font.draw(batch,e.toString(),e.getX(),e.getY());
             }
         });
@@ -161,9 +161,9 @@ class GameScreen implements Screen {
         batch.begin();
 //        font.draw(batch, world.getEntities().toString(), 150, 220);
         world.getEntities().forEach(e -> {
-            String texture = e.getTexture();
-            if (texture != null && !Objects.equals(texture, "")) {
-                batch.draw(new Texture(Gdx.files.classpath(texture)), e.getX(), e.getY());
+            String texturePath = e.getTexture();
+            if (texturePath != null && !Objects.equals(texturePath, "")) {
+                batch.draw(new Texture(Gdx.files.classpath(texturePath)), e.getX(), e.getY());
                 font.draw(batch,e.toString(),e.getX(),e.getY());
             }
         });
