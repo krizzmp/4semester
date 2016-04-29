@@ -24,18 +24,20 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    private Optional<? extends ICollisionSolverService> collisionSolverService;
+    private Collection<? extends ICollisionSolverService> collisionSolverService;
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
     private Collection<? extends IGameProcess> processes;
+    private Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
 
     public GameScreen() {
         batch = new SpriteBatch();
@@ -54,7 +56,7 @@ class GameScreen implements Screen {
         result.addLookupListener(lookupListenerGameProccess);
         Result<ICollisionSolverService> result2 = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
         result2.allInstances().stream().findFirst();
-        collisionSolverService = result2.allInstances().stream().findFirst();
+        collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
         result2.addLookupListener(lookupListenerCollisionSolver);
     }
 
@@ -81,7 +83,7 @@ class GameScreen implements Screen {
     private final LookupListener lookupListenerCollisionSolver = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
-            collisionSolverService = Lookup.getDefault().lookupResult(ICollisionSolverService.class).allInstances().stream().findFirst();
+            collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
         }
     };
 
@@ -110,27 +112,26 @@ class GameScreen implements Screen {
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
-        collisionSolverService.ifPresent(cs->cs.update(world));
+        collisionSolverService.forEach(cs->cs.update(world));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
         batch.draw(texture2, 0, 0);
         world.getEntities().forEach(e -> {
             String texturePath = e.getTexture();
             if (texturePath != null && !Objects.equals(texturePath, "")) {
-                Texture texture = new Texture(Gdx.files.classpath(texturePath));
+                Texture texture = new Texture(Gdx.files.classpath(texturePath)); // TODO: 29/04/16 momoize texture to avoid creating a new file and texture every frame -kristoffer
                 batch.draw(texture, e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
-//                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
         });
         batch.end();
         if(world.isGameover()){
             Game.getInstance().setScreen(new GameoverScreen());
-            this.dispose();
+            dispose();
         }
+        System.out.println(1 / delta);
     }
 
     /**
