@@ -92,7 +92,7 @@ public class BarrierGameProcess implements IGameProcess {
                 Entity barrier = new Entity();
                 barrier.setType(EntityType.BARRIER);
                 barrier.setHealth(50);
-                barrier.setTexture("barrierTexture02.png");
+                barrier.setTexturePath("barrierTexture02.png");
                 barrier.setSpeed(0);
                 barrier.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
                 barrier.setX(posX);

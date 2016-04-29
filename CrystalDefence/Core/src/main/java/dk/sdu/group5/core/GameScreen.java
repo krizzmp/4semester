@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,8 @@ import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 class GameScreen implements Screen {
@@ -36,7 +39,18 @@ class GameScreen implements Screen {
     private Stage stage;
     private Table table;
 
+    private final Texture defaultTexture;
+    private final Map<String, Texture> cachedTextures;
+
     public GameScreen() {
+        FileHandle fileHandle = Gdx.files.classpath("defaultTexture.png");
+        if (!fileHandle.exists()) {
+            System.err.println("Default texture not found!");
+        }
+        defaultTexture = new Texture(fileHandle);
+
+        cachedTextures = new HashMap<>();
+
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
@@ -81,7 +95,9 @@ class GameScreen implements Screen {
 
             Game.getInstance().setScreen(PS = new PauseScreen(this));
         }
+
         //spawn enemies
+        // TODO: 29-04-2016 Get out of Common
         SpawnController.getInstance().update(world, delta);
 
         //update entities
@@ -93,12 +109,11 @@ class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
-        batch.draw(texture2, 0, 0);
+        batch.draw(getTexture("mapTexture.png"), 0, 0);
         world.getEntities().forEach(e -> {
-            String texturePath = e.getTexture();
+            String texturePath = e.getTexturePath();
             if (texturePath != null && !Objects.equals(texturePath, "")) {
-                Texture texture = new Texture(Gdx.files.classpath(texturePath));
+                Texture texture = getTexture(texturePath);
                 batch.draw(texture, e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
 //                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
@@ -108,6 +123,21 @@ class GameScreen implements Screen {
             Game.getInstance().setScreen(new GameoverScreen());
             this.dispose();
         }
+    }
+
+    private Texture getTexture(String texturePath) {
+        if (!cachedTextures.containsKey(texturePath)) {
+            FileHandle fileHandle = Gdx.files.classpath(texturePath);
+            Texture texture;
+            if (fileHandle.exists()) {
+                texture = new Texture(fileHandle);
+            } else {
+                texture = defaultTexture;
+            }
+            cachedTextures.put(texturePath, texture);
+        }
+
+        return cachedTextures.get(texturePath);
     }
 
     /**
