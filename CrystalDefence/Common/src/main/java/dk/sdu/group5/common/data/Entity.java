@@ -17,20 +17,20 @@ public class Entity {
     private int health;
     private ICollider collider;
     private EntityType type;
-    private String texture;
+    private String texturePath;
     private float Speed;
 
     public Entity() {
         properties = new HashSet<>();
     }
 
-    public Entity(EntityType entityType, float speed, float x, float y, String texture, int health, float width, float height) {
+    public Entity(EntityType entityType, float speed, float x, float y, String texturePath, int health, float width, float height) {
         this();
         setType(entityType);
         setSpeed(speed);
         setX(x);
         setY(y);
-        setTexture(texture);
+        setTexturePath(texturePath);
         setHealth(health);
         setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width, height)));
     }
@@ -102,12 +102,12 @@ public class Entity {
         return String.format("%s{x: %.0f, y: %.0f, health: %d}", type, x, y, health);
     }
 
-    public String getTexture() {
-        return texture;
+    public String getTexturePath() {
+        return texturePath;
     }
 
-    public void setTexture(String texture) {
-        this.texture = texture;
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
     }
 
     public boolean is(String collidable) {
