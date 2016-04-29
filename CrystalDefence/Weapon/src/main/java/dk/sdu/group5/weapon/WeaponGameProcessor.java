@@ -14,11 +14,6 @@ public class WeaponGameProcessor implements IGameProcess {
     private GameKeys gameKeys;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         bc = new BulletController();
         gameKeys = GameKeys.getInstance();
@@ -68,7 +63,4 @@ public class WeaponGameProcessor implements IGameProcess {
     public void stop(World world) {
     }
 
-    @Override
-    public void uninstall() {
-    }
 }
