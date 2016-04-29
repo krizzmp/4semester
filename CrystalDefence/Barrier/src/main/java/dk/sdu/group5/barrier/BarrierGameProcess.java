@@ -37,11 +37,6 @@ public class BarrierGameProcess implements IGameProcess {
     private ICollisionDetectorService collisionService;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
     }
@@ -121,11 +116,6 @@ public class BarrierGameProcess implements IGameProcess {
     public void stop(World world) {
         listBarriers.stream().forEach(e -> world.removeEntity(e));
         listBarriers.clear();
-    }
-
-    @Override
-    public void uninstall() {
-
     }
 
 }

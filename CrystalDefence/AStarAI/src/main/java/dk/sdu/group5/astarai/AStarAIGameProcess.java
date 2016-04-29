@@ -17,11 +17,6 @@ public class AStarAIGameProcess implements IGameProcess {
     private final float MIN_PLAYER_DISTANCE = 150f;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
 
     }
@@ -74,11 +69,6 @@ public class AStarAIGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-
-    }
-
-    @Override
-    public void uninstall() {
 
     }
 

@@ -13,11 +13,6 @@ public class EnemyGameProcess implements IGameProcess {
     private EnemySpawner enemySpawner;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         enemySpawner = new EnemySpawner();
         SpawnController.getInstance().register(enemySpawner);
@@ -38,8 +33,4 @@ public class EnemyGameProcess implements IGameProcess {
         SpawnController.getInstance().unRegister(enemySpawner);
     }
 
-    @Override
-    public void uninstall() {
-
-    }
 }
