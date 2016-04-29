@@ -123,6 +123,7 @@ class GameScreen implements Screen {
             Game.getInstance().setScreen(new GameoverScreen());
             this.dispose();
         }
+        System.out.println(1 / delta);
     }
 
     private Texture getTexture(String texturePath) {
