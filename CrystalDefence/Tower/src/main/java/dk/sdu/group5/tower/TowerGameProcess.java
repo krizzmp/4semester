@@ -13,11 +13,6 @@ public class TowerGameProcess implements IGameProcess {
     private Entity tower;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         tower = new Entity();
         tower.setType(EntityType.TOWER);
@@ -43,11 +38,6 @@ public class TowerGameProcess implements IGameProcess {
     @Override
     public void stop(World world) {
         world.removeEntity(tower);
-
-    }
-
-    @Override
-    public void uninstall() {
 
     }
 
