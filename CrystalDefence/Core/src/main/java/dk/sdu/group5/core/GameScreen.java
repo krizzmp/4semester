@@ -171,7 +171,7 @@ class GameScreen implements Screen {
 //                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
         });
-        font.draw(batch, "" + (1 / delta), 0, 0);
+        font.draw(batch, "" + (1 / delta), 0, font.getLineHeight());
         batch.end();
         if(world.isGameover()){
             Game.getInstance().setScreen(new GameoverScreen());
