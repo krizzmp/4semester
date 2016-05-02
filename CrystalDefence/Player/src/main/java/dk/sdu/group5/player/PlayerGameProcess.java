@@ -12,11 +12,6 @@ public class PlayerGameProcess implements IGameProcess {
     private Entity player;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02.png", 100, 48, 48);
         player.addProperty("collidable");
@@ -51,11 +46,6 @@ public class PlayerGameProcess implements IGameProcess {
     @Override
     public void stop(World world) {
         world.removeEntity(player);
-    }
-
-    @Override
-    public void uninstall() {
-
     }
 
 }

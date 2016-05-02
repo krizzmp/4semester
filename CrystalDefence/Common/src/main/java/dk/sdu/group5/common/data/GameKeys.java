@@ -46,5 +46,9 @@ public class GameKeys {
     public void setKeyState(int key, boolean state) {
         listOfKeys.stream().filter(k -> k.getKey() == key).forEach(k -> k.setState(state));
     }
+
+    public void resetKeys(){
+        listOfKeys.stream().forEach(k -> k.setState(false));
+    }
 }
  

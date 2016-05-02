@@ -13,18 +13,13 @@ public class TowerGameProcess implements IGameProcess {
     private Entity tower;
 
     @Override
-    public void install() {
-
-    }
-
-    @Override
     public void start(World world) {
         tower = new Entity();
         tower.setType(EntityType.TOWER);
         tower.setHealth(3);
         tower.setX(350);
         tower.setY(280);
-        tower.setTexture("towerTexture.png");
+        tower.setTexturePath("towerTexture.png");
         tower.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
         tower.addProperty("tangible");
         tower.addProperty("collidable");
@@ -43,11 +38,6 @@ public class TowerGameProcess implements IGameProcess {
     @Override
     public void stop(World world) {
         world.removeEntity(tower);
-
-    }
-
-    @Override
-    public void uninstall() {
 
     }
 

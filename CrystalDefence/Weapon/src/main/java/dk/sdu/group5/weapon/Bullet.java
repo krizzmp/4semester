@@ -28,7 +28,7 @@ class Bullet {
         bullet.setType(EntityType.BULLET);
         bullet.setHealth(1);
 
-        bullet.setTexture("bulletTexture.png");
+        bullet.setTexturePath("bulletTexture.png");
         bullet.setSpeed(speed);
         Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
         bullet.setCollider(new SquareCollider(false, new AABB(-4.5f, -4.5f, 9f, 9f)));
