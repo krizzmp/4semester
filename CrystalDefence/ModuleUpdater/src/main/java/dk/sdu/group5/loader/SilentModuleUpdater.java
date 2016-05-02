@@ -45,6 +45,10 @@ public final class SilentModuleUpdater {
             if (file.exists()) {
                 localProvider = UpdateUnitProviderFactory.getDefault().create("dk_sdu_group5_local_update_center",
                         "Local ModuleUpdater Update Center", file.toURI().toURL());
+                System.out.println("Update units: " + localProvider.getUpdateUnits().size());
+                for (UpdateUnit uu : localProvider.getUpdateUnits()) {
+                    System.out.println(uu.getCodeName());
+                }
             }
         } catch (MalformedURLException ex) {
             // Do nothing
@@ -63,7 +67,7 @@ public final class SilentModuleUpdater {
 
         Collection<UpdateElement> updates = findUpdates();
         Collection<UpdateElement> available = findNewModules();
-        Collection<UpdateElement> uninstalls = findUnstalls();
+        Collection<UpdateElement> uninstalls = findUninstalls();
 
         if (updates.isEmpty() && available.isEmpty() && uninstalls.isEmpty()) {
             // none for install
@@ -100,7 +104,7 @@ public final class SilentModuleUpdater {
         if (containerForUninstall != null) {
             try {
                 handleUninstall(containerForUninstall);
-                LOGGER.info("Unstall modules done.");
+                LOGGER.info("Uninstall modules done.");
             } catch (UpdateHandlerException ex) {
                 LOGGER.log(Level.INFO, ex.getLocalizedMessage(), ex.getCause());
                 return;
@@ -191,7 +195,7 @@ public final class SilentModuleUpdater {
         return locals;
     }
 
-    private Collection<UpdateElement> findUnstalls() {
+    private Collection<UpdateElement> findUninstalls() {
 
         if (locallyInstalled.isEmpty()) {
             return locallyInstalled;
