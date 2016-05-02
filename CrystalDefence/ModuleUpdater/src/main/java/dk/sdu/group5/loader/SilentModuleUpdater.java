@@ -38,7 +38,7 @@ public final class SilentModuleUpdater {
         // Bundle properties' path is wrong.
         try {
             File file = new File("../netbeans_site/updates.xml");
-            if (file.exists()) {
+            if (false && file.exists()) {
                 devProvider = UpdateUnitProviderFactory.getDefault().create("dk_sdu_group5_loader_update_center",
                         "Module Updater", file.toURI().toURL());
             }
