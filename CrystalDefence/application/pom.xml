@@ -103,7 +103,7 @@
                                 <id>extra</id>
                                 <goals>
                                     <goal>autoupdate</goal>
-                                    <goal>build-installers</goal>
+                                    <!--<goal>build-installers</goal>-->
                                 </goals>
                             </execution>
                         </executions>

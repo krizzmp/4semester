@@ -20,12 +20,16 @@ import java.util.logging.Logger;
  * Based on the project:
  * https://github.com/cses-sdu-dk/SB4-KOM-F16/tree/master/AsteroidsNetbeansModules/SilentUpdate
  */
+
+/**
+ * http://wiki.netbeans.org/DevFaqCustomUpdateCenter
+ */
 public final class SilentModuleUpdater {
 
-    private final String SILENT_UC_CODE_NAME = "dk_sdu_group5_loader_update_center"; // NOI18N
+    private final String SILENT_UC_CODE_NAME = "dk_sdu_group5_ModuleUpdater_update_center"; // NOI18N
     private Collection<UpdateElement> locallyInstalled = new ArrayList<>();
     private final Logger LOGGER = Logger.getLogger(SilentModuleUpdater.class.getPackage().getName());
-    private UpdateUnitProvider devProvider;
+    private UpdateUnitProvider localProvider;
 
     private static final SilentModuleUpdater INSTANCE = new SilentModuleUpdater();
 
@@ -34,13 +38,13 @@ public final class SilentModuleUpdater {
     }
 
     private SilentModuleUpdater() {
-        // Tries to create a new provider based on the development path if the
+        // Tries to create a new provider based on a local path if the
         // Bundle properties' path is wrong.
         try {
             File file = new File("../netbeans_site/updates.xml");
-            if (false && file.exists()) {
-                devProvider = UpdateUnitProviderFactory.getDefault().create("dk_sdu_group5_loader_update_center",
-                        "Module Updater", file.toURI().toURL());
+            if (file.exists()) {
+                localProvider = UpdateUnitProviderFactory.getDefault().create("dk_sdu_group5_local_update_center",
+                        "Local ModuleUpdater Update Center", file.toURI().toURL());
             }
         } catch (MalformedURLException ex) {
             // Do nothing
@@ -245,8 +249,8 @@ public final class SilentModuleUpdater {
     }
 
     private UpdateUnitProvider getSilentUpdateProvider() {
-        if (devProvider != null) {
-            return devProvider;
+        if (localProvider != null) {
+            return localProvider;
         }
 
         List<UpdateUnitProvider> providers = UpdateUnitProviderFactory.getDefault().getUpdateUnitProviders(true);
