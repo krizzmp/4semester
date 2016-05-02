@@ -69,10 +69,11 @@ class GameScreen implements Screen {
 
         world.getEntities().forEach(System.out::println);
 
+        processes.addAll(processResult.allInstances());
+        collisionSolvers.addAll(colSolverResult.allInstances());
+
         processResult.allInstances().stream().forEach((process) ->
-        {
-            process.start(world);
-        });
+                process.start(world));
     }
 
     /**
