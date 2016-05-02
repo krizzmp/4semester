@@ -80,7 +80,7 @@
         </plugins>
     </build>
 
-    <profiles>
+    <!--<profiles>
         <profile>
             <id>deployment</id>
             <build>
@@ -93,7 +93,7 @@
                                 <id>extra</id>
                                 <goals>
                                     <goal>autoupdate</goal>
-                                    <!--<goal>build-installers</goal>-->
+                                    &lt;!&ndash;<goal>build-installers</goal>&ndash;&gt;
                                 </goals>
                             </execution>
                         </executions>
@@ -101,5 +101,5 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles>-->
 </project>
