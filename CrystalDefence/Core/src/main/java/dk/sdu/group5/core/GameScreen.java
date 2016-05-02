@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import dk.sdu.group5.common.data.Difficulty;
 import dk.sdu.group5.common.data.GameKeys;
 import dk.sdu.group5.common.data.SpawnController;
@@ -25,25 +22,26 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    private Collection<? extends ICollisionSolverService> collisionSolverService;
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
-    private Collection<? extends IGameProcess> processes;
+    private Collection<IGameProcess> processes;
+    private Collection<ICollisionSolverService> collisionSolvers;
     private Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
 
     private final Texture defaultTexture;
     private final Map<String, Texture> cachedTextures;
+
+    private Result<IGameProcess> processResult;
+    private Result<ICollisionSolverService> colSolverResult;
 
     public GameScreen() {
         FileHandle fileHandle = Gdx.files.classpath("defaultTexture.png");
@@ -61,17 +59,15 @@ class GameScreen implements Screen {
     }
 
     public void start() {
-
-        processes = Lookup.getDefault().lookupAll(IGameProcess.class);
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
-        Result<IGameProcess> result = Lookup.getDefault().lookupResult(IGameProcess.class);
-        processes.forEach(p -> p.start(world));
+
+        processResult = Lookup.getDefault().lookupResult(IGameProcess.class);
+        processResult.addLookupListener(lookupListenerGameProccess);
+
+        colSolverResult = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
+        colSolverResult.addLookupListener(lookupListenerCollisionSolver);
+
         world.getEntities().forEach(System.out::println);
-        result.addLookupListener(lookupListenerGameProccess);
-        Result<ICollisionSolverService> result2 = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
-        result2.allInstances().stream().findFirst();
-        collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
-        result2.addLookupListener(lookupListenerCollisionSolver);
     }
 
     /**
@@ -97,14 +93,40 @@ class GameScreen implements Screen {
     private final LookupListener lookupListenerCollisionSolver = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
-            collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
+            Collection<? extends ICollisionSolverService> updatedSolvers = colSolverResult.allInstances();
+
+            for (ICollisionSolverService solver : updatedSolvers) {
+                if (!updatedSolvers.contains(solver)) {
+                    collisionSolvers.add(solver);
+                }
+            }
+
+            for (ICollisionSolverService solver : collisionSolvers) {
+                if (!updatedSolvers.contains(solver)) {
+                    collisionSolvers.remove(solver);
+                }
+            }
         }
     };
 
     private final LookupListener lookupListenerGameProccess = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
-            processes = Lookup.getDefault().lookupAll(IGameProcess.class);
+            Collection<? extends IGameProcess> updatedProcesses = processResult.allInstances();
+
+            for (IGameProcess process : updatedProcesses) {
+                if (!processes.contains(process)) {
+                    processes.add(process);
+                    process.start(world);
+                }
+            }
+
+            for (IGameProcess process : processes) {
+                if (!updatedProcesses.contains(process)) {
+                    processes.remove(process);
+                    process.stop(world);
+                }
+            }
         }
     };
 
@@ -128,7 +150,7 @@ class GameScreen implements Screen {
         //update entities
         processes.forEach(p -> p.update(world, delta));
 
-        collisionSolverService.forEach(cs->cs.update(world));
+        collisionSolvers.forEach(cs -> cs.update(world));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
