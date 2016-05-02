@@ -14,10 +14,7 @@ import java.util.stream.Collectors;
 @ServiceProvider(service = IGameProcess.class)
 public class AStarAIGameProcess implements IGameProcess {
 
-    @Override
-    public void install() {
-
-    }
+    private final float MIN_PLAYER_DISTANCE = 150f;
 
     @Override
     public void start(World world) {
@@ -33,7 +30,13 @@ public class AStarAIGameProcess implements IGameProcess {
             // TODO: 12/04/16 Perhaps change barriers to avoidables
             List<Entity> barriers = entities.stream().filter(x -> x != e && isBarrier(x)).collect(Collectors.toList());
             Vec enemyPos = getEntityPosition(e);
-            Vec direction = PathFinder.getDirection(e, barriers, p);
+
+            Entity target = tower.get();
+            if (enemyPos.minus(getEntityPosition(player.get())).length() <= MIN_PLAYER_DISTANCE) {
+                target = player.get();
+            }
+
+            Vec direction = PathFinder.getDirection(e, barriers, target);
             Vec entityVel = direction.unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
             Vec newPoint = enemyPos.plus(entityVel);
             e.setX((float) newPoint.getX());
@@ -66,11 +69,6 @@ public class AStarAIGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-
-    }
-
-    @Override
-    public void uninstall() {
 
     }
 

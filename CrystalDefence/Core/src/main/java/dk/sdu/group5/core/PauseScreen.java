@@ -37,8 +37,7 @@ public class PauseScreen implements Screen {
 
     @Override
     public void show() {
-        GameKeys.getInstance().setKeyState(67, false);
-        GameKeys.getInstance().setKeyState(131, false);
+        GameKeys.getInstance().resetKeys();
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
