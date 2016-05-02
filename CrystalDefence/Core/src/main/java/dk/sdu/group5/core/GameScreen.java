@@ -21,10 +21,7 @@ import org.openide.util.Lookup.Result;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 class GameScreen implements Screen {
 
@@ -61,6 +58,9 @@ class GameScreen implements Screen {
     public void start() {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
 
+        processes = new ArrayList<>();
+        collisionSolvers = new ArrayList<>();
+
         processResult = Lookup.getDefault().lookupResult(IGameProcess.class);
         processResult.addLookupListener(lookupListenerGameProccess);
 
@@ -68,6 +68,11 @@ class GameScreen implements Screen {
         colSolverResult.addLookupListener(lookupListenerCollisionSolver);
 
         world.getEntities().forEach(System.out::println);
+
+        processResult.allInstances().stream().forEach((process) ->
+        {
+            process.start(world);
+        });
     }
 
     /**
@@ -166,12 +171,12 @@ class GameScreen implements Screen {
 //                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
         });
+        font.draw(batch, "" + (1 / delta), 0, 0);
         batch.end();
         if(world.isGameover()){
             Game.getInstance().setScreen(new GameoverScreen());
             dispose();
         }
-        System.out.println(1 / delta);
     }
 
     private Texture getTexture(String texturePath) {
