@@ -9,11 +9,14 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
+import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
@@ -31,11 +34,36 @@ public class BarrierGameProcess implements IGameProcess {
     private boolean placeable = false;
 
     private List<Entity> listBarriers = new LinkedList<>();
-    private ICollisionDetectorService collisionService;
+
+    private Lookup.Result<ICollisionDetectorService> collisionDetectorResult;
+    private ICollisionDetectorService collisionDetectorService;
+
+    private ReadWriteLock collisionDetectorLock = new ReentrantReadWriteLock();
 
     @Override
     public void start(World world) {
-        collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
+        collisionDetectorResult = Lookup.getDefault().lookupResult(ICollisionDetectorService.class);
+        collisionDetectorResult.addLookupListener(lookupListenerCollisionDetector);
+
+        updateDetectorService();
+    }
+
+    private final LookupListener lookupListenerCollisionDetector = le -> updateDetectorService();
+
+    private void updateDetectorService() {
+        collisionDetectorLock.writeLock().lock();
+        collisionDetectorService = findDetectorService();
+        collisionDetectorLock.writeLock().unlock();
+    }
+
+    private ICollisionDetectorService findDetectorService() {
+        Optional<? extends ICollisionDetectorService> optionalDetector;
+        optionalDetector = collisionDetectorResult.allInstances().stream().findFirst();
+        if (optionalDetector.isPresent()) {
+            return optionalDetector.get();
+        }
+
+        return null;
     }
 
     @Override
@@ -108,11 +136,15 @@ public class BarrierGameProcess implements IGameProcess {
 
     private boolean checkCollision(Entity barrier, List<Entity> entities) {
         // Collision stuff
-        for (Entity ent : entities) {
-            if (collisionService.collides(barrier, ent)) {
-                return false;
+        collisionDetectorLock.readLock().lock();
+        if (collisionDetectorService != null) {
+            for (Entity ent : entities) {
+                if (collisionDetectorService.collides(barrier, ent)) {
+                    return false;
+                }
             }
         }
+        collisionDetectorLock.readLock().unlock();
 
         return true;
     }

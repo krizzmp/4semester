@@ -22,36 +22,40 @@ import java.util.logging.Logger;
  */
 
 /**
- * http://wiki.netbeans.org/DevFaqCustomUpdateCenter
+ * Documentation on update centers: http://wiki.netbeans.org/DevFaqCustomUpdateCenter
  */
-public final class SilentModuleUpdater {
+public final class ModuleUpdater {
 
-    private final String SILENT_UC_CODE_NAME = "dk_sdu_group5_ModuleUpdater_update_center"; // NOI18N
-    private Collection<UpdateElement> locallyInstalled = new ArrayList<>();
-    private final Logger LOGGER = Logger.getLogger(SilentModuleUpdater.class.getPackage().getName());
+    private final String EXTERNAL_UPDATE_CENTER_NAME = "dk_sdu_group5_ModuleUpdater_update_center"; // NOI18N
+    private final Logger LOGGER = Logger.getLogger(ModuleUpdater.class.getPackage().getName());
     private UpdateUnitProvider localProvider;
+    private Collection<UpdateElement> locallyInstalled = new ArrayList<>();
 
-    private static final SilentModuleUpdater INSTANCE = new SilentModuleUpdater();
+    private static final ModuleUpdater INSTANCE = new ModuleUpdater();
 
-    public static SilentModuleUpdater getInstance() {
+    public static ModuleUpdater getInstance() {
         return INSTANCE;
     }
 
-    private SilentModuleUpdater() {
-        // Tries to create a new provider based on a local path if the
-        // Bundle properties' path is wrong.
+    private ModuleUpdater() {
         try {
             File file = new File("../netbeans_site/updates.xml");
             if (file.exists()) {
                 localProvider = UpdateUnitProviderFactory.getDefault().create("dk_sdu_group5_local_update_center",
                         "Local ModuleUpdater Update Center", file.toURI().toURL());
-                System.out.println("Update units: " + localProvider.getUpdateUnits().size());
+                LOGGER.info("Update units: " + localProvider.getUpdateUnits().size());
                 for (UpdateUnit uu : localProvider.getUpdateUnits()) {
-                    System.out.println(uu.getCodeName());
+                    LOGGER.info(uu.getCodeName());
                 }
             }
         } catch (MalformedURLException ex) {
-            // Do nothing
+            LOGGER.info("Could not find local update center!");
+        }
+
+        for (UpdateUnit updateUnit : UpdateManager.getDefault().getUpdateUnits()) {
+            if (updateUnit.getType() == UpdateManager.TYPE.KIT_MODULE) {
+                locallyInstalled.add(updateUnit.getInstalled());
+            }
         }
     }
 
@@ -61,9 +65,8 @@ public final class SilentModuleUpdater {
     }
 
     public void checkAndHandleUpdates() {
-
-        // refresh silent update center first
-        refreshSilentUpdateProvider();
+        // refresh update center first
+        refreshUpdateProvider();
 
         Collection<UpdateElement> updates = findUpdates();
         Collection<UpdateElement> available = findNewModules();
@@ -71,7 +74,7 @@ public final class SilentModuleUpdater {
 
         if (updates.isEmpty() && available.isEmpty() && uninstalls.isEmpty()) {
             // none for install
-            LOGGER.info("None for update/install/uninstall");
+//            LOGGER.info("None for update/install/uninstall");
             return;
         }
 
@@ -110,6 +113,7 @@ public final class SilentModuleUpdater {
                 return;
             }
         }
+
         locallyInstalled = findLocalInstalled();
     }
 
@@ -181,10 +185,8 @@ public final class SilentModuleUpdater {
     }
 
     private Collection<UpdateElement> findLocalInstalled() {
-
-        // Find uninstalls
         Collection<UpdateElement> locals = new HashSet<>();
-        List<UpdateUnit> updateUnits = getSilentUpdateProvider().getUpdateUnits();
+        List<UpdateUnit> updateUnits = getUpdateProvider().getUpdateUnits();
 
         for (UpdateUnit updateUnit : updateUnits) {
             if (updateUnit.getInstalled() != null) {
@@ -201,9 +203,9 @@ public final class SilentModuleUpdater {
             return locallyInstalled;
         }
 
-        Collection<UpdateElement> updateUnits = findLocalInstalled();
+        Collection<UpdateElement> localInstalled = findLocalInstalled();
         Collection<UpdateElement> uninstalls = new HashSet<>(locallyInstalled);
-        uninstalls.removeAll(updateUnits);
+        uninstalls.removeAll(localInstalled);
 
         return uninstalls;
     }
@@ -211,7 +213,7 @@ public final class SilentModuleUpdater {
     private Collection<UpdateElement> findUpdates() {
         // check updates
         Collection<UpdateElement> elements4update = new HashSet<>();
-        List<UpdateUnit> updateUnits = getSilentUpdateProvider().getUpdateUnits();
+        List<UpdateUnit> updateUnits = getUpdateProvider().getUpdateUnits();
         for (UpdateUnit unit : updateUnits) {
             if (unit.getInstalled() != null) { // means the plugin already installed
                 if (!unit.getAvailableUpdates().isEmpty()) { // has updates
@@ -236,31 +238,34 @@ public final class SilentModuleUpdater {
         return elements4install;
     }
 
-    private void refreshSilentUpdateProvider() {
-        UpdateUnitProvider silentUpdateProvider = getSilentUpdateProvider();
-        if (silentUpdateProvider == null) {
+    private void refreshUpdateProvider() {
+        UpdateUnitProvider updateProvider = getUpdateProvider();
+        if (updateProvider == null) {
             // have a problem => cannot continue
             LOGGER.info("Missing Silent Update Provider => cannot continue.");
             return;
         }
 
         try {
-            silentUpdateProvider.refresh(null, true);
+            updateProvider.refresh(null, true);
+//            for (UpdateUnit updateUnit : updateProvider.getUpdateUnits()){
+//                if(updateUnit.)
+//            }
         } catch (IOException ex) {
             // caught a exception
             LOGGER.log(Level.INFO, "A problem caught while refreshing Update Centers, cause: ", ex);
         }
     }
 
-    private UpdateUnitProvider getSilentUpdateProvider() {
+    private UpdateUnitProvider getUpdateProvider() {
         if (localProvider != null) {
             return localProvider;
         }
 
-        List<UpdateUnitProvider> providers = UpdateUnitProviderFactory.getDefault().getUpdateUnitProviders(true);
-        for (UpdateUnitProvider p : providers) {
-            if (SILENT_UC_CODE_NAME.equals(p.getName())) {
-                return p;
+        List<UpdateUnitProvider> updateProviders = UpdateUnitProviderFactory.getDefault().getUpdateUnitProviders(true);
+        for (UpdateUnitProvider provider : updateProviders) {
+            if (EXTERNAL_UPDATE_CENTER_NAME.equals(provider.getName())) {
+                return provider;
             }
         }
 
