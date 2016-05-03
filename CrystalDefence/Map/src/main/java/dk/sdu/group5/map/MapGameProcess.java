@@ -53,7 +53,7 @@ public class MapGameProcess implements IGameProcess {
     private Entity createTowerEntity(float x, float y) {
         Entity entity = new Entity();
         entity.setType(EntityType.TOWER);
-        entity.setHealth(3);
+        entity.setHealth(50);
         entity.setTexturePath("towerTexture.png");
         entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
         entity.addProperty("tangible");
