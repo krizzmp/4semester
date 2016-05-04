@@ -79,6 +79,7 @@
         <module>AStarAI</module>
         <module>Barrier</module>
         <module>SimpleCollisionService</module>
+        <module>Map</module>
     </modules>
 
     <properties>

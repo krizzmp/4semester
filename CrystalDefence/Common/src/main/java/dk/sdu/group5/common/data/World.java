@@ -11,6 +11,7 @@ public class World {
     private Difficulty difficulty;
     private WeaponType weaponType;
     private boolean gameover = false;
+    private String backgroundTexturePath;
 
     public boolean isGameover() {
         return gameover;
@@ -21,9 +22,7 @@ public class World {
     }
 
 
-
-    private World()
-    {
+    private World() {
         entities = new LinkedList<>();
         collisions = new HashMap<>();
         weaponType = WeaponType.PISTOL;
@@ -62,8 +61,7 @@ public class World {
         return collisions.getOrDefault(entity, new LinkedList<>());
     }
 
-    public Difficulty getDifficulty()
-    {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
@@ -73,5 +71,13 @@ public class World {
 
     public WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    public String getBackgroundTexturePath() {
+        return backgroundTexturePath;
+    }
+
+    public void setBackgroundTexturePath(String backgroundTexturePath) {
+        this.backgroundTexturePath = backgroundTexturePath;
     }
 }

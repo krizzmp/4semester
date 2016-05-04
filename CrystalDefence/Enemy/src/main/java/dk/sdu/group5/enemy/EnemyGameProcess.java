@@ -27,15 +27,15 @@ public class EnemyGameProcess implements IGameProcess {
     public void update(World world, float delta) {
         world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
                 .forEach(e -> world.getCollisions(e).stream()
-                        .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER)
+                        .filter(collidedEntity -> collidedEntity.getType() == EntityType.PLAYER || collidedEntity.getType() == EntityType.TOWER)
                         .forEach(collidedEntity -> collidedEntity.setHealth(collidedEntity.getHealth() - 1)));
 
         // TODO: 12/04/16 Missing Enemy-Tower collision check
-        
+
         // Check if enemy has no more hp
         world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
                 .filter(e -> e.getHealth() <= 0).forEach(e -> listOfDeadEnemies.add(e));
-        
+
         listOfDeadEnemies.stream().forEach(e -> world.removeEntity(e));
         listOfDeadEnemies.clear();
     }
