@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Install: dk/sdu/group5/player/Installer.class
 OpenIDE-Module-Localizing-Bundle: dk/sdu/group5/player/Bundle.properties
 
