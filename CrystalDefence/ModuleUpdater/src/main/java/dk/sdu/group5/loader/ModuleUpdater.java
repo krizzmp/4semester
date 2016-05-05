@@ -28,11 +28,11 @@ public final class ModuleUpdater {
 
     private final String EXTERNAL_UPDATE_CENTER_NAME = "dk_sdu_group5_ModuleUpdater_update_center"; // NOI18N
     private final Logger LOGGER = Logger.getLogger(ModuleUpdater.class.getPackage().getName());
+
     private UpdateUnitProvider localProvider;
     private Collection<UpdateElement> locallyInstalled = new ArrayList<>();
 
     private static final ModuleUpdater INSTANCE = new ModuleUpdater();
-
     public static ModuleUpdater getInstance() {
         return INSTANCE;
     }
@@ -59,13 +59,8 @@ public final class ModuleUpdater {
         }
     }
 
-    public boolean timeToCheck() {
-        // every startup
-        return true;
-    }
-
     public void checkAndHandleUpdates() {
-        // refresh update center first
+        // refresh update center
         refreshUpdateProvider();
 
         Collection<UpdateElement> updates = findUpdates();
@@ -73,8 +68,7 @@ public final class ModuleUpdater {
         Collection<UpdateElement> uninstalls = findUninstalls();
 
         if (updates.isEmpty() && available.isEmpty() && uninstalls.isEmpty()) {
-            // none for install
-//            LOGGER.info("None for update/install/uninstall");
+            LOGGER.info("None for update/install/uninstall");
             return;
         }
 
@@ -117,12 +111,6 @@ public final class ModuleUpdater {
         locallyInstalled = findLocalInstalled();
     }
 
-    private boolean isLicenseApproved(String license) {
-        // place your code there
-        return true;
-    }
-
-    // package private methods
     private void handleInstall(OperationContainer<InstallSupport> container) throws UpdateHandlerException {
         // check licenses
         if (!allLicensesApproved(container)) {
@@ -241,18 +229,13 @@ public final class ModuleUpdater {
     private void refreshUpdateProvider() {
         UpdateUnitProvider updateProvider = getUpdateProvider();
         if (updateProvider == null) {
-            // have a problem => cannot continue
             LOGGER.info("Missing Silent Update Provider => cannot continue.");
             return;
         }
 
         try {
             updateProvider.refresh(null, true);
-//            for (UpdateUnit updateUnit : updateProvider.getUpdateUnits()){
-//                if(updateUnit.)
-//            }
         } catch (IOException ex) {
-            // caught a exception
             LOGGER.log(Level.INFO, "A problem caught while refreshing Update Centers, cause: ", ex);
         }
     }
@@ -289,8 +272,8 @@ public final class ModuleUpdater {
                 }
                 cont.add(operationInfo.getRequiredElements());
                 if (!operationInfo.getBrokenDependencies().isEmpty()) {
-                    // have a problem => cannot continue
-                    LOGGER.log(Level.INFO, "There are broken dependencies => cannot continue, broken deps: {0}", operationInfo.getBrokenDependencies());
+                    LOGGER.log(Level.INFO, "There are broken dependencies => cannot continue, broken dependencies: {0}",
+                            operationInfo.getBrokenDependencies());
                     return null;
                 }
             }
@@ -320,8 +303,8 @@ public final class ModuleUpdater {
                 }
                 container.add(operationInfo.getRequiredElements());
                 if (!operationInfo.getBrokenDependencies().isEmpty()) {
-                    // have a problem => cannot continue
-                    LOGGER.log(Level.INFO, "There are broken dependencies => cannot continue, broken deps: {0}", operationInfo.getBrokenDependencies());
+                    LOGGER.log(Level.INFO, "There are broken dependencies => cannot continue, broken dependencies: {0}",
+                            operationInfo.getBrokenDependencies());
                     return null;
                 }
             }
@@ -330,41 +313,28 @@ public final class ModuleUpdater {
     }
 
     private boolean allLicensesApproved(OperationContainer<InstallSupport> container) {
-        if (!container.listInvalid().isEmpty()) {
-            return false;
-        }
-        for (OperationInfo<InstallSupport> info : container.listAll()) {
-            String license = info.getUpdateElement().getLicence();
-            if (!isLicenseApproved(license)) {
-                return false;
-            }
-        }
-        return true;
+        return container.listInvalid().isEmpty();
+
     }
 
     private Validator doDownload(InstallSupport support) throws OperationException {
-        return support.doDownload(null, true);
+        return support.doDownload(null, true, false);
     }
 
     private Installer doVerify(InstallSupport support, Validator validator) throws OperationException {
-
-        Installer installer = support.doValidate(validator, null); // validates all plugins are correctly downloaded
-        // XXX: use there methods to make sure updates are signed and trusted
-        // installSupport.isSigned(installer, <an update element>);
-        // installSupport.isTrusted(installer, <an update element>);
-        return installer;
+        return support.doValidate(validator, null);
     }
 
     private Restarter doInstall(InstallSupport support, Installer installer) throws OperationException {
         return support.doInstall(installer, null);
     }
 
-    public class UpdateHandlerException extends Exception {
-        public UpdateHandlerException(String msg) {
+    private class UpdateHandlerException extends Exception {
+        UpdateHandlerException(String msg) {
             super(msg);
         }
 
-        public UpdateHandlerException(String msg, Throwable th) {
+        UpdateHandlerException(String msg, Throwable th) {
             super(msg, th);
         }
     }

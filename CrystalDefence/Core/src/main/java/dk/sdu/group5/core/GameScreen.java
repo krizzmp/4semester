@@ -21,8 +21,6 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
 import java.util.*;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 class GameScreen implements Screen {
 
@@ -41,8 +39,8 @@ class GameScreen implements Screen {
     private Result<IGameProcess> processResult;
     private Result<ICollisionSolverService> collisionSolverResult;
 
-    private ReadWriteLock processLock = new ReentrantReadWriteLock();
-    private ReadWriteLock collisionSolverLock = new ReentrantReadWriteLock();
+    private final Object processLock = new Object();
+    private final Object collisionSolverLock = new Object();
 
     public GameScreen() {
         FileHandle fileHandle = Gdx.files.classpath("defaultTexture.png");
@@ -59,16 +57,16 @@ class GameScreen implements Screen {
         start();
     }
 
-    public void start() {
+    void start() {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
 
-        processLock.writeLock().lock();
-        processes = new ArrayList<>();
-        processLock.writeLock().unlock();
+        synchronized (processLock) {
+            processes = new ArrayList<>();
+        }
 
-        collisionSolverLock.writeLock().lock();
-        collisionSolvers = new ArrayList<>();
-        collisionSolverLock.writeLock().unlock();
+        synchronized (collisionSolverLock) {
+            collisionSolvers = new ArrayList<>();
+        }
 
         processResult = Lookup.getDefault().lookupResult(IGameProcess.class);
         processResult.addLookupListener(lookupListenerGameProcess);
@@ -76,18 +74,14 @@ class GameScreen implements Screen {
         collisionSolverResult = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
         collisionSolverResult.addLookupListener(lookupListenerCollisionSolver);
 
-        processLock.writeLock().lock();
-        processes.addAll(processResult.allInstances());
-        processLock.writeLock().unlock();
+        synchronized (processLock) {
+            processes.addAll(processResult.allInstances());
+            processes.forEach((process) -> process.start(world));
+        }
 
-        collisionSolverLock.writeLock().lock();
-        collisionSolvers.addAll(collisionSolverResult.allInstances());
-        collisionSolverLock.writeLock().unlock();
-
-        processLock.readLock().lock();
-        processResult.allInstances().forEach((process) ->
-                process.start(world));
-        processLock.readLock().unlock();
+        synchronized (collisionSolverLock) {
+            collisionSolvers.addAll(collisionSolverResult.allInstances());
+        }
     }
 
     @Override
@@ -112,22 +106,23 @@ class GameScreen implements Screen {
         public void resultChanged(LookupEvent le) {
             Collection<? extends ICollisionSolverService> updatedSolvers = collisionSolverResult.allInstances();
 
-            collisionSolverLock.writeLock().lock();
-            for (ICollisionSolverService solver : updatedSolvers) {
-                if (!collisionSolvers.contains(solver)) {
-                    collisionSolvers.add(solver);
+            synchronized (collisionSolverLock) {
+                for (ICollisionSolverService solver : updatedSolvers) {
+                    if (!collisionSolvers.contains(solver)) {
+                        collisionSolvers.add(solver);
+                    }
                 }
             }
 
-            Iterator<ICollisionSolverService> collisionSolverIterator = collisionSolvers.iterator();
-            while (collisionSolverIterator.hasNext()) {
-                ICollisionSolverService solver = collisionSolverIterator.next();
-                if (!updatedSolvers.contains(solver)) {
-                    collisionSolverIterator.remove();
+            synchronized (collisionSolverLock) {
+                Iterator<ICollisionSolverService> collisionSolverIterator = collisionSolvers.iterator();
+                while (collisionSolverIterator.hasNext()) {
+                    ICollisionSolverService solver = collisionSolverIterator.next();
+                    if (!updatedSolvers.contains(solver)) {
+                        collisionSolverIterator.remove();
+                    }
                 }
             }
-
-            collisionSolverLock.writeLock().unlock();
         }
     };
 
@@ -136,23 +131,25 @@ class GameScreen implements Screen {
         public void resultChanged(LookupEvent le) {
             Collection<? extends IGameProcess> updatedProcesses = processResult.allInstances();
 
-            processLock.writeLock().lock();
-            for (IGameProcess process : updatedProcesses) {
-                if (!processes.contains(process)) {
-                    processes.add(process);
-                    process.start(world);
+            synchronized (processLock) {
+                for (IGameProcess process : updatedProcesses) {
+                    if (!processes.contains(process)) {
+                        processes.add(process);
+                        process.start(world);
+                    }
                 }
             }
 
-            Iterator<IGameProcess> processIterator = processes.iterator();
-            while (processIterator.hasNext()) {
-                IGameProcess process = processIterator.next();
-                if (!updatedProcesses.contains(process)) {
-                    process.stop(world);
-                    processIterator.remove();
+            synchronized (processLock) {
+                Iterator<IGameProcess> processIterator = processes.iterator();
+                while (processIterator.hasNext()) {
+                    IGameProcess process = processIterator.next();
+                    if (!updatedProcesses.contains(process)) {
+                        process.stop(world);
+                        processIterator.remove();
+                    }
                 }
             }
-            processLock.writeLock().unlock();
         }
     };
 
@@ -168,14 +165,15 @@ class GameScreen implements Screen {
         // TODO: 29-04-2016 Get out of Common
         SpawnController.getInstance().update(world, delta);
 
-        //update entities
-        processLock.readLock().lock();
-        processes.forEach(p -> p.update(world, delta));
-        processLock.readLock().unlock();
+        //update processes
+        synchronized (processLock) {
+            processes.forEach(p -> p.update(world, delta));
+        }
 
-        collisionSolverLock.readLock().lock();
-        collisionSolvers.forEach(cs -> cs.update(world));
-        collisionSolverLock.readLock().unlock();
+        //update collision solvers
+        synchronized (collisionSolverLock) {
+            collisionSolvers.forEach(cs -> cs.update(world));
+        }
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -240,9 +238,9 @@ class GameScreen implements Screen {
     }
 
     public void stop() {
-        // Call stop on all components
-        processLock.readLock().lock();
-        processes.forEach(p -> p.stop(world));
-        processLock.readLock().unlock();
+        //Stops all processes
+        synchronized (processLock) {
+            processes.forEach(p -> p.stop(world));
+        }
     }
 }

@@ -11,19 +11,20 @@ import java.util.concurrent.TimeUnit;
  * https://github.com/cses-sdu-dk/SB4-KOM-F16/tree/master/AsteroidsNetbeansModules/SilentUpdate
  */
 class Installer extends ModuleInstall {
-    private final ScheduledExecutorService exector = Executors.newScheduledThreadPool(1);
-
-    private static final Runnable doCheck = () -> {
-        if (ModuleUpdater.getInstance().timeToCheck()) {
-            ModuleUpdater.getInstance().checkAndHandleUpdates();
-        }
-    };
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @Override
     public void restored() {
         super.restored();
 
-        exector.scheduleAtFixedRate(doCheck, 5000, 5000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(() -> ModuleUpdater.getInstance().checkAndHandleUpdates(),
+                5000, 5000, TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    public void uninstalled() {
+        super.uninstalled();
+
+        scheduledExecutorService.shutdown();
+    }
 }

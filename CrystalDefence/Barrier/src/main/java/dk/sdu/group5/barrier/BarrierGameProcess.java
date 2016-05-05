@@ -15,8 +15,6 @@ import org.openide.util.lookup.ServiceProvider;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
@@ -38,7 +36,7 @@ public class BarrierGameProcess implements IGameProcess {
     private Lookup.Result<ICollisionDetectorService> collisionDetectorResult;
     private ICollisionDetectorService collisionDetectorService;
 
-    private ReadWriteLock collisionDetectorLock = new ReentrantReadWriteLock();
+    private final Object collisionDetectorLock = new Object();
 
     @Override
     public void start(World world) {
@@ -51,9 +49,9 @@ public class BarrierGameProcess implements IGameProcess {
     private final LookupListener lookupListenerCollisionDetector = le -> updateDetectorService();
 
     private void updateDetectorService() {
-        collisionDetectorLock.writeLock().lock();
-        collisionDetectorService = findDetectorService();
-        collisionDetectorLock.writeLock().unlock();
+        synchronized (collisionDetectorLock) {
+            collisionDetectorService = findDetectorService();
+        }
     }
 
     private ICollisionDetectorService findDetectorService() {
@@ -135,16 +133,17 @@ public class BarrierGameProcess implements IGameProcess {
     }
 
     private boolean checkCollision(Entity barrier, List<Entity> entities) {
-        // Collision stuff
-        collisionDetectorLock.readLock().lock();
-        if (collisionDetectorService != null) {
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService == null) {
+                return true;
+            }
+
             for (Entity ent : entities) {
                 if (collisionDetectorService.collides(barrier, ent)) {
                     return false;
                 }
             }
         }
-        collisionDetectorLock.readLock().unlock();
 
         return true;
     }

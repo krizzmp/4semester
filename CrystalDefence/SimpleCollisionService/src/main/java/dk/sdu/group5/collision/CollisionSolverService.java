@@ -11,8 +11,6 @@ import org.openide.util.lookup.ServiceProvider;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 @ServiceProvider(service = ICollisionSolverService.class)
@@ -21,7 +19,7 @@ public class CollisionSolverService implements ICollisionSolverService {
     private Lookup.Result<ICollisionDetectorService> collisionDetectorResult;
     private ICollisionDetectorService collisionDetectorService;
 
-    private ReadWriteLock collisionDetectorLock = new ReentrantReadWriteLock();
+    private final Object collisionDetectorLock = new Object();
 
     public CollisionSolverService() {
         collisionDetectorResult = Lookup.getDefault().lookupResult(ICollisionDetectorService.class);
@@ -33,9 +31,9 @@ public class CollisionSolverService implements ICollisionSolverService {
     private final LookupListener lookupListenerCollisionDetector = le -> updateDetectorService();
 
     private void updateDetectorService() {
-        collisionDetectorLock.writeLock().lock();
-        collisionDetectorService = findDetectorService();
-        collisionDetectorLock.writeLock().unlock();
+        synchronized (collisionDetectorLock) {
+            collisionDetectorService = findDetectorService();
+        }
     }
 
     private ICollisionDetectorService findDetectorService() {
@@ -51,12 +49,11 @@ public class CollisionSolverService implements ICollisionSolverService {
     public void update(World world) {
         world.clearCollisions();
 
-        collisionDetectorLock.readLock().lock();
-        if (collisionDetectorService == null) {
-            collisionDetectorLock.readLock().unlock();
-            return;
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService == null) {
+                return;
+            }
         }
-        collisionDetectorLock.readLock().unlock();
 
         List<Entity> collidableEnts = world.getEntities().stream()
                 .filter(e -> e.getCollider() != null)
@@ -66,18 +63,18 @@ public class CollisionSolverService implements ICollisionSolverService {
                 .filter(e -> !e.getProperties().contains("static"))
                 .collect(Collectors.toList());
 
-        collisionDetectorLock.readLock().lock();
-        if (collisionDetectorService != null) {
-            dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
-                    && collisionDetectorService.collides(de, ce)).forEach(ce -> {
-                applyImpulse(de, ce);
-                world.addCollision(de, ce);
-                if (ce.is("static")) {
-                    world.addCollision(ce, de);
-                }
-            }));
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService != null) {
+                dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
+                        && collisionDetectorService.collides(de, ce)).forEach(ce -> {
+                    applyImpulse(de, ce);
+                    world.addCollision(de, ce);
+                    if (ce.is("static")) {
+                        world.addCollision(ce, de);
+                    }
+                }));
+            }
         }
-        collisionDetectorLock.readLock().unlock();
     }
 
     private void applyImpulse(Entity e1, Entity e2) {
