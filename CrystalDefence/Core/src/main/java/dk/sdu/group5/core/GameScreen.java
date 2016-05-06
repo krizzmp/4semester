@@ -34,7 +34,6 @@ import java.util.Optional;
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    private Collection<? extends ICollisionSolverService> collisionSolverService;
     private PauseScreen PS;
     private SpriteBatch batch;
     private BitmapFont font;
@@ -68,10 +67,6 @@ class GameScreen implements Screen {
         processes.forEach(p -> p.start(world));
         world.getEntities().forEach(System.out::println);
         result.addLookupListener(lookupListenerGameProccess);
-        Result<ICollisionSolverService> result2 = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
-        result2.allInstances().stream().findFirst();
-        collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
-        result2.addLookupListener(lookupListenerCollisionSolver);
     }
 
     /**
@@ -94,12 +89,6 @@ class GameScreen implements Screen {
         });
 
     }
-    private final LookupListener lookupListenerCollisionSolver = new LookupListener() {
-        @Override
-        public void resultChanged(LookupEvent le) {
-            collisionSolverService = Lookup.getDefault().lookupAll(ICollisionSolverService.class);
-        }
-    };
 
     private final LookupListener lookupListenerGameProccess = new LookupListener() {
         @Override
@@ -127,8 +116,6 @@ class GameScreen implements Screen {
 
         //update entities
         processes.forEach(p -> p.update(world, delta));
-
-        collisionSolverService.forEach(cs->cs.update(world));
 
         //render
         Gdx.gl.glClearColor(0, 0, 0, 1);

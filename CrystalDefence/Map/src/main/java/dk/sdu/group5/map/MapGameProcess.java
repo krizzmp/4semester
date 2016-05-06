@@ -16,10 +16,6 @@ public class MapGameProcess implements IGameProcess {
     private List<Entity> environment;
 
     @Override
-    public void install() {
-    }
-
-    @Override
     public void start(World world) {
         environment = new ArrayList<>();
 
@@ -74,11 +70,6 @@ public class MapGameProcess implements IGameProcess {
         environment.stream().forEach((entity) -> {
             world.removeEntity(entity);
         });
-    }
-
-    @Override
-    public void uninstall() {
-
     }
 
 }
