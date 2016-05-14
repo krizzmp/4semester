@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: dk/sdu/group5/loader/Installer.class
+OpenIDE-Module-Localizing-Bundle: dk/sdu/group5/loader/Bundle.properties
+OpenIDE-Module-Layer: dk/sdu/group5/loader/layer.xml
+

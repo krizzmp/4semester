@@ -6,22 +6,54 @@ import dk.sdu.group5.common.data.collision.ICollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.ICollisionSolverService;
 import org.openide.util.Lookup;
+import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ServiceProvider(service = ICollisionSolverService.class)
 public class CollisionSolverService implements ICollisionSolverService {
 
-    private ICollisionDetectorService collisionService;
+    private Lookup.Result<ICollisionDetectorService> collisionDetectorResult;
+    private ICollisionDetectorService collisionDetectorService;
+
+    private final Object collisionDetectorLock = new Object();
 
     public CollisionSolverService() {
-        this.collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
+        collisionDetectorResult = Lookup.getDefault().lookupResult(ICollisionDetectorService.class);
+        collisionDetectorResult.addLookupListener(lookupListenerCollisionDetector);
+
+        updateDetectorService();
+    }
+
+    private final LookupListener lookupListenerCollisionDetector = le -> updateDetectorService();
+
+    private void updateDetectorService() {
+        synchronized (collisionDetectorLock) {
+            collisionDetectorService = findDetectorService();
+        }
+    }
+
+    private ICollisionDetectorService findDetectorService() {
+        Optional<? extends ICollisionDetectorService> optionalDetector;
+        optionalDetector = collisionDetectorResult.allInstances().stream().findFirst();
+        if (optionalDetector.isPresent()) {
+            return optionalDetector.get();
+        }
+
+        return null;
     }
 
     public void update(World world) {
         world.clearCollisions();
+
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService == null) {
+                return;
+            }
+        }
 
         List<Entity> collidableEnts = world.getEntities().stream()
                 .filter(e -> e.getCollider() != null)
@@ -31,14 +63,18 @@ public class CollisionSolverService implements ICollisionSolverService {
                 .filter(e -> !e.getProperties().contains("static"))
                 .collect(Collectors.toList());
 
-        dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
-                && collisionService.collides(de, ce)).forEach(ce -> {
-            applyImpulse(de, ce);
-            world.addCollision(de, ce);
-            if (ce.is("static")) {
-                world.addCollision(ce, de);
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService != null) {
+                dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
+                        && collisionDetectorService.collides(de, ce)).forEach(ce -> {
+                    applyImpulse(de, ce);
+                    world.addCollision(de, ce);
+                    if (ce.is("static")) {
+                        world.addCollision(ce, de);
+                    }
+                }));
             }
-        }));
+        }
     }
 
     private void applyImpulse(Entity e1, Entity e2) {

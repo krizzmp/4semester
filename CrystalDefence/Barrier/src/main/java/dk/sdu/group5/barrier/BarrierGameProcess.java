@@ -9,6 +9,7 @@ import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
+import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.util.LinkedList;
@@ -31,11 +32,36 @@ public class BarrierGameProcess implements IGameProcess {
     private boolean placeable = false;
 
     private List<Entity> listBarriers = new LinkedList<>();
-    private ICollisionDetectorService collisionService;
+
+    private Lookup.Result<ICollisionDetectorService> collisionDetectorResult;
+    private ICollisionDetectorService collisionDetectorService;
+
+    private final Object collisionDetectorLock = new Object();
 
     @Override
     public void start(World world) {
-        collisionService = Lookup.getDefault().lookup(ICollisionDetectorService.class);
+        collisionDetectorResult = Lookup.getDefault().lookupResult(ICollisionDetectorService.class);
+        collisionDetectorResult.addLookupListener(lookupListenerCollisionDetector);
+
+        updateDetectorService();
+    }
+
+    private final LookupListener lookupListenerCollisionDetector = le -> updateDetectorService();
+
+    private void updateDetectorService() {
+        synchronized (collisionDetectorLock) {
+            collisionDetectorService = findDetectorService();
+        }
+    }
+
+    private ICollisionDetectorService findDetectorService() {
+        Optional<? extends ICollisionDetectorService> optionalDetector;
+        optionalDetector = collisionDetectorResult.allInstances().stream().findFirst();
+        if (optionalDetector.isPresent()) {
+            return optionalDetector.get();
+        }
+
+        return null;
     }
 
     @Override
@@ -107,10 +133,15 @@ public class BarrierGameProcess implements IGameProcess {
     }
 
     private boolean checkCollision(Entity barrier, List<Entity> entities) {
-        // Collision stuff
-        for (Entity ent : entities) {
-            if (collisionService.collides(barrier, ent)) {
-                return false;
+        synchronized (collisionDetectorLock) {
+            if (collisionDetectorService == null) {
+                return true;
+            }
+
+            for (Entity ent : entities) {
+                if (collisionDetectorService.collides(barrier, ent)) {
+                    return false;
+                }
             }
         }
 
