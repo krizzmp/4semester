@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
+/*
  * Based on the project:
  * https://github.com/cses-sdu-dk/SB4-KOM-F16/tree/master/AsteroidsNetbeansModules/SilentUpdate
  */
