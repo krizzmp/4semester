@@ -2,10 +2,12 @@ package dk.sdu.group5.common.data;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class World {
     private final Map<String, Entity> entities;
     private final Map<Entity, List<Entity>> collisions;
+    private final Collection<SpawnData> spawnData;
     private Difficulty difficulty;
     private WeaponType weaponType;
     private boolean gameover = false;
@@ -23,7 +25,11 @@ public class World {
     private World() {
         entities = new ConcurrentHashMap<>();
         collisions = new HashMap<>();
-        weaponType = WeaponType.PISTOL;
+        spawnData = new ConcurrentLinkedQueue<>();
+    }
+
+    public Collection<SpawnData> getSpawnData() {
+        return spawnData;
     }
 
     public GameKeys getGameKeys() {

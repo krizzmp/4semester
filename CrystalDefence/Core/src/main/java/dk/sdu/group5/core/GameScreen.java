@@ -192,10 +192,6 @@ class GameScreen implements Screen {
     }
 
     private void updateServices(float delta) {
-        //spawn enemies
-        // TODO: 29-04-2016 Get out of Common
-        SpawnController.getInstance().update(world, delta);
-
         //update processes
         synchronized (processLock) {
             processes.forEach(p -> p.update(world, delta));

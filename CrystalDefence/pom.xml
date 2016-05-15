@@ -97,6 +97,7 @@
         <module>SimpleCollisionService</module>
         <module>ModuleUpdater</module>
         <module>Map</module>
+        <module>Spawner</module>
     </modules>
 
     <properties>

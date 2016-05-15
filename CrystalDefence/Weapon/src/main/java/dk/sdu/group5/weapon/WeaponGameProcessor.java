@@ -1,9 +1,6 @@
 package dk.sdu.group5.weapon;
 
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.KeyState;
-import dk.sdu.group5.common.data.Posf2d;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -14,6 +11,7 @@ public class WeaponGameProcessor implements IGameProcess {
 
     @Override
     public void start(World world) {
+        world.setWeaponType(WeaponType.PISTOL);
         bulletController = new BulletController();
     }
 

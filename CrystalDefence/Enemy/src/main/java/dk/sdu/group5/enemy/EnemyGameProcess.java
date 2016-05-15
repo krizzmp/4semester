@@ -1,8 +1,11 @@
 package dk.sdu.group5.enemy;
 
+import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.SpawnController;
+import dk.sdu.group5.common.data.SpawnData;
 import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -10,14 +13,15 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IGameProcess.class)
 public class EnemyGameProcess implements IGameProcess {
 
-    private EnemySpawner enemySpawner;
-//    private List<Entity> listOfDeadEnemies;
+    private SpawnData spawnData;
 
     @Override
     public void start(World world) {
-        enemySpawner = new EnemySpawner();
-        SpawnController.getInstance().register(enemySpawner);
-//        listOfDeadEnemies = new ArrayList<>();
+        spawnData = new SpawnData();
+        spawnData.setPrototypeEntity(createPrototypeEntity());
+        spawnData.setDifficulty(100);
+
+        world.getSpawnData().add(spawnData);
     }
 
     @Override
@@ -30,14 +34,24 @@ public class EnemyGameProcess implements IGameProcess {
         // Remove enemy if enemy has no more hp
         world.getEntities().stream().filter(e -> e.getType() == EntityType.ENEMY)
                 .filter(e -> e.getHealth() <= 0).forEach(e -> world.removeEntity(e));
-//
-//        listOfDeadEnemies.stream().forEach(e -> world.removeEntity(e));
-//        listOfDeadEnemies.clear();
     }
 
     @Override
     public void stop(World world) {
-        SpawnController.getInstance().unRegister(enemySpawner);
+        world.getSpawnData().remove(spawnData);
+    }
+
+    private Entity createPrototypeEntity() {
+        Entity entity = new Entity();
+        entity.setType(EntityType.ENEMY);
+        entity.setHealth(3);
+        entity.setSpeed(40);
+        entity.setTexturePath("enemyTextureb.png");
+        entity.setCollider(new SquareCollider(false, new AABB(-14, -15, 26, 30)));
+        entity.addProperty("collidable");
+        entity.addProperty("tangible");
+        entity.addProperty("damageable");
+        return entity;
     }
 
 }
