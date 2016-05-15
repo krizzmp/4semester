@@ -9,10 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dk.sdu.group5.common.data.Difficulty;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.SpawnController;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.ICollisionSolverService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
@@ -25,16 +22,15 @@ import java.util.*;
 class GameScreen implements Screen {
 
     public boolean gameOver = false;
-    private PauseScreen PS;
+    private PauseScreen pauseScreen;
     private SpriteBatch batch;
     private BitmapFont font;
     private World world;
     private List<IGameProcess> processes;
     private List<ICollisionSolverService> collisionSolvers;
-    private Texture texture2 = new Texture(Gdx.files.classpath("mapTexture.png"));
 
     private final Texture defaultTexture;
-    private final Map<String, Texture> cachedTextures;
+    private Map<String, Texture> cachedTextures;
 
     private Result<IGameProcess> processResult;
     private Result<ICollisionSolverService> collisionSolverResult;
@@ -47,18 +43,21 @@ class GameScreen implements Screen {
         if (!fileHandle.exists()) {
             System.err.println("Default texture not found!");
         }
-        defaultTexture = new Texture(fileHandle);
 
+        defaultTexture = new Texture(fileHandle);
+        pauseScreen = new PauseScreen(this);
         cachedTextures = new HashMap<>();
 
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.CYAN);
-        start();
-    }
 
-    void start() {
         world = new World(new Difficulty(500, 3)); // spawn every 3 seconds
+        world.setDisplayResolutionWidth(Gdx.graphics.getWidth());
+        world.setDisplayResolutionHeight(Gdx.graphics.getHeight());
+
+        world.setGameKeys(new GameKeys());
+        world.setOldGameKeys(new GameKeys());
 
         synchronized (processLock) {
             processes = new ArrayList<>();
@@ -86,16 +85,21 @@ class GameScreen implements Screen {
 
     @Override
     public void show() {
+        if (world != null) {
+            world.getGameKeys().resetKeys();
+            world.getOldGameKeys().resetKeys();
+        }
+                
         Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
             public boolean keyDown(int k) {
-                GameKeys.getInstance().setKeyState(k, true);
+                world.getGameKeys().setKeyState(k, KeyState.PRESSED);
                 return true;
             }
 
             @Override
             public boolean keyUp(int k) {
-                //Searches the list of all used keys, and returns true if that key is in that list
-                GameKeys.getInstance().setKeyState(k, false);
+                world.getGameKeys().setKeyState(k, KeyState.RELEASED);
                 return true;
             }
         });
@@ -156,11 +160,38 @@ class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        if (GameKeys.getInstance().pause_backspace.getKeyState() || GameKeys.getInstance().pause_escape.getKeyState()) {
-
-            Game.getInstance().setScreen(PS = new PauseScreen(this));
+        if (world.isGameover()) {
+            Game.getInstance().setScreen(new GameoverScreen());
+            dispose();
         }
 
+        updateInput();
+        updateServices(delta);
+        draw(delta);
+    }
+
+    private void updateInput() {
+
+        for (Key key : world.getGameKeys().getKeys()) {
+            if (world.getOldGameKeys().getKeyState(key.getKeyCode()) == KeyState.PRESSED) {
+                key.setState(KeyState.HELD);
+            }
+
+            if (world.getOldGameKeys().getKeyState(key.getKeyCode()) == KeyState.RELEASED) {
+                key.setState(KeyState.NONE);
+            }
+
+            world.getOldGameKeys().setKeyState(key.getKeyCode(), key.getState());
+        }
+
+        if (world.getGameKeys().getPauseBackspace().getState() == KeyState.RELEASED
+                || world.getGameKeys().getPauseEscape().getState() == KeyState.RELEASED) {
+
+            Game.getInstance().setScreen(pauseScreen);
+        }
+    }
+
+    private void updateServices(float delta) {
         //spawn enemies
         // TODO: 29-04-2016 Get out of Common
         SpawnController.getInstance().update(world, delta);
@@ -174,8 +205,9 @@ class GameScreen implements Screen {
         synchronized (collisionSolverLock) {
             collisionSolvers.forEach(cs -> cs.update(world));
         }
+    }
 
-        //render
+    private void draw(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
@@ -190,12 +222,24 @@ class GameScreen implements Screen {
 //                font.draw(batch, e.toString(), e.getX() - texture.getWidth() / 2f, e.getY() - texture.getHeight() / 2f);
             }
         });
-        font.draw(batch, "" + (1 / delta), 0, font.getLineHeight());
+
+        font.draw(batch, "" + Gdx.graphics.getFramesPerSecond(),
+                world.getDisplayResolutionWidth() - 20f,
+                world.getDisplayResolutionHeight() - font.getLineHeight());
+
+        world.getEntities().stream().filter(e -> e.getType() == EntityType.PLAYER)
+                .findFirst().ifPresent(player -> {
+            font.draw(batch, "Player Health: " + player.getHealth(),
+                    0, world.getDisplayResolutionHeight() - font.getLineHeight());
+        });
+
+        world.getEntities().stream().filter(e -> e.getType() == EntityType.TOWER)
+                .findFirst().ifPresent(tower -> {
+            font.draw(batch, "Tower Health: " + tower.getHealth(),
+                    0, world.getDisplayResolutionHeight() - font.getLineHeight() * 2f);
+        });
+        
         batch.end();
-        if(world.isGameover()){
-            Game.getInstance().setScreen(new GameoverScreen());
-            dispose();
-        }
     }
 
     private Texture getTexture(String texturePath) {
@@ -235,10 +279,6 @@ class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
-    }
-
-    public void stop() {
         //Stops all processes
         synchronized (processLock) {
             processes.forEach(p -> p.stop(world));

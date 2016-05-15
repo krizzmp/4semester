@@ -6,10 +6,11 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @ServiceProvider(service = IGameProcess.class)
 public class AStarAIGameProcess implements IGameProcess {
@@ -23,31 +24,60 @@ public class AStarAIGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        List<Entity> entities = world.getEntities();
+        Collection<Entity> entities = world.getEntities();
         Optional<Entity> tower = getFirstTower(entities);
         Optional<Entity> player = getFirstPlayer(entities);
-        player.ifPresent(p -> tower.ifPresent(t -> forEachEnemy(entities, e -> {
-            // TODO: 12/04/16 Perhaps change barriers to avoidables
-            List<Entity> barriers = entities.stream().filter(x -> x != e && isBarrier(x)).collect(Collectors.toList());
-            Vec enemyPos = getEntityPosition(e);
 
-            Entity target = tower.get();
-            if (enemyPos.minus(getEntityPosition(player.get())).length() <= MIN_PLAYER_DISTANCE) {
+        if (!player.isPresent() && !tower.isPresent()) {
+            return;
+        }
+
+        forEachEnemy(entities, e -> {
+            Entity target = null;
+            if (tower.isPresent()) {
+                target = tower.get();
+            }
+            
+            Vec enemyPos = getEntityPosition(e);
+            if (player.isPresent()
+                    && (!tower.isPresent()
+                    || enemyPos.minus(getEntityPosition(player.get())).length()
+                    <= MIN_PLAYER_DISTANCE)) {
                 target = player.get();
             }
 
-            Vec direction = PathFinder.getDirection(e, barriers, target);
+            if (target == null) {
+                return;
+            }
+
+            List<Entity> avoidables = new ArrayList<>();
+            for (Entity x : entities) {
+                if (x != e && isAvoidable(target, x)) {
+                    avoidables.add(x);
+                }
+            }
+
+            Vec direction = PathFinder.getDirection(e, avoidables, target);
             Vec entityVel = direction.unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
             Vec newPoint = enemyPos.plus(entityVel);
             e.setX((float) newPoint.getX());
             e.setY((float) newPoint.getY());
-        })));
+        });
     }
 
-    // TODO: 12/04/16 Perhaps change name to shouldAvoid?
-    // TODO: 12/04/16 Should bullets be considered a barrier?
-    private Boolean isBarrier(Entity entity) {
-        return entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.BULLET && entity.getType() != EntityType.ENEMY;
+    private Boolean isAvoidable(Entity sourceEntity, Entity targetEntity) {
+        if (targetEntity.getType() == EntityType.PLAYER) {
+            return sourceEntity.getType() != EntityType.PLAYER
+                    && sourceEntity.getType() != EntityType.BULLET
+                    && sourceEntity.getType() != EntityType.ENEMY;
+        } else if (targetEntity.getType() == EntityType.TOWER) {
+            return sourceEntity.getType() != EntityType.TOWER
+                    && sourceEntity.getType() != EntityType.PLAYER
+                    && sourceEntity.getType() != EntityType.BULLET
+                    && sourceEntity.getType() != EntityType.ENEMY;
+        }
+
+        return false;
     }
 
     private Vec getEntityPosition(Entity entity) {
@@ -55,15 +85,15 @@ public class AStarAIGameProcess implements IGameProcess {
     }
 
 
-    private Optional<Entity> getFirstTower(List<Entity> entities) {
+    private Optional<Entity> getFirstTower(Collection<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.TOWER).findFirst();
     }
 
-    private Optional<Entity> getFirstPlayer(List<Entity> entities) {
+    private Optional<Entity> getFirstPlayer(Collection<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
 
-    private void forEachEnemy(List<Entity> entities, Consumer<Entity> entityConsumer) {
+    private void forEachEnemy(Collection<Entity> entities, Consumer<Entity> entityConsumer) {
         entities.stream().filter(e -> e.getType() == EntityType.ENEMY).forEach(entityConsumer);
     }
 

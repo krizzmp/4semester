@@ -24,6 +24,7 @@ public class Entity {
         properties = new HashSet<>();
     }
 
+    // TODO 15-05-16: Why constructor parameters?
     public Entity(EntityType entityType, float speed, float x, float y, String texturePath, int health, float width, float height) {
         this();
         setType(entityType);
@@ -33,6 +34,10 @@ public class Entity {
         setTexturePath(texturePath);
         setHealth(health);
         setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width, height)));
+    }
+
+    public String getID() {
+        return ID.toString();
     }
 
     public float getSpeed() {

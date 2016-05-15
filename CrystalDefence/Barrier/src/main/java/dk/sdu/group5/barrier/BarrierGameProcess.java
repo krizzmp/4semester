@@ -1,9 +1,6 @@
 package dk.sdu.group5.barrier;
 
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
@@ -12,6 +9,7 @@ import org.openide.util.Lookup;
 import org.openide.util.LookupListener;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -19,17 +17,11 @@ import java.util.Optional;
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
 
-    private int maxBarriers = 10; //TODO: Set a proper number of max barriers
+    private int maxBarriers = 5;
     private float offsetX = 8f;
     private float offsetY = 8f;
     private float posX;
     private float posY;
-    private final int BARRIER_HEIGHT = 48;
-    private final int BARRIER_WIDTH = 48;
-
-    private Entity barrier;
-
-    private boolean placeable = false;
 
     private List<Entity> listBarriers = new LinkedList<>();
 
@@ -66,31 +58,27 @@ public class BarrierGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        GameKeys gameKeys = GameKeys.getInstance();
-        if (gameKeys.player_place_barrier.getKeyState()) {
-            //TODO: 19/03/16 Check player direction and add barrier in front of player. - Martin F.
+        GameKeys gameKeys = world.getGameKeys();
+        if (gameKeys.getPlayerPlaceBarrier().getState() == KeyState.PRESSED) {
             //TODO: 31/03/16 Implement getWidth and getHeight from entities. - Martin F.
             //TODO: 31/03/16 Replace key detection with look direction. - Martin F.
-            //TODO: 31/03/16 Implement via tilesystem (Map component). - Martin F.
             Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
 
             // default is the right direction
-            // TODO: 11/04/16 Player width can be found through the entity's collider
-            posX = player.getX() + offsetX + 48; // 32 is player width.
+            posX = player.getX() + offsetX + player.getBounds().getWidth();
             posY = player.getY();
 
-            if (gameKeys.player_movement_up.getKeyState()) {
+            if (gameKeys.getPlayerMovementUp().getState() == KeyState.HELD) {
                 // Place up
                 posX = player.getX();
-                // TODO: 11/04/16 Player height can be found through the entity's collider
-                posY = player.getY() + offsetY + 48; // 32 is player height.
-            } else if (gameKeys.player_movement_down.getKeyState()) {
+                posY = player.getY() + offsetY + player.getBounds().getHeight();
+            } else if (gameKeys.getPlayerMovementDown().getState() == KeyState.HELD) {
                 // Place down
                 posX = player.getX();
-                posY = player.getY() - offsetY - BARRIER_HEIGHT; // 32 is barrier height.
-            } else if (gameKeys.player_movement_left.getKeyState()) {
+                posY = player.getY() - offsetY - player.getBounds().getHeight();
+            } else if (gameKeys.getPlayerMovementLeft().getState() == KeyState.HELD) {
                 // Place left
-                posX = player.getX() - offsetX - BARRIER_WIDTH; // 32 is barrier width.
+                posX = player.getX() - offsetX - player.getBounds().getWidth();
                 posY = player.getY();
             }
             if (posX % 48 != 0) {
@@ -132,7 +120,7 @@ public class BarrierGameProcess implements IGameProcess {
 
     }
 
-    private boolean checkCollision(Entity barrier, List<Entity> entities) {
+    private boolean checkCollision(Entity barrier, Collection<Entity> entities) {
         synchronized (collisionDetectorLock) {
             if (collisionDetectorService == null) {
                 return true;
@@ -148,7 +136,7 @@ public class BarrierGameProcess implements IGameProcess {
         return true;
     }
 
-    private Optional<Entity> getPlayer(List<Entity> entities) {
+    private Optional<Entity> getPlayer(Collection<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
 

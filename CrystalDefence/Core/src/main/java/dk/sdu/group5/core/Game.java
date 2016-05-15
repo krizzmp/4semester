@@ -1,26 +1,21 @@
 package dk.sdu.group5.core;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.openal.AL;
 
 class Game extends com.badlogic.gdx.Game {
 
-    private GameScreen gameScreen;
     private StartScreen startScreen;
-    private Stage stage;
     private static Game game;
-    public static Game getInstance(){
-        if (game == null){
+
+    private Game() {
+
+    }
+
+    public static Game getInstance() {
+        if (game == null) {
             game = new Game();
         }
         return game;
-    }
-    private Game(){
-
     }
 
     @Override
@@ -28,8 +23,7 @@ class Game extends com.badlogic.gdx.Game {
         //something like this:
         startScreen = new StartScreen(() -> {
             //Gdx.app.exit();
-            gameScreen = new GameScreen();
-            gameScreen.start();
+            GameScreen gameScreen = new GameScreen();
             setScreen(gameScreen);
         });
         setScreen(startScreen);
@@ -42,8 +36,10 @@ class Game extends com.badlogic.gdx.Game {
     @Override
     public void dispose() {
         super.dispose();
-        startScreen.dispose();
-        gameScreen.dispose();
+
+        if (startScreen != null) {
+            startScreen.dispose();
+        }
     }
 
 }

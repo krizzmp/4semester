@@ -1,9 +1,6 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -13,7 +10,9 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02.png", 100, 48, 48);
+        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02b.png", 100, 32, 48);
+        player.setX(world.getDisplayResolutionWidth() / 2f - 100f);
+        player.setY(world.getDisplayResolutionHeight() / 2f);
         player.addProperty("collidable");
         player.addProperty("tangible");
         player.addProperty("damageable");
@@ -23,22 +22,26 @@ public class PlayerGameProcess implements IGameProcess {
     @Override
     public void update(World world, float delta) {
         //Player Movement
-        GameKeys gameKeys = GameKeys.getInstance();
+        GameKeys gameKeys = world.getGameKeys();
         float playerSpeed = player.getSpeed();
-        if (gameKeys.player_movement_up.getKeyState()) {
+        if (gameKeys.getPlayerMovementUp().getState() == KeyState.PRESSED
+                || gameKeys.getPlayerMovementUp().getState() == KeyState.HELD) {
             player.setY(player.getY() + playerSpeed * delta);
         }
-        if (gameKeys.player_movement_down.getKeyState()) {
+        if (gameKeys.getPlayerMovementDown().getState() == KeyState.PRESSED
+                || gameKeys.getPlayerMovementDown().getState() == KeyState.HELD) {
             player.setY(player.getY() - playerSpeed * delta);
         }
-        if (gameKeys.player_movement_left.getKeyState()) {
+        if (gameKeys.getPlayerMovementLeft().getState() == KeyState.PRESSED
+                || gameKeys.getPlayerMovementLeft().getState() == KeyState.HELD) {
             player.setX(player.getX() - playerSpeed * delta);
         }
-        if (gameKeys.player_movement_right.getKeyState()) {
+        if (gameKeys.getPlayerMovementRight().getState() == KeyState.PRESSED
+                || gameKeys.getPlayerMovementRight().getState() == KeyState.HELD) {
             player.setX(player.getX() + playerSpeed * delta);
         }
 
-        if(player.getHealth() < 0){
+        if (player.getHealth() < 0) {
             world.setGameover(true);
         }
     }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import dk.sdu.group5.common.data.GameKeys;
 /**
  * Created by Hivemaster on 08-04-2016.
  */
@@ -22,13 +20,9 @@ public class GameoverScreen implements Screen {
     private Skin skin;
     private Stage stage;
     private Table table;
-    private float delta;
-
-
 
     @Override
     public void show() {
-        GameKeys.getInstance().resetKeys();
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
@@ -83,7 +77,6 @@ public class GameoverScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        this.delta = delta;
         //painting the screen white
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

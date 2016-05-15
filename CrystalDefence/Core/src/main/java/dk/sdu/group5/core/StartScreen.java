@@ -40,6 +40,7 @@ class StartScreen implements Screen {
         style = new TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
     }
 
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);

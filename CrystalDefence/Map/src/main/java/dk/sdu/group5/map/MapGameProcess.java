@@ -21,16 +21,14 @@ public class MapGameProcess implements IGameProcess {
 
         world.setBackgroundTexturePath("mapTexture.png");
 
-        environment.add(createEnvironmentEntity(448, 197));
+        environment.add(createEnvironmentEntity(500, 197));
         environment.add(createEnvironmentEntity(216, 19));
         environment.add(createEnvironmentEntity(288, 222));
         environment.add(createEnvironmentEntity(337, 336));
-        // TODO: 26/04/16 Get actual width and height.
-        environment.add(createTowerEntity(350, 280));
+        environment.add(createTowerEntity(world.getDisplayResolutionWidth() / 2f,
+                world.getDisplayResolutionHeight() / 2f));
 
-        for (Entity environment1 : environment) {
-            world.addEntity(environment1);
-        }
+        environment.forEach(e -> world.addEntity(e));
     }
 
     private Entity createEnvironmentEntity(float x, float y) {
@@ -50,8 +48,8 @@ public class MapGameProcess implements IGameProcess {
         Entity entity = new Entity();
         entity.setType(EntityType.TOWER);
         entity.setHealth(50);
-        entity.setTexturePath("towerTexture.png");
-        entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
+        entity.setTexturePath("towerTextureb.png");
+        entity.setCollider(new SquareCollider(false, new AABB(-32, -35.5f, 64, 71)));
         entity.addProperty("tangible");
         entity.addProperty("collidable");
         entity.addProperty("static");

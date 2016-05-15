@@ -3,27 +3,22 @@ package dk.sdu.group5.common.data;
 
 
 public class Key {
-    private int key;
-    private boolean state;
-    
-    public Key(int keycode, boolean state){
-        key = keycode;
-        this.state = state;
+    private int keyCode;
+    private KeyState state;
+
+    public Key(int keycode) {
+        keyCode = keycode;
     }
-    
-    public int getKey() {
-        return key;
+
+    public int getKeyCode() {
+        return keyCode;
     }
-    
-    public boolean getKeyState() {
+
+    public KeyState getState() {
         return state;
     }
-    
-    public void setKey(int keycode) {       // Should probably also check the key is a viable ligGDX keycode 
-        key = keycode;
-    }
-    
-    public void setState(boolean state) {
+
+    public void setState(KeyState state) {
         this.state = state;
     }
 }

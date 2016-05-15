@@ -1,17 +1,62 @@
 package dk.sdu.group5.common.data;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World {
-    private final List<Entity> entities;
+    private final Map<String, Entity> entities;
     private final Map<Entity, List<Entity>> collisions;
     private Difficulty difficulty;
     private WeaponType weaponType;
     private boolean gameover = false;
     private String backgroundTexturePath;
+    private int displayResolutionWidth;
+    private int displayResolutionHeight;
+    private GameKeys gameKeys;
+    private GameKeys oldGameKeys;
+
+    public World(Difficulty difficulty) {
+        this();
+        this.difficulty = difficulty;
+    }
+
+    private World() {
+        entities = new ConcurrentHashMap<>();
+        collisions = new HashMap<>();
+        weaponType = WeaponType.PISTOL;
+    }
+
+    public GameKeys getGameKeys() {
+        return gameKeys;
+    }
+
+    public void setGameKeys(GameKeys gameKeys) {
+        this.gameKeys = gameKeys;
+    }
+
+    public GameKeys getOldGameKeys() {
+        return oldGameKeys;
+    }
+
+    public void setOldGameKeys(GameKeys oldGameKeys) {
+        this.oldGameKeys = oldGameKeys;
+    }
+
+    public int getDisplayResolutionWidth() {
+        return displayResolutionWidth;
+    }
+
+    public void setDisplayResolutionWidth(int displayResolutionWidth) {
+        this.displayResolutionWidth = displayResolutionWidth;
+    }
+
+    public int getDisplayResolutionHeight() {
+        return displayResolutionHeight;
+    }
+
+    public void setDisplayResolutionHeight(int displayResolutionHeight) {
+        this.displayResolutionHeight = displayResolutionHeight;
+    }
 
     public boolean isGameover() {
         return gameover;
@@ -22,27 +67,16 @@ public class World {
     }
 
 
-    private World() {
-        entities = new LinkedList<>();
-        collisions = new HashMap<>();
-        weaponType = WeaponType.PISTOL;
-    }
-
-    public World(Difficulty difficulty) {
-        this();
-        this.difficulty = difficulty;
-    }
-
     public void addEntity(Entity entity) {
-        entities.add(entity);
+        entities.put(entity.getID(), entity);
     }
 
     public void removeEntity(Entity entity) {
-        entities.remove(entity);
+        entities.remove(entity.getID());
     }
 
-    public List<Entity> getEntities() {
-        return entities;
+    public Collection<Entity> getEntities() {
+        return entities.values();
     }
 
     public void addCollision(Entity srcEntity, Entity targetEntity) {
@@ -65,12 +99,12 @@ public class World {
         return difficulty;
     }
 
-    public void setWeaponType(WeaponType type) {
-        weaponType = type;
-    }
-
     public WeaponType getWeaponType() {
         return weaponType;
+    }
+
+    public void setWeaponType(WeaponType type) {
+        weaponType = type;
     }
 
     public String getBackgroundTexturePath() {

@@ -28,7 +28,7 @@ public class SpawnController {
                 Entity entity = s.spawn();
                 setEntityPos(getPosOnEdge(800, 400), entity);
                 world.getDifficulty().currentDifficulty += s.getDifficulty();
-                world.getEntities().add(entity);
+                world.addEntity(entity);
             });
             reset();
         });

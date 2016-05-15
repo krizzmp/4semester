@@ -1,25 +1,25 @@
 package dk.sdu.group5.weapon;
 
+import dk.sdu.group5.common.data.Posf2d;
 import dk.sdu.group5.common.data.WeaponType;
 import dk.sdu.group5.common.data.World;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BulletController {
-
-    private float bulletRemoveTime = 5.0f;
+class BulletController {
+    private final List<Bullet> weaponMagazine;
     private float shootInterval = 1.0f;
     private boolean isLocked = false;
     private long startLockTime;
     private int weaponMagazineSize = 0;
-    private final List<Bullet> weaponMagazine;
 
-    public BulletController() {
+    BulletController() {
         weaponMagazine = new LinkedList<>();
     }
 
-    public void update(World world, float delta) {
+    void update(World world, float delta) {
         long currentLockTime = System.currentTimeMillis();
         setShootInterval(world.getWeaponType());
         if (currentLockTime - startLockTime >= shootInterval * 1000) {
@@ -27,23 +27,6 @@ public class BulletController {
         }
 
         updateBullets(world, delta);
-    }
-
-    public void shootBullet(World world, String direction) {
-        boolean magazineNotFull = false;
-
-        if (weaponMagazineSize == 0) {
-            magazineNotFull = true;
-        } else if (weaponMagazine.size() < weaponMagazineSize) {
-            magazineNotFull = true;
-        }
-
-        if (!isLocked && magazineNotFull) {
-            Bullet bullet = new Bullet(world, direction);
-            weaponMagazine.add(bullet);
-            startLockTime = System.currentTimeMillis();
-            isLocked = true;
-        }
     }
 
     private void setShootInterval(WeaponType type) {
@@ -71,5 +54,21 @@ public class BulletController {
                 it.remove();
             }
         }
+    }
+
+    // TODO 15-05-16: Remove direction or direction2
+    void shootBullet(World world, String direction, Posf2d direction2) {
+        if (!isLocked && (weaponMagazine.size() < weaponMagazineSize ||
+                weaponMagazineSize == 0)) {
+            Bullet bullet = new Bullet(world, direction, direction2);
+            weaponMagazine.add(bullet);
+            startLockTime = System.currentTimeMillis();
+            isLocked = true;
+        }
+    }
+
+    void clearBullets(World world) {
+        weaponMagazine.forEach(b -> b.removeBullet(world));
+        weaponMagazine.clear();
     }
 }

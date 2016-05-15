@@ -56,7 +56,7 @@ public class CollisionSolverService implements ICollisionSolverService {
         }
 
         List<Entity> collidableEnts = world.getEntities().stream()
-                .filter(e -> e.getCollider() != null)
+                .filter(e -> e.getCollider() != null && e.is("collidable"))
                 .collect(Collectors.toList());
 
         List<Entity> dynamicEnts = collidableEnts.stream()
