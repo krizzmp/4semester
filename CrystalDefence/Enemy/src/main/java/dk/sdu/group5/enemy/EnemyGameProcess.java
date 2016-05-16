@@ -38,6 +38,8 @@ public class EnemyGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
+        spawnData.getSpawnedEntities().forEach(entity -> world.getEntities().remove(entity));
+
         world.getSpawnData().remove(spawnData);
     }
 

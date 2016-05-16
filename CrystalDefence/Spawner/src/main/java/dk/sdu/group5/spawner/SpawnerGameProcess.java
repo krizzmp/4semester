@@ -1,11 +1,9 @@
 package dk.sdu.group5.spawner;
 
-import dk.sdu.group5.common.data.Difficulty;
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.Posf2d;
-import dk.sdu.group5.common.data.SpawnData;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
+import org.openide.util.lookup.ServiceProvider;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +11,6 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class SpawnerGameProcess implements IGameProcess
@@ -38,6 +35,7 @@ public class SpawnerGameProcess implements IGameProcess
                 Difficulty difficulty = world.getDifficulty();
                 difficulty.setCurrentDifficulty(difficulty.getCurrentDifficulty() 
                         + spawnData.getDifficulty());
+                spawnData.getSpawnedEntities().add(entity);
                 world.addEntity(entity);
             });
             reset();
