@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.ICollisionSolverService;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.Lookup;
@@ -18,6 +19,7 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 class GameScreen implements Screen {
 
@@ -27,15 +29,18 @@ class GameScreen implements Screen {
     private BitmapFont font;
     private World world;
     private List<IGameProcess> processes;
-    private List<ICollisionSolverService> collisionSolvers;
+    private ICollisionSolverService collisionSolver;
+    private ICollisionDetectorService collisionDetector;
 
     private final Texture defaultTexture;
     private Map<String, Texture> cachedTextures;
 
     private Result<IGameProcess> processResult;
     private Result<ICollisionSolverService> collisionSolverResult;
+    private Result<ICollisionDetectorService> collisionDetectorResult;
 
     private final Object processLock = new Object();
+    private final Object collisionDetectorLock = new Object();
     private final Object collisionSolverLock = new Object();
 
     public GameScreen() {
@@ -63,24 +68,22 @@ class GameScreen implements Screen {
             processes = new ArrayList<>();
         }
 
-        synchronized (collisionSolverLock) {
-            collisionSolvers = new ArrayList<>();
-        }
-
         processResult = Lookup.getDefault().lookupResult(IGameProcess.class);
         processResult.addLookupListener(lookupListenerGameProcess);
 
         collisionSolverResult = Lookup.getDefault().lookupResult(ICollisionSolverService.class);
         collisionSolverResult.addLookupListener(lookupListenerCollisionSolver);
 
+        collisionDetectorResult = Lookup.getDefault().lookupResult(ICollisionDetectorService.class);
+        collisionDetectorResult.addLookupListener(lookupListenerCollisionDetector);
+
         synchronized (processLock) {
             processes.addAll(processResult.allInstances());
             processes.forEach((process) -> process.start(world));
         }
 
-        synchronized (collisionSolverLock) {
-            collisionSolvers.addAll(collisionSolverResult.allInstances());
-        }
+        updateDetector();
+        updateSolver();
     }
 
     @Override
@@ -105,29 +108,13 @@ class GameScreen implements Screen {
         });
 
     }
-    private final LookupListener lookupListenerCollisionSolver = new LookupListener() {
-        @Override
-        public void resultChanged(LookupEvent le) {
-            Collection<? extends ICollisionSolverService> updatedSolvers = collisionSolverResult.allInstances();
 
-            synchronized (collisionSolverLock) {
-                for (ICollisionSolverService solver : updatedSolvers) {
-                    if (!collisionSolvers.contains(solver)) {
-                        collisionSolvers.add(solver);
-                    }
-                }
-            }
+    private final LookupListener lookupListenerCollisionSolver = le -> {
+        updateSolver();
+    };
 
-            synchronized (collisionSolverLock) {
-                Iterator<ICollisionSolverService> collisionSolverIterator = collisionSolvers.iterator();
-                while (collisionSolverIterator.hasNext()) {
-                    ICollisionSolverService solver = collisionSolverIterator.next();
-                    if (!updatedSolvers.contains(solver)) {
-                        collisionSolverIterator.remove();
-                    }
-                }
-            }
-        }
+    private final LookupListener lookupListenerCollisionDetector = le -> {
+        updateDetector();
     };
 
     private final LookupListener lookupListenerGameProcess = new LookupListener() {
@@ -156,6 +143,38 @@ class GameScreen implements Screen {
             }
         }
     };
+
+    private void updateDetector() {
+        synchronized (collisionDetectorLock) {
+            collisionDetector = findDetector();
+        }
+    }
+
+    private void updateSolver() {
+        synchronized (collisionSolverLock) {
+            collisionSolver = findSolver();
+        }
+    }
+
+    private ICollisionDetectorService findDetector() {
+        Optional<? extends ICollisionDetectorService> optionalDetector;
+        optionalDetector = collisionDetectorResult.allInstances().stream().findFirst();
+        if (optionalDetector.isPresent()) {
+            return optionalDetector.get();
+        }
+
+        return null;
+    }
+
+    private ICollisionSolverService findSolver() {
+        Optional<? extends ICollisionSolverService> optionalSolver;
+        optionalSolver = collisionSolverResult.allInstances().stream().findFirst();
+        if (optionalSolver.isPresent()) {
+            return optionalSolver.get();
+        }
+
+        return null;
+    }
 
     @Override
     public void render(float delta) {
@@ -197,9 +216,37 @@ class GameScreen implements Screen {
             processes.forEach(p -> p.update(world, delta));
         }
 
-        //update collision solvers
+        //update collisions
+        world.clearCollisions();
+
+        synchronized (collisionDetectorLock) {
+            if (collisionDetector != null) {
+                List<Entity> collidableEnts = world.getEntities().stream()
+                        .filter(e -> e.getCollider() != null && e.is("collidable"))
+                        .collect(Collectors.toList());
+
+                List<Entity> dynamicEnts = collidableEnts.stream()
+                        .filter(e -> !e.getProperties().contains("static"))
+                        .collect(Collectors.toList());
+
+                dynamicEnts.stream().forEach(de -> collidableEnts.stream().filter(ce -> de != ce
+                        && collisionDetector.collides(de, ce)).forEach(ce -> {
+                    world.addCollision(de, ce);
+                    if (ce.is("static")) {
+                        world.addCollision(ce, de);
+                    }
+                }));
+            }
+        }
+
         synchronized (collisionSolverLock) {
-            collisionSolvers.forEach(cs -> cs.update(world));
+            if (collisionSolver != null) {
+                world.getEntities().forEach(entity -> {
+                    world.getCollisions(entity).forEach(collidedEntity -> {
+                        collisionSolver.solve(entity, collidedEntity);
+                    });
+                });
+            }
         }
     }
 
