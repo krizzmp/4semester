@@ -1,6 +1,7 @@
 package dk.sdu.group5.astarai;
 
 import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.collision.AABB;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,12 +10,12 @@ import static dk.sdu.group5.astarai.AStar.aStar;
 
 class PathFinder {
 
-    private static Node generateSolution(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
-        return aStar(startPos, goalPos, VisibilityUtils.getVisibilityLines(startPos, barriers, goalPos, size));
+    private static Node generateSolution(Vec startPos, List<Entity> barriers, Vec goalPos, AABB srcBounds) {
+        return aStar(startPos, goalPos, VisibilityUtils.getVisibilityLines(startPos, barriers, goalPos, srcBounds));
     }
 
-    private static LinkedList<Vec> getPath(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
-        Node node = generateSolution(startPos, barriers, goalPos, size);
+    private static LinkedList<Vec> getPath(Vec startPos, List<Entity> barriers, Vec goalPos, AABB srcBounds) {
+        Node node = generateSolution(startPos, barriers, goalPos, srcBounds);
         return getPath(node);
     }
 
@@ -39,13 +40,13 @@ class PathFinder {
     }
 
     // TODO: 12/04/16 Maybe a better name for size? Perhaps offset or extend?
-    private static Vec getDirection(Vec startPos, List<Entity> barriers, Vec goalPos, float size) {
-        return getDirection(getPath(startPos, barriers, goalPos, size));
+    private static Vec getDirection(Vec startPos, List<Entity> barriers, Vec goalPos, AABB srcBounds) {
+        return getDirection(getPath(startPos, barriers, goalPos, srcBounds));
     }
 
     static Vec getDirection(Entity srcEntity, List<Entity> barriers, Entity targetEntity) {
-        return getDirection(getEntityPosition(srcEntity), barriers, getEntityPosition(targetEntity),
-                srcEntity.getCollider().getBounds().getOriginX() + srcEntity.getCollider().getBounds().getWidth() * 2);
+        return getDirection(getEntityPosition(srcEntity), barriers,
+                getEntityPosition(targetEntity), srcEntity.getBounds());
     }
 
     private static Vec getEntityPosition(Entity entity) {

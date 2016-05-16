@@ -51,8 +51,8 @@ public class AStarAIGameProcess implements IGameProcess {
             }
 
             List<Entity> avoidables = new ArrayList<>();
-            for (Entity x : entities) {
-                if (x != e && isAvoidable(target, x)) {
+            for (Entity x : world.getEntities()) {
+                if (x != e && isAvoidable(x,target)) {
                     avoidables.add(x);
                 }
             }
@@ -66,18 +66,7 @@ public class AStarAIGameProcess implements IGameProcess {
     }
 
     private Boolean isAvoidable(Entity sourceEntity, Entity targetEntity) {
-        if (targetEntity.getType() == EntityType.PLAYER) {
-            return sourceEntity.getType() != EntityType.PLAYER
-                    && sourceEntity.getType() != EntityType.BULLET
-                    && sourceEntity.getType() != EntityType.ENEMY;
-        } else if (targetEntity.getType() == EntityType.TOWER) {
-            return sourceEntity.getType() != EntityType.TOWER
-                    && sourceEntity.getType() != EntityType.PLAYER
-                    && sourceEntity.getType() != EntityType.BULLET
-                    && sourceEntity.getType() != EntityType.ENEMY;
-        }
-
-        return false;
+        return sourceEntity.getType() != targetEntity.getType();
     }
 
     private Vec getEntityPosition(Entity entity) {

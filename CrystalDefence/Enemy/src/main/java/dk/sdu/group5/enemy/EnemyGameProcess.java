@@ -47,7 +47,7 @@ public class EnemyGameProcess implements IGameProcess {
         entity.setHealth(3);
         entity.setSpeed(40);
         entity.setTexturePath("enemyTextureb.png");
-        entity.setCollider(new SquareCollider(false, new AABB(-14, -15, 26, 30)));
+        entity.setCollider(new SquareCollider(false, new AABB(-13, -15, 26, 30)));
         entity.addProperty("collidable");
         entity.addProperty("tangible");
         entity.addProperty("damageable");
