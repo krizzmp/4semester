@@ -1,18 +1,21 @@
 package dk.sdu.group5.barrier;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.KeyState;
+import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.IGameProcess;
-import org.openide.util.Lookup;
-import org.openide.util.LookupListener;
-import org.openide.util.lookup.ServiceProvider;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.openide.util.Lookup;
+import org.openide.util.LookupListener;
+import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class BarrierGameProcess implements IGameProcess {
@@ -62,7 +65,12 @@ public class BarrierGameProcess implements IGameProcess {
         if (gameKeys.getPlayerPlaceBarrier().getState() == KeyState.PRESSED) {
             //TODO: 31/03/16 Implement getWidth and getHeight from entities. - Martin F.
             //TODO: 31/03/16 Replace key detection with look direction. - Martin F.
-            Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
+            Optional<Entity> playerOptional = getPlayer(world.getEntities());
+            if(!playerOptional.isPresent()){
+                return;
+            }
+            
+            Entity player = playerOptional.get();
 
             // default is the right direction
             posX = player.getX() + offsetX + player.getBounds().getWidth();
@@ -115,9 +123,7 @@ public class BarrierGameProcess implements IGameProcess {
                     listBarriers.add(barrier);
                 }
             }
-
         }
-
     }
 
     private boolean checkCollision(Entity barrier, Collection<Entity> entities) {

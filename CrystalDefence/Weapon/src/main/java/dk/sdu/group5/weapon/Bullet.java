@@ -7,9 +7,6 @@ import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 
-import java.util.Collection;
-import java.util.Optional;
-
 class Bullet {
 
     private static final float ACTIVE_TIME_LIMIT = 10000;
@@ -23,7 +20,7 @@ class Bullet {
     private int dy = 0; // 1 = up, -1 = down
     private float speed = 120;
 
-    Bullet(World world, String direction, Posf2d direction2) {
+    Bullet(World world, Entity player, String direction, Posf2d direction2) {
         setDirection(direction);
 
         bullet = new Entity();
@@ -35,7 +32,6 @@ class Bullet {
         bullet.addProperty("collidable");
         bullet.addProperty("damageable");
 
-        Entity player = getPlayer(world.getEntities()).orElseThrow(RuntimeException::new);
         bullet.setX(player.getX() + direction2.getX() * player.getBounds().getWidth() / 2f
                 + direction2.getX() * bullet.getBounds().getWidth() / 2f);
         bullet.setY(player.getY() + direction2.getY() * player.getBounds().getHeight() / 2f
@@ -105,10 +101,6 @@ class Bullet {
             default:
                 break;
         }
-    }
-
-    private Optional<Entity> getPlayer(Collection<Entity> xs) {
-        return xs.stream().filter(e -> e.getType() == EntityType.PLAYER).findFirst();
     }
 
     void update(World world, float delta) {
