@@ -25,8 +25,6 @@ public class MapGameProcess implements IGameProcess {
         environment.add(createEnvironmentEntity(216, 19));
         environment.add(createEnvironmentEntity(288, 222));
         environment.add(createEnvironmentEntity(337, 336));
-        environment.add(createTowerEntity(world.getDisplayResolutionWidth() / 2f,
-                world.getDisplayResolutionHeight() / 2f));
 
         environment.forEach(e -> world.addEntity(e));
     }
@@ -35,25 +33,10 @@ public class MapGameProcess implements IGameProcess {
         Entity entity = new Entity();
         entity.setType(EntityType.ENVIRONMENT);
         entity.setCollider(new SquareCollider(false, new AABB(-16, -16, 32, 32)));
-        entity.setTexturePath("gridPattern.png");
+        entity.setTexturePath("environmentTexture.png");
         entity.addProperty("tangible");
         entity.addProperty("collidable");
         entity.addProperty("static");
-        entity.setX(x);
-        entity.setY(y);
-        return entity;
-    }
-
-    private Entity createTowerEntity(float x, float y) {
-        Entity entity = new Entity();
-        entity.setType(EntityType.TOWER);
-        entity.setHealth(50);
-        entity.setTexturePath("towerTextureb.png");
-        entity.setCollider(new SquareCollider(false, new AABB(-32, -35.5f, 64, 71)));
-        entity.addProperty("tangible");
-        entity.addProperty("collidable");
-        entity.addProperty("static");
-        entity.addProperty("damageable");
         entity.setX(x);
         entity.setY(y);
         return entity;
@@ -65,8 +48,7 @@ public class MapGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        environment.stream().forEach((entity) -> {
-            world.removeEntity(entity);
-        });
+        world.setBackgroundTexturePath(null);
+        environment.stream().forEach((entity) -> world.removeEntity(entity));
     }
 }
