@@ -22,10 +22,10 @@
 
     <dependencies>
         <!--<dependency>-->
-            <!--<groupId>org.netbeans.cluster</groupId>-->
-            <!--<artifactId>platform</artifactId>-->
-            <!--<version>${netbeans.version}</version>-->
-            <!--<type>pom</type>-->
+        <!--<groupId>org.netbeans.cluster</groupId>-->
+        <!--<artifactId>platform</artifactId>-->
+        <!--<version>${netbeans.version}</version>-->
+        <!--<type>pom</type>-->
         <!--</dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -57,6 +57,12 @@
             <artifactId>ModuleUpdater</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -75,8 +81,32 @@
                         <all.clusters>${all.clusters}</all.clusters>
                         <branding.token>${brandingToken}</branding.token>
                     </systemPropertyVariables>
+                    <groups>${testcase.groups}</groups>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>PlayerWeapon</id>
+            <properties>
+                <testcase.groups>dk.sdu.group5.integrationtest.IntegrationPlayerWeaponTest</testcase.groups>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>Player</artifactId>
+                    <version>${project.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>Weapon</artifactId>
+                    <version>${project.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
