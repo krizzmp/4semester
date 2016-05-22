@@ -2,7 +2,6 @@ package dk.sdu.group5.weapon;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.Posf2d;
 import dk.sdu.group5.common.data.WeaponType;
 import dk.sdu.group5.common.data.World;
 import java.util.Collection;
@@ -59,15 +58,14 @@ class BulletController {
         }
     }
 
-    // TODO 15-05-16: Remove direction or direction2
-    void shootBullet(World world, String direction, Posf2d direction2) {
+    void shootBullet(World world, String direction) {
         
         Optional<Entity> player = getPlayer(world.getEntities());
 
         if (player.isPresent() && !isLocked 
                 && (weaponMagazine.size() < weaponMagazineSize 
                 || weaponMagazineSize == 0)) {
-            Bullet bullet = new Bullet(world, player.get(), direction, direction2);
+            Bullet bullet = new Bullet(world, player.get(), direction);
             weaponMagazine.add(bullet);
             startLockTime = System.currentTimeMillis();
             isLocked = true;

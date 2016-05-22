@@ -85,6 +85,7 @@
     <modules>
         <module>branding</module>
         <module>application</module>
+        <module>TestParent</module>
         <module>Common</module>
         <module>Player</module>
         <module>Enemy</module>

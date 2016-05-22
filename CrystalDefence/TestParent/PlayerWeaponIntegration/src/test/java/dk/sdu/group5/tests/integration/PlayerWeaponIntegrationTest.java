@@ -1,4 +1,4 @@
-package dk.sdu.group5.integrationtest;
+package dk.sdu.group5.tests.integration;
 
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
@@ -16,13 +16,13 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openide.util.Lookup;
 
-public class IntegrationPlayerWeaponTest
+public class PlayerWeaponIntegrationTest
 {
     private Collection<? extends IGameProcess> processes;
     private World world;
     private float delta;
     
-    public IntegrationPlayerWeaponTest()
+    public PlayerWeaponIntegrationTest()
     {
     }
 
@@ -53,7 +53,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpBulletCreated()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -68,7 +68,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpBulletCreatedAbovePlayer()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -85,7 +85,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownBulletCreated()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -100,7 +100,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownBulletCreatedBelowPlayer()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -117,7 +117,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootRightBulletCreated()
     {
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
@@ -132,7 +132,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootRightBulletCreatedRightSidePlayer()
     {
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
@@ -149,7 +149,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootLeftBulletCreated()
     {
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
@@ -164,7 +164,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootLeftBulletCreatedLeftSidePlayer()
     {
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
@@ -181,7 +181,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpRightBulletCreated()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -197,7 +197,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpRightBulletCreatedUpRightToPlayer()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -216,7 +216,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpLeftBulletCreated()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -232,7 +232,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpLeftBulletCreatedUpLeftToPlayer()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
@@ -250,7 +250,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownRightBulletCreated()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -266,7 +266,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownRightBulletCreatedDownRightToPlayer()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -284,7 +284,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownLeftBulletCreated()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -300,7 +300,7 @@ public class IntegrationPlayerWeaponTest
     }
 
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootDownLeftBulletCreatedDownLeftToPlayer()
     {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
@@ -318,7 +318,7 @@ public class IntegrationPlayerWeaponTest
     }
     
     @Test
-    @Category(IntegrationPlayerWeaponTest.class)
+    @Category(PlayerWeaponIntegrationTest.class)
     public void testShootUpBulletCreatedAboveMovedPlayer()
     {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);

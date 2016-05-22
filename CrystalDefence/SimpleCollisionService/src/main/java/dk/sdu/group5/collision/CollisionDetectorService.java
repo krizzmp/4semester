@@ -10,6 +10,18 @@ import org.openide.util.lookup.ServiceProvider;
 public class CollisionDetectorService implements ICollisionDetectorService {
     @Override
     public boolean collides(Entity e1, Entity e2) {
+        if(e1 == null){
+            throw new NullPointerException("Entity e1 is null!");
+        }
+        
+        if(e2 == null){
+            throw new NullPointerException("Entity e2 is null!");
+        }
+        
+        if(e1.getCollider() == null || e2.getCollider() == null){
+            return false;
+        }
+        
         return intersects(e1.getCollider(), e2.getCollider(), e1, e2);
     }
 

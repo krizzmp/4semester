@@ -1,6 +1,9 @@
 package dk.sdu.group5.weapon;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.KeyState;
+import dk.sdu.group5.common.data.WeaponType;
+import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -25,33 +28,33 @@ public class WeaponGameProcessor implements IGameProcess {
         if (gameKeys.getPlayerShootUp().getState() == KeyState.HELD) {
             if (gameKeys.getPlayerShootLeft().getState() == KeyState.HELD) {
                 // if up and left
-                bulletController.shootBullet(world, "upLeft", new Posf2d(-1f, 1f));
+                bulletController.shootBullet(world, "upLeft");
             } else if (gameKeys.getPlayerShootRight().getState() == KeyState.HELD) {
                 // if up and right
-                bulletController.shootBullet(world, "upRight", new Posf2d(1f, 1f));
+                bulletController.shootBullet(world, "upRight");
             } else {
                 // if up
-                bulletController.shootBullet(world, "up", new Posf2d(0f, 1f));
+                bulletController.shootBullet(world, "up");
             }
         } else if (gameKeys.getPlayerShootDown().getState() == KeyState.HELD) {
             if (gameKeys.getPlayerShootLeft().getState() == KeyState.HELD) {
                 // if down and left
-                bulletController.shootBullet(world, "downLeft", new Posf2d(-1f, -1f));
+                bulletController.shootBullet(world, "downLeft");
             } else if (gameKeys.getPlayerShootRight().getState() == KeyState.HELD) {
                 // if down and right
-                bulletController.shootBullet(world, "downRight", new Posf2d(1f, -1f));
+                bulletController.shootBullet(world, "downRight");
             } else {
                 // if down
-                bulletController.shootBullet(world, "down", new Posf2d(0f, -1f));
+                bulletController.shootBullet(world, "down");
             }
         } else {
             if (gameKeys.getPlayerShootLeft().getState() == KeyState.HELD) {
                 // if left
-                bulletController.shootBullet(world, "left", new Posf2d(-1f, 0f));
+                bulletController.shootBullet(world, "left");
             }
             if (gameKeys.getPlayerShootRight().getState() == KeyState.HELD) {
                 // if right
-                bulletController.shootBullet(world, "right", new Posf2d(1f, 0f));
+                bulletController.shootBullet(world, "right");
             }
         }
     }

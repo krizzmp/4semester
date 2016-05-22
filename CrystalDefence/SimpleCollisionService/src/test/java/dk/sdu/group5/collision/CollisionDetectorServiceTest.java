@@ -43,8 +43,6 @@ public class CollisionDetectorServiceTest
     @Test(expected = NullPointerException.class)
     public void testCollidesNull()
     {
-        System.out.println("Collides null");
-        
         Entity e1 = null;
         Entity e2 = null;
         
@@ -55,8 +53,6 @@ public class CollisionDetectorServiceTest
     @Test
     public void testCollidesNoCollider()
     {
-        System.out.println("Collides no collider");
-        
         Entity e1 = new Entity();
         Entity e2 = new Entity();
         
@@ -68,10 +64,8 @@ public class CollisionDetectorServiceTest
     }
     
     @Test
-    public void testCollidesOverlappingNotTrigger()
-    {
-        System.out.println("Collides not collidable");
-        
+    public void testCollidesOverlapping()
+    {        
         Entity e1 = new Entity();
         e1.setCollider(new SquareCollider(false,new AABB(0, 0, 2, 2)));
         Entity e2 = new Entity();
@@ -79,7 +73,7 @@ public class CollisionDetectorServiceTest
         
         CollisionDetectorService instance = new CollisionDetectorService();
         
-        boolean expResult = false;
+        boolean expResult = true;
         boolean result = instance.collides(e1, e2);
         Assert.assertEquals(expResult, result);
     }

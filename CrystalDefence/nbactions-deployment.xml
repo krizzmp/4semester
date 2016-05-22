@@ -9,6 +9,7 @@
             <goal>clean</goal>
             <goal>install</goal>
             <goal>nbm:autoupdate</goal>
+            
         </goals>
     </action>
 </actions>
