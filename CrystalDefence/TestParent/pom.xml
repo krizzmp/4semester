@@ -41,6 +41,9 @@
         <module>SikulixGUITestResume</module>
         <module>SikulixGUITestNewGame</module>
         <module>SikulixGUITestMainMenu</module>
+        <module>CollisionSystemIntegration</module>
+        <module>PlayerBarrierNoCollisionIntegration</module>
+        <module>PlayerBarrierCollisionIntegration</module>
     </modules>
 
 </project>

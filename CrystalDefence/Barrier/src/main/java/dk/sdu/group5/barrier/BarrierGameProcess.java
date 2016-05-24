@@ -89,19 +89,23 @@ public class BarrierGameProcess implements IGameProcess {
                 posX = player.getX() - offsetX - player.getBounds().getWidth();
                 posY = player.getY();
             }
-            if (posX % 48 != 0) {
-                if (posX % 48 < 24) {
-                    posX = posX - (posX % 48);
+            
+            float remainderX = (Math.abs(posX) % 48);
+            float remainderY = (Math.abs(posY) % 48);
+            
+            if (remainderX != 0) {
+                if (remainderX < 24) {
+                    posX = posX - (remainderX);
                 } else {
-                    posX = posX + (48 - (posX % 48));
+                    posX = posX + (48 - (remainderX));
                 }
             }
 
-            if (posY % 48 != 0) {
-                if (posY % 48 < 24) {
-                    posY = posY - (posY % 48);
+            if (remainderY != 0) {
+                if (remainderY < 24) {
+                    posY = posY - (remainderY);
                 } else {
-                    posY = posY + (48 - (posY % 48));
+                    posY = posY + (48 - (remainderY));
                 }
             }
 

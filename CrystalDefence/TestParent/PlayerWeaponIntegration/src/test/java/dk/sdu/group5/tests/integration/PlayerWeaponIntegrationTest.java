@@ -1,61 +1,44 @@
 package dk.sdu.group5.tests.integration;
 
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.KeyState;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.services.IGameProcess;
-import java.util.Collection;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.*;
 import org.openide.util.Lookup;
 
-public class PlayerWeaponIntegrationTest
-{
+import java.util.Collection;
+
+public class PlayerWeaponIntegrationTest {
     private Collection<? extends IGameProcess> processes;
     private World world;
     private float delta;
-    
-    public PlayerWeaponIntegrationTest()
-    {
+
+    public PlayerWeaponIntegrationTest() {
     }
 
     @BeforeClass
-    public static void setUpClass()
-    {
+    public static void setUpClass() {
     }
 
     @AfterClass
-    public static void tearDownClass()
-    {
+    public static void tearDownClass() {
     }
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         processes = Lookup.getDefault().lookupAll(IGameProcess.class);
         world = new World(null);
         world.setGameKeys(new GameKeys());
-        
+
         // Time per frame if running at 60 fps
-        delta = 1f/60f;
+        delta = 1f / 60f;
     }
 
     @After
-    public void tearDown()
-    {
+    public void tearDown() {
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpBulletCreated()
-    {
+    public void testShootUpBulletCreated() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -68,11 +51,9 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpBulletCreatedAbovePlayer()
-    {
+    public void testShootUpBulletCreatedAbovePlayer() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
-        
+
         processes.forEach(process -> process.start(world));
         processes.forEach(process -> process.update(world, delta));
 
@@ -83,11 +64,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getY() > player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownBulletCreated()
-    {
+    public void testShootDownBulletCreated() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -100,9 +79,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownBulletCreatedBelowPlayer()
-    {
+    public void testShootDownBulletCreatedBelowPlayer() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -115,11 +92,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getY() < player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootRightBulletCreated()
-    {
+    public void testShootRightBulletCreated() {
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -132,9 +107,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootRightBulletCreatedRightSidePlayer()
-    {
+    public void testShootRightBulletCreatedRightSidePlayer() {
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -147,11 +120,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getX() > player.getX());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootLeftBulletCreated()
-    {
+    public void testShootLeftBulletCreated() {
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -164,9 +135,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootLeftBulletCreatedLeftSidePlayer()
-    {
+    public void testShootLeftBulletCreatedLeftSidePlayer() {
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
         processes.forEach(process -> process.start(world));
@@ -179,11 +148,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getX() < player.getX());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpRightBulletCreated()
-    {
+    public void testShootUpRightBulletCreated() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
@@ -197,9 +164,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpRightBulletCreatedUpRightToPlayer()
-    {
+    public void testShootUpRightBulletCreatedUpRightToPlayer() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
@@ -214,11 +179,9 @@ public class PlayerWeaponIntegrationTest
         Assert.assertTrue(bullet.getX() > player.getX()
                 && bullet.getY() > player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpLeftBulletCreated()
-    {
+    public void testShootUpLeftBulletCreated() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
@@ -232,9 +195,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpLeftBulletCreatedUpLeftToPlayer()
-    {
+    public void testShootUpLeftBulletCreatedUpLeftToPlayer() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
@@ -248,11 +209,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getX() < player.getX() && bullet.getY() > player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownRightBulletCreated()
-    {
+    public void testShootDownRightBulletCreated() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
@@ -266,9 +225,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownRightBulletCreatedDownRightToPlayer()
-    {
+    public void testShootDownRightBulletCreatedDownRightToPlayer() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootRight().setState(KeyState.HELD);
 
@@ -282,11 +239,9 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getX() > player.getX() && bullet.getY() < player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownLeftBulletCreated()
-    {
+    public void testShootDownLeftBulletCreated() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
@@ -300,9 +255,7 @@ public class PlayerWeaponIntegrationTest
     }
 
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootDownLeftBulletCreatedDownLeftToPlayer()
-    {
+    public void testShootDownLeftBulletCreatedDownLeftToPlayer() {
         world.getGameKeys().getPlayerShootDown().setState(KeyState.HELD);
         world.getGameKeys().getPlayerShootLeft().setState(KeyState.HELD);
 
@@ -316,21 +269,19 @@ public class PlayerWeaponIntegrationTest
 
         Assert.assertTrue(bullet.getX() < player.getX() && bullet.getY() < player.getY());
     }
-    
+
     @Test
-    @Category(PlayerWeaponIntegrationTest.class)
-    public void testShootUpBulletCreatedAboveMovedPlayer()
-    {
+    public void testShootUpBulletCreatedAboveMovedPlayer() {
         world.getGameKeys().getPlayerShootUp().setState(KeyState.HELD);
-        
+
         processes.forEach(process -> process.start(world));
 
         Entity player = world.getEntities().stream()
                 .filter(e -> e.getType() == EntityType.PLAYER).findFirst().get();
         player.setY(player.getY() + 100);
-        
+
         processes.forEach(process -> process.update(world, delta));
-        
+
         Entity bullet = world.getEntities().stream()
                 .filter(e -> e.getType() == EntityType.BULLET).findFirst().get();
 

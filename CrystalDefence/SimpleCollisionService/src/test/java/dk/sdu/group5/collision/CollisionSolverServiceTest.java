@@ -134,7 +134,7 @@ public class CollisionSolverServiceTest {
         float x2 = e1.getX();
         float y2 = e1.getY();
 
-        Assert.assertTrue(Math.abs(x2 - x1) < tolerance && Math.abs(y2 - y1) < tolerance);
+        Assert.assertTrue(Math.abs(x2 - x1) >= tolerance || Math.abs(y2 - y1) >= tolerance);
     }
 
     @Test
@@ -157,7 +157,7 @@ public class CollisionSolverServiceTest {
         float x2 = e2.getX();
         float y2 = e2.getY();
 
-        Assert.assertTrue(Math.abs(x2 - x1) < tolerance && Math.abs(y2 - y1) < tolerance);
+        Assert.assertTrue(Math.abs(x2 - x1) >= tolerance || Math.abs(y2 - y1) >= tolerance);
     }
 
     @Test
