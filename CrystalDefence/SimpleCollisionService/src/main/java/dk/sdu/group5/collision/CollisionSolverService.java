@@ -10,8 +10,12 @@ public class CollisionSolverService implements ICollisionSolverService {
 
     @Override
     public void solve(Entity e1, Entity e2) {
-        if (e1 == null || e2 == null) {
-            return;
+        if(e1 == null){
+            throw new NullPointerException("Entity e1 is null!");
+        }
+        
+        if(e2 == null){
+            throw new NullPointerException("Entity e2 is null!");
         }
 
         applyImpulse(e1, e2);
