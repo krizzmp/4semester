@@ -10,8 +10,12 @@ public class CollisionSolverService implements ICollisionSolverService {
 
     @Override
     public void solve(Entity e1, Entity e2) {
-        if (e1 == null || e2 == null) {
-            return;
+        if(e1 == null){
+            throw new NullPointerException("Entity e1 is null!");
+        }
+        
+        if(e2 == null){
+            throw new NullPointerException("Entity e2 is null!");
         }
 
         applyImpulse(e1, e2);
@@ -58,7 +62,7 @@ public class CollisionSolverService implements ICollisionSolverService {
         float yDepth = 0f;
         if (e1.getY() < e2.getY()) {
             yDepth = yDepthMax(e1, e2);
-        } else if (e1.getY() > e2.getY()) {
+        } else if (e1.getY() >= e2.getY()) {
             yDepth = yDepthMin(e1, e2);
         }
         return yDepth;
@@ -68,7 +72,7 @@ public class CollisionSolverService implements ICollisionSolverService {
         float xDepth = 0f;
         if (e1.getX() < e2.getX()) {
             xDepth = xDepthMax(e1, e2);
-        } else if (e1.getX() > e2.getX()) {
+        } else if (e1.getX() >= e2.getX()) {
             xDepth = xDepthMin(e1, e2);
         }
         return xDepth;
