@@ -58,7 +58,7 @@ public class CollisionSolverService implements ICollisionSolverService {
         float yDepth = 0f;
         if (e1.getY() < e2.getY()) {
             yDepth = yDepthMax(e1, e2);
-        } else if (e1.getY() > e2.getY()) {
+        } else if (e1.getY() >= e2.getY()) {
             yDepth = yDepthMin(e1, e2);
         }
         return yDepth;
@@ -68,7 +68,7 @@ public class CollisionSolverService implements ICollisionSolverService {
         float xDepth = 0f;
         if (e1.getX() < e2.getX()) {
             xDepth = xDepthMax(e1, e2);
-        } else if (e1.getX() > e2.getX()) {
+        } else if (e1.getX() >= e2.getX()) {
             xDepth = xDepthMin(e1, e2);
         }
         return xDepth;

@@ -1,5 +1,6 @@
 package dk.sdu.group5.core;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -9,19 +10,31 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Difficulty;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.Key;
+import dk.sdu.group5.common.data.KeyState;
+import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.ICollisionSolverService;
 import dk.sdu.group5.common.services.IGameProcess;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.openide.util.Lookup;
 import org.openide.util.Lookup.Result;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-class GameScreen implements Screen {
+public class GameScreen implements Screen {
 
     public boolean gameOver = false;
     private PauseScreen pauseScreen;
@@ -43,14 +56,18 @@ class GameScreen implements Screen {
     private final Object collisionDetectorLock = new Object();
     private final Object collisionSolverLock = new Object();
 
-    public GameScreen() {
+    private final Game game;
+    
+    public GameScreen(Game game) {
+        this.game = game;
+                
         FileHandle fileHandle = Gdx.files.classpath("defaultTexture.png");
         if (!fileHandle.exists()) {
             System.err.println("Default texture not found!");
         }
 
         defaultTexture = new Texture(fileHandle);
-        pauseScreen = new PauseScreen(this);
+        pauseScreen = new PauseScreen(game,this);
         cachedTextures = new HashMap<>();
 
         batch = new SpriteBatch();
@@ -180,7 +197,7 @@ class GameScreen implements Screen {
     public void render(float delta) {
 
         if (world.isGameover()) {
-            Game.getInstance().setScreen(new GameoverScreen());
+            game.setScreen(new GameOverScreen(game));
             dispose();
         }
 
@@ -206,7 +223,7 @@ class GameScreen implements Screen {
         if (world.getGameKeys().getPauseBackspace().getState() == KeyState.RELEASED
                 || world.getGameKeys().getPauseEscape().getState() == KeyState.RELEASED) {
 
-            Game.getInstance().setScreen(pauseScreen);
+            game.setScreen(pauseScreen);
         }
     }
 

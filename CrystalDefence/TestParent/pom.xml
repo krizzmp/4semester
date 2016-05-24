@@ -13,7 +13,7 @@
     
     <name>TestParent</name>
     
-    <build>
+<!--    <build>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -32,10 +32,15 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-    </build>
+    </build>-->
   
     <modules>
         <module>PlayerWeaponIntegration</module>
+        <module>SikulixGUITestExit</module>
+        <module>SikulixGUITestStart</module>
+        <module>SikulixGUITestResume</module>
+        <module>SikulixGUITestNewGame</module>
+        <module>SikulixGUITestMainMenu</module>
     </modules>
 
 </project>

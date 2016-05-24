@@ -1,5 +1,6 @@
 package dk.sdu.group5.core;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,24 +17,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 /**
  * Created by Hivemaster on 31-03-2016.
  */
-public class PauseScreen implements Screen {
-
+public class PauseScreen implements Screen
+{
     private BitmapFont font;
     private Skin skin;
     private Stage stage;
     private Table table;
     private GameScreen gameScreen;
+    
+    private final Game game;
 
-    PauseScreen(GameScreen gameScreen) {
+    public PauseScreen(Game game, GameScreen gameScreen)
+    {
+        this.game = game;
         this.gameScreen = gameScreen;
-    }
 
-    @Override
-    public void show() {
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
         skin = new Skin();
@@ -43,35 +44,42 @@ public class PauseScreen implements Screen {
         stage.addActor(table);
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
 
-        addButton("Resume game", () -> Game.getInstance().setScreen(gameScreen), style);
+        addButton("Resume game", () -> game.setScreen(gameScreen), style);
         addButton("Main Menu", () -> mainmenu(), style);
         addButton("Exit game", () -> Gdx.app.exit(), style);
-        
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
     }
 
-    private void mainmenu() {
-        GameScreen gameScreen;
-        StartScreen startScreen;
-        gameScreen = new GameScreen();
-        //something like this:
-        startScreen = new StartScreen(() -> {
-//            Gdx.app.exit();
-            Game.getInstance().setScreen(gameScreen);
+    @Override
+    public void show()
+    {
+        Gdx.input.setInputProcessor(stage);
+
+//        Gdx.gl.glClearColor(1, 1, 1, 1);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        stage.act(Gdx.graphics.getDeltaTime());
+//        stage.draw();
+    }
+
+    private void mainmenu()
+    {
+        StartScreen startScreen = new StartScreen(() ->
+        {
+            game.setScreen(new GameScreen(game));
         });
-        Game.getInstance().setScreen(startScreen);
+        
+        game.setScreen(startScreen);
         this.gameScreen.dispose();
         dispose();
     }
 
-    private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style) {
+    private void addButton(String text, final Runnable onEnter, TextButton.TextButtonStyle style)
+    {
         final TextButton button = new TextButton(text, style);
-        button.addListener(new ClickListener() {
+        button.addListener(new ClickListener()
+        {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            {
                 super.touchUp(event, x, y, pointer, button);
                 onEnter.run();
             }
@@ -81,7 +89,8 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta)
+    {
         //painting the screen white
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -90,27 +99,32 @@ public class PauseScreen implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int i, int i1)
+    {
 
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
 
     }
 
     @Override
-    public void hide() {
+    public void hide()
+    {
         Gdx.input.setInputProcessor(null);
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         font.dispose();
         stage.dispose();
         skin.dispose();
