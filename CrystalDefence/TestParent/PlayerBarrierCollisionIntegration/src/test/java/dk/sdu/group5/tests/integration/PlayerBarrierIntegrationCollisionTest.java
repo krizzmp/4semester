@@ -1,23 +1,16 @@
 package dk.sdu.group5.tests.integration;
 
-import dk.sdu.group5.common.data.Entity;
-import dk.sdu.group5.common.data.EntityType;
-import dk.sdu.group5.common.data.GameKeys;
-import dk.sdu.group5.common.data.KeyState;
-import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.*;
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.ICollisionDetectorService;
 import dk.sdu.group5.common.services.IGameProcess;
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.util.Collection;
+import java.util.NoSuchElementException;
 
 public class PlayerBarrierIntegrationCollisionTest {
     private Collection<? extends IGameProcess> processes;
@@ -53,9 +46,8 @@ public class PlayerBarrierIntegrationCollisionTest {
     @Test(expected = NoSuchElementException.class)
     public void testBarrierCreatedUpCollision() {
         Entity obstacle = new Entity();
-        obstacle.setCollider(new SquareCollider(false, new AABB(-16,-16,32,32)));
+        obstacle.setCollider(new SquareCollider(false, new AABB(0, 0, 2, 2)));
         obstacle.addProperty("collidable");
-        obstacle.setY(16);
         world.addEntity(obstacle);
 
         world.getGameKeys().getPlayerPlaceBarrier().setState(KeyState.PRESSED);
