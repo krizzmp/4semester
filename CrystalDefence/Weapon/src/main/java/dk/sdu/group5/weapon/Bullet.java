@@ -96,9 +96,7 @@ class Bullet {
                         collidedEntity.setHealth(collidedEntity.getHealth() - 1);
                     }
 
-                    if (collidedEntity.getType() != EntityType.PLAYER) {
-                        toBeRemoved = true;
-                    }
+                    toBeRemoved = true;
                 }));
     }
 
