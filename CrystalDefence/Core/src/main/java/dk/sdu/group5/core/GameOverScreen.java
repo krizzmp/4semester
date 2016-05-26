@@ -64,7 +64,6 @@ public class GameOverScreen implements Screen {
 
     }
     private void startgame(){
-        System.out.println("Hello");
         GameScreen gameScreen = new GameScreen(game);
         game.setScreen(gameScreen);
 

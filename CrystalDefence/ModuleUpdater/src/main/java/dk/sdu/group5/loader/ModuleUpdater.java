@@ -1,11 +1,5 @@
 package dk.sdu.group5.loader;
 
-import org.netbeans.api.autoupdate.*;
-import org.netbeans.api.autoupdate.InstallSupport.Installer;
-import org.netbeans.api.autoupdate.InstallSupport.Validator;
-import org.netbeans.api.autoupdate.OperationContainer.OperationInfo;
-import org.netbeans.api.autoupdate.OperationSupport.Restarter;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -15,6 +9,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.netbeans.api.autoupdate.InstallSupport;
+import org.netbeans.api.autoupdate.InstallSupport.Installer;
+import org.netbeans.api.autoupdate.InstallSupport.Validator;
+import org.netbeans.api.autoupdate.OperationContainer;
+import org.netbeans.api.autoupdate.OperationContainer.OperationInfo;
+import org.netbeans.api.autoupdate.OperationException;
+import org.netbeans.api.autoupdate.OperationSupport;
+import org.netbeans.api.autoupdate.OperationSupport.Restarter;
+import org.netbeans.api.autoupdate.UpdateElement;
+import org.netbeans.api.autoupdate.UpdateManager;
+import org.netbeans.api.autoupdate.UpdateUnit;
+import org.netbeans.api.autoupdate.UpdateUnitProvider;
+import org.netbeans.api.autoupdate.UpdateUnitProviderFactory;
 
 /*
  * Based on the project:
@@ -215,7 +222,7 @@ public final class ModuleUpdater {
     private Collection<UpdateElement> findNewModules() {
         // check updates
         Collection<UpdateElement> elements4install = new HashSet<>();
-        List<UpdateUnit> updateUnits = UpdateManager.getDefault().getUpdateUnits();
+        List<UpdateUnit> updateUnits = getUpdateProvider().getUpdateUnits();
         for (UpdateUnit unit : updateUnits) {
             if (unit.getInstalled() == null) { // means the plugin is not installed yet
                 if (!unit.getAvailableUpdates().isEmpty()) { // is available
