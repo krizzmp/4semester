@@ -1,7 +1,5 @@
 package dk.sdu.group5.core;
 
-import com.badlogic.gdx.Screen;
-
 public class Game extends com.badlogic.gdx.Game {
 
     private StartScreen startScreen;
@@ -15,10 +13,6 @@ public class Game extends com.badlogic.gdx.Game {
             setScreen(gameScreen);
         });
         setScreen(startScreen);
-    }
-
-    public void screen(Screen screen) {
-        setScreen(screen);
     }
 
     @Override
