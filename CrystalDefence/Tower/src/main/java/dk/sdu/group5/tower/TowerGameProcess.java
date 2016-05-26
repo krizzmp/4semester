@@ -22,7 +22,7 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void update(World world, float delta) {
-        if (tower.getHealth() < 0) {
+        if (tower.getHealth() <= 0) {
             world.setGameover(true);
         }
     }
@@ -44,7 +44,6 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
-        world.removeEntity(tower);
     }
 
 }
