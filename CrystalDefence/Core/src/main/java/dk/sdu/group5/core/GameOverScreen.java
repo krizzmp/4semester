@@ -18,12 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * Created by Hivemaster on 08-04-2016.
  */
 public class GameOverScreen implements Screen {
+    private final Game game;
     private BitmapFont font;
     private Skin skin;
     private Stage stage;
     private Table table;
-
-    private final Game game;
 
     public GameOverScreen(Game game) {
         this.game = game;
@@ -31,43 +30,45 @@ public class GameOverScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.RED);
         stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
         TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("assets/ui-gray.atlas"));
-
         skin = new Skin();
         skin.addRegions(textureAtlas);
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(skin.getDrawable("button_01"), skin.getDrawable("button_01"), skin.getDrawable("button_01"), font);
         addButton("New Game", () -> startgame(), style);
         addButton("Main Menu", () -> mainmenu(), style);
         addButton("Exit game", () -> Gdx.app.exit(), style);
-
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
 //        Gdx.gl.glClearColor(1, 1, 1, 1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //        stage.act(Gdx.graphics.getDeltaTime());
 //        stage.draw();
-
-        Gdx.input.setInputProcessor(stage);
     }
 
-    private void mainmenu() {
-        StartScreen startScreen = new StartScreen(() -> {
-            game.setScreen(new GameScreen(game));
+    public void mainmenu() {
+        GameScreen gameScreen;
+        StartScreen startScreen;
+        gameScreen = new GameScreen(game);
+        //something like this:
+        startScreen = new StartScreen(() -> {
+//            Gdx.app.exit();
+            game.setScreen(gameScreen);
         });
         game.setScreen(startScreen);
 
 
     }
 
-    private void startgame() {
-        System.out.println("Hello");
+    public void startgame() {
         GameScreen gameScreen = new GameScreen(game);
         game.setScreen(gameScreen);
 

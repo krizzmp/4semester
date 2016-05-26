@@ -28,7 +28,6 @@ public class GameScreen implements Screen {
     private final Object collisionDetectorLock = new Object();
     private final Object collisionSolverLock = new Object();
     private final Game game;
-    public boolean gameOver = false;
     private PauseScreen pauseScreen;
     private SpriteBatch batch;
     private BitmapFont font;

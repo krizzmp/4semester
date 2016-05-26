@@ -44,6 +44,7 @@ public class TowerGameProcess implements IGameProcess {
 
     @Override
     public void stop(World world) {
+        world.removeEntity(tower);
     }
 
 }
