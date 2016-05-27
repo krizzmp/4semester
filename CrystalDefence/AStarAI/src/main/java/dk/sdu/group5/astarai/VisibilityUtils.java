@@ -1,49 +1,54 @@
 package dk.sdu.group5.astarai;
 
+import static dk.sdu.group5.astarai.FunctionUtility.flatMap;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.collision.AABB;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dk.sdu.group5.astarai.FU.flatMap;
-import static dk.sdu.group5.astarai.FU.lift2;
-
 class VisibilityUtils {
-    static List<LineSegment> getVisibilityLines(Vec startPos, List<Entity> barriers, Vec goalPos, AABB srcBounds) {
+    
+    static List<LineSegment> getVisibilityLines(Vec startPos, List<Entity> obstacles, Vec goalPos, AABB srcBounds) {
         List<Vec> points = new ArrayList<>();
         points.add(startPos);
         points.add(goalPos);
-        points.addAll(flatMap(e -> getEntityCornerPoints(e, srcBounds), barriers));
-        List<LineSegment> rays = lift2(LineSegment::new).apply(points, points); // rays
-        List<LineSegment> barrierLines = flatMap(e -> getLines(e, srcBounds), barriers);
-        return rays.stream().filter(a -> !a.intersects(barrierLines)).collect(Collectors.toList());
+        
+        // Collect all obstacle points
+        Collection<Vec> obstaclePoints = flatMap(e -> getEntityCornerPoints(e, srcBounds), obstacles);
+        points.addAll(obstaclePoints);
+        
+        // Find all rays, i.e. the line segments between all combinations of points
+        List<LineSegment> rays = getRays(points);
+        
+        // Find all rays segments not intersecting with obstacle lines
+        List<LineSegment> obstacleLines = flatMap(e -> getLines(e, srcBounds), obstacles);
+        return rays.stream().filter(a -> !a.intersects(obstacleLines)).collect(Collectors.toList());
     }
 
-    // TODO: 12/04/16 Describe what 0.1 and 0.2 does. Offsets?
-    private static List<LineSegment> getLines(Entity entity, AABB srcBounds) {
-        List<LineSegment> lines = new ArrayList<>(4);
-        float a = 0.2f;
-        float b = 0.1f;
-        Vec topRightPoint = new Vec(maxX(entity, srcBounds) + 0.1, maxY(entity, srcBounds));
-        Vec bottomRightPoint = new Vec(minX(entity, srcBounds) + 0.1, maxY(entity, srcBounds));
+    private static List<LineSegment> getLines(Entity entity, AABB srcBounds) {  
+        Vec topRightPoint = new Vec(maxX(entity, srcBounds), maxY(entity, srcBounds));
+        Vec topLeftPoint = new Vec(minX(entity, srcBounds), maxY(entity, srcBounds));
         Vec bottomLeftPoint = new Vec(minX(entity, srcBounds), minY(entity, srcBounds));
-        Vec topLeftPoint = new Vec(maxX(entity, srcBounds), minY(entity, srcBounds));
-        lines.add(new LineSegment(topRightPoint.plus(-a, -b), topLeftPoint.plus(-a, b)));
-        lines.add(new LineSegment(topLeftPoint.plus(-b, a), bottomLeftPoint.plus(b, a)));
-        lines.add(new LineSegment(bottomLeftPoint.plus(a, b), bottomRightPoint.plus(a, -b)));
-        lines.add(new LineSegment(bottomRightPoint.plus(b, -a), topRightPoint.plus(-b, -a)));
+        Vec bottomRightPoint = new Vec(maxX(entity, srcBounds), minY(entity, srcBounds));
+        
+        List<LineSegment> lines = new ArrayList<>(4);
+        lines.add(new LineSegment(topRightPoint, bottomRightPoint));
+        lines.add(new LineSegment(bottomRightPoint, bottomLeftPoint));
+        lines.add(new LineSegment(bottomLeftPoint, topLeftPoint));
+        lines.add(new LineSegment(topLeftPoint, topRightPoint));
         return lines;
     }
 
-    // TODO: 12/04/16 Describe what 0.1 does
     private static List<Vec> getEntityCornerPoints(Entity entity, AABB srcBounds) {
+        float offset = 0.1f;
+        
         List<Vec> points = new ArrayList<>(4);
-        points.add(new Vec(maxX(entity, srcBounds) + 0.1, maxY(entity, srcBounds)));
-        points.add(new Vec(minX(entity, srcBounds) + 0.1, maxY(entity, srcBounds)));
-        points.add(new Vec(minX(entity, srcBounds), minY(entity, srcBounds)));
-        points.add(new Vec(maxX(entity, srcBounds), minY(entity, srcBounds)));
+        points.add(new Vec(maxX(entity, srcBounds) + offset, maxY(entity, srcBounds) + offset));
+        points.add(new Vec(minX(entity, srcBounds) - offset, maxY(entity, srcBounds) + offset));
+        points.add(new Vec(minX(entity, srcBounds) - offset, minY(entity, srcBounds) - offset));
+        points.add(new Vec(maxX(entity, srcBounds) + offset, minY(entity, srcBounds) - offset));
         return points;
     }
 
@@ -63,5 +68,17 @@ class VisibilityUtils {
     private static float maxX(Entity entity, AABB srcBounds) {
         return entity.getBounds().getOriginX() + entity.getBounds().getWidth()
                 + entity.getX() + srcBounds.getWidth() / 2f;
+    }
+    
+    public static List<LineSegment> getRays(List<Vec> points) {
+        List<LineSegment> raySegments = new ArrayList<>();
+        
+        for (int i = 0; i < points.size(); i++) {
+            for (int j = i+1; j < points.size(); j++) {
+                raySegments.add(new LineSegment(points.get(i), points.get(j)));
+            }
+        }
+            
+        return raySegments;
     }
 }
