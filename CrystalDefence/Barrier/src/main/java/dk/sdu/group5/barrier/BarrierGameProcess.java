@@ -25,6 +25,7 @@ public class BarrierGameProcess implements IGameProcess {
     private float offsetY = 8f;
     private float posX;
     private float posY;
+    private final static int GRID_SIZE = 48;
 
     private List<Entity> listBarriers = new LinkedList<>();
 
@@ -63,7 +64,6 @@ public class BarrierGameProcess implements IGameProcess {
     public void update(World world, float delta) {
         GameKeys gameKeys = world.getGameKeys();
         if (gameKeys.getPlayerPlaceBarrier().getState() == KeyState.PRESSED) {
-            //TODO: 31/03/16 Implement getWidth and getHeight from entities. - Martin F.
             //TODO: 31/03/16 Replace key detection with look direction. - Martin F.
             Optional<Entity> playerOptional = getPlayer(world.getEntities());
             if(!playerOptional.isPresent()){
@@ -90,22 +90,22 @@ public class BarrierGameProcess implements IGameProcess {
                 posY = player.getY();
             }
             
-            float remainderX = (Math.abs(posX) % 48);
-            float remainderY = (Math.abs(posY) % 48);
+            float remainderX = (Math.abs(posX) % GRID_SIZE);
+            float remainderY = (Math.abs(posY) % GRID_SIZE);
             
             if (remainderX != 0) {
-                if (remainderX < 24) {
+                if (remainderX < GRID_SIZE/2f) {
                     posX = posX - (remainderX);
                 } else {
-                    posX = posX + (48 - (remainderX));
+                    posX = posX + (GRID_SIZE - (remainderX));
                 }
             }
 
             if (remainderY != 0) {
-                if (remainderY < 24) {
+                if (remainderY < GRID_SIZE/2f) {
                     posY = posY - (remainderY);
                 } else {
-                    posY = posY + (48 - (remainderY));
+                    posY = posY + (GRID_SIZE - (remainderY));
                 }
             }
 

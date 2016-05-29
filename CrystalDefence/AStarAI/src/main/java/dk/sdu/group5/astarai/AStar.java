@@ -1,34 +1,44 @@
 package dk.sdu.group5.astarai;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AStar {
-
+    
     /*
     * g is the cost of the path from the current node to the root node.
     * h is the heuristic function.
      */
-    public static Node aStar(Vec startPos, Vec goalPos, List<LineSegment> lineSegments) {
-        PriorityQueue<Node> openNodeList = new PriorityQueue<>();
+    public static Node aStar(Vec startPos, Vec goalPos, List<LineSegment> lineSegments) {        
+        PriorityQueue<Node> fringe = new PriorityQueue<>();
         Node currentNode = new Node(startPos, null, 0, distance(startPos, goalPos));
-        openNodeList.add(currentNode);
+        fringe.add(currentNode);
         Set<Node> closedNodeList = new HashSet<>();
-        while (openNodeList.size() != 0) {
-            currentNode = openNodeList.poll();
-            List<Vec> successorsPoints = connections(currentNode, lineSegments);
+        
+        while (fringe.size() != 0) {
+            currentNode = fringe.poll();
+            
+            if (currentNode.getItem().equals(goalPos)) {
+                    return currentNode;
+            }
+            
+            List<Vec> successorsPoints = expand(currentNode, lineSegments);
+            
             for (Vec successorPoint : successorsPoints) {
                 double g = currentNode.getG() + distance(successorPoint, currentNode.getItem());
                 double h = distance(successorPoint, goalPos);
                 Node node = new Node(successorPoint, currentNode, g, h);
-                if (node.getItem().equals(goalPos)) {
-                    return node;
-                }
-                if (containsCheaper(openNodeList, node))
+                
+                if (containsCheaper(fringe, node))
                     continue;
                 if (containsCheaper(closedNodeList, node))
                     continue;
-                openNodeList.add(node);
+                    
+                fringe.add(node);
             }
             closedNodeList.add(currentNode);
         }
@@ -36,11 +46,13 @@ public class AStar {
     }
 
     private static boolean containsCheaper(Collection<Node> nodes, Node node) {
-        return nodes.stream().filter(n -> n.getItem().equals(node.getItem())).anyMatch(n -> n.getF() <= node.getF());
+        return nodes.stream().filter(n -> n.getItem().equals(node.getItem()))
+                .anyMatch(n -> n.getF() <= node.getF());
     }
 
-    private static List<Vec> connections(Node node, List<LineSegment> lineSegments) {
-        return lineSegments.stream().map(ls -> getConnectedNodePoint(node, ls)).filter(x -> x != null)
+    private static List<Vec> expand(Node node, List<LineSegment> lineSegments) {
+        return lineSegments.stream().map(ls -> getConnectedNodePoint(node, ls))
+                .filter(x -> x != null)
                 .collect(Collectors.toList());
     }
 

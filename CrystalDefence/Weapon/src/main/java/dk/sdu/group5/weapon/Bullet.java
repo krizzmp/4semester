@@ -38,7 +38,6 @@ class Bullet {
     }
 
     private void setDirection(String direction) {
-        // TODO: 18/03/16 Implement entity.getTextureHeight/Width
         switch (direction) {
             case "up":
                 dx = 0;
@@ -91,12 +90,15 @@ class Bullet {
         }
 
         world.getEntities().stream().filter((entity) -> (entity.getType() == EntityType.BULLET))
-                .forEach((bullet) -> world.getCollisions(bullet).stream().forEach(collidedEntity -> {
+                .forEach((b) -> world.getCollisions(b).stream().forEach(collidedEntity -> {
                     if (collidedEntity.getType() == EntityType.ENEMY) {
                         collidedEntity.setHealth(collidedEntity.getHealth() - 1);
                     }
+                    
+                    if(collidedEntity.getType() != EntityType.PLAYER){
+                        toBeRemoved = true;
+                    }
 
-                    toBeRemoved = true;
                 }));
     }
 

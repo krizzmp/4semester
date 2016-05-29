@@ -4,13 +4,12 @@ import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.EntityType;
 import dk.sdu.group5.common.data.World;
 import dk.sdu.group5.common.services.IGameProcess;
-import org.openide.util.lookup.ServiceProvider;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IGameProcess.class)
 public class AStarAIGameProcess implements IGameProcess {
@@ -56,7 +55,7 @@ public class AStarAIGameProcess implements IGameProcess {
                     avoidables.add(x);
                 }
             }
-
+            
             Vec direction = PathFinder.getDirection(e, avoidables, target);
             Vec entityVel = direction.unit().times(e.getSpeed() * delta); // (t - e)/(|t-e|) * speed * delta
             Vec newPoint = enemyPos.plus(entityVel);
@@ -72,7 +71,7 @@ public class AStarAIGameProcess implements IGameProcess {
     private Vec getEntityPosition(Entity entity) {
         return new Vec(entity.getX(), entity.getY());
     }
-
+    
 
     private Optional<Entity> getFirstTower(Collection<Entity> entities) {
         return entities.stream().filter(e -> e.getType() == EntityType.TOWER).findFirst();

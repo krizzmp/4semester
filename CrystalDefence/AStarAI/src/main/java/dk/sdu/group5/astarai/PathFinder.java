@@ -1,12 +1,10 @@
 package dk.sdu.group5.astarai;
 
+import static dk.sdu.group5.astarai.AStar.aStar;
 import dk.sdu.group5.common.data.Entity;
 import dk.sdu.group5.common.data.collision.AABB;
-
 import java.util.LinkedList;
 import java.util.List;
-
-import static dk.sdu.group5.astarai.AStar.aStar;
 
 class PathFinder {
 
@@ -39,7 +37,6 @@ class PathFinder {
         return points.get(1).minus(points.get(0));
     }
 
-    // TODO: 12/04/16 Maybe a better name for size? Perhaps offset or extend?
     private static Vec getDirection(Vec startPos, List<Entity> barriers, Vec goalPos, AABB srcBounds) {
         return getDirection(getPath(startPos, barriers, goalPos, srcBounds));
     }

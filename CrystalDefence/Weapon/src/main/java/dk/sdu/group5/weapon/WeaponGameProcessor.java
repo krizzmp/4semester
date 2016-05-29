@@ -24,7 +24,6 @@ public class WeaponGameProcessor implements IGameProcess {
 
         GameKeys gameKeys = world.getGameKeys();
         // Shoot in 8 directions
-        // Note: A whole lot of if statements. I can make it differently, but let's talk about it first - Martin F
         if (gameKeys.getPlayerShootUp().getState() == KeyState.HELD) {
             if (gameKeys.getPlayerShootLeft().getState() == KeyState.HELD) {
                 // if up and left

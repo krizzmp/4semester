@@ -1,5 +1,10 @@
 package dk.sdu.group5.astarai;
 
+    /*
+    * g is the cost of the path from the current node to the root node.
+    * h is the heuristic function.
+    * f is the estimated total cost of the path to the to the node towards the goal.
+     */
 class Node implements Comparable<Node> {
     private final Vec item;
     private final Node parent;
