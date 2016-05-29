@@ -1,6 +1,12 @@
 package dk.sdu.group5.player;
 
-import dk.sdu.group5.common.data.*;
+import dk.sdu.group5.common.data.Entity;
+import dk.sdu.group5.common.data.EntityType;
+import dk.sdu.group5.common.data.GameKeys;
+import dk.sdu.group5.common.data.KeyState;
+import dk.sdu.group5.common.data.World;
+import dk.sdu.group5.common.data.collision.AABB;
+import dk.sdu.group5.common.data.collision.SquareCollider;
 import dk.sdu.group5.common.services.IGameProcess;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -10,7 +16,12 @@ public class PlayerGameProcess implements IGameProcess {
 
     @Override
     public void start(World world) {
-        player = new Entity(EntityType.PLAYER, 60, 250, 250, "playerTexture02b.png", 100, 32, 48);
+        player = new Entity();
+        player.setType(EntityType.PLAYER);
+        player.setSpeed(60);
+        player.setTexturePath("playerTexture02b.png");
+        player.setHealth(100);
+        player.setCollider(new SquareCollider(false, new AABB(-16, -24, 32, 48)));
         player.setX(world.getDisplayResolutionWidth() / 2f - 100f);
         player.setY(world.getDisplayResolutionHeight() / 2f);
         player.addProperty("collidable");

@@ -2,7 +2,6 @@ package dk.sdu.group5.common.data;
 
 import dk.sdu.group5.common.data.collision.AABB;
 import dk.sdu.group5.common.data.collision.ICollider;
-import dk.sdu.group5.common.data.collision.SquareCollider;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,18 +21,6 @@ public class Entity {
 
     public Entity() {
         properties = new HashSet<>();
-    }
-
-    // TODO 15-05-16: Why constructor parameters?
-    public Entity(EntityType entityType, float speed, float x, float y, String texturePath, int health, float width, float height) {
-        this();
-        setType(entityType);
-        setSpeed(speed);
-        setX(x);
-        setY(y);
-        setTexturePath(texturePath);
-        setHealth(health);
-        setCollider(new SquareCollider(false, new AABB(-width / 2, -height / 2, width, height)));
     }
 
     public String getID() {
