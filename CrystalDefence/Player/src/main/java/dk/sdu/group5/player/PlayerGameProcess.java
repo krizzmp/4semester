@@ -52,7 +52,7 @@ public class PlayerGameProcess implements IGameProcess {
             player.setX(player.getX() + playerSpeed * delta);
         }
 
-        if (player.getHealth() < 0) {
+        if (player.getHealth() <= 0) {
             world.setGameover(true);
         }
     }
