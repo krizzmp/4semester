@@ -53,11 +53,6 @@ public class PauseScreen implements Screen
     public void show()
     {
         Gdx.input.setInputProcessor(stage);
-
-//        Gdx.gl.glClearColor(1, 1, 1, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        stage.act(Gdx.graphics.getDeltaTime());
-//        stage.draw();
     }
 
     private void mainmenu()

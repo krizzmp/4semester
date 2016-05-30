@@ -48,11 +48,6 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void show() {
-//        Gdx.gl.glClearColor(1, 1, 1, 1);
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        stage.act(Gdx.graphics.getDeltaTime());
-//        stage.draw();
-
         Gdx.input.setInputProcessor(stage);
     }
     private void mainmenu(){
